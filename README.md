@@ -9,7 +9,12 @@ Situs statis untuk belajar bahasa Inggris bersama anak: ungkapan sehari-hari, pe
 | `index.html`, `style.css`, `app.js` | **File inti (mesin aplikasi)** — beranda, profil nama anak, suara benar/salah, tes bicara |
 | `pelajaran1.html`, `pelajaran2.html`, ... | Isi pelajaran — tambah pelajaran = tambah file baru |
 | `template-pelajaran.html` | Template untuk pelajaran baru |
+| `manifest.json`, `sw.js`, `icons/`, `sfx/` | Pendukung mode aplikasi (PWA) & efek suara |
 | `petunjuk.html` | Panduan lengkap (buka di browser) |
+
+## Pasang di HP seperti aplikasi
+
+Setelah diunggah (HTTPS): buka alamatnya di Chrome/Safari HP → **Tambahkan ke layar utama** — muncul ikon 🦖 sendiri dan terbuka penuh layar tanpa address bar.
 
 ## Menambah pelajaran
 

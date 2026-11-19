@@ -89,36 +89,81 @@ function speakText(text, lang, speed){
   window.speechSynthesis.speak(u);
 }
 
-/* ---------- EFEK SUARA BENAR/SALAH (Web Audio) ---------- */
+/* ---------- EFEK SUARA BENAR/SALAH (Web Audio + fallback file WAV) ---------- */
 var audioCtx = null;
-function playSound(kind){
+var SFX_FILES = { correct: 'sfx/correct.wav', almost: 'sfx/almost.wav', wrong: 'sfx/wrong.wav' };
+
+function sfxFallback(kind){
+  /* dipakai jika Web Audio terblokir/suspend — mainkan file WAV */
+  try {
+    var src = SFX_FILES[kind];
+    if(!src) return;
+    var a = new window.Audio(src);
+    a.volume = 1;
+    var p = a.play();
+    if(p && p.catch) p.catch(function(){});
+  } catch(e){}
+}
+
+function audioPrewarm(){
+  /* siapkan AudioContext di ketukan pertama agar suara tidak tertahan kebijakan autoplay */
   try {
     var AC = window.AudioContext || window.webkitAudioContext;
     if(!AC) return;
     if(!audioCtx) audioCtx = new AC();
-    if(audioCtx.state === 'suspended') audioCtx.resume();
-    var t = audioCtx.currentTime;
-    function note(freq, start, dur, type, gain){
-      var o = audioCtx.createOscillator();
-      var g = audioCtx.createGain();
-      o.type = type || 'sine';
-      o.frequency.value = freq;
-      g.gain.setValueAtTime(0.0001, t + start);
-      g.gain.exponentialRampToValueAtTime(gain || 0.16, t + start + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + start + dur);
-      o.connect(g); g.connect(audioCtx.destination);
-      o.start(t + start); o.stop(t + start + dur + 0.05);
-    }
-    if(kind === 'correct'){          /* "ding!" naik — jawaban benar */
-      note(659.25, 0, 0.14, 'sine', 0.18);
-      note(880, 0.12, 0.22, 'sine', 0.18);
-    } else if(kind === 'almost'){    /* nada tunggal — hampir benar */
-      note(587.33, 0, 0.18, 'sine', 0.13);
-    } else if(kind === 'wrong'){     /* "buzz!" rendah — jawaban salah */
-      note(196, 0, 0.18, 'square', 0.07);
-      note(147, 0.16, 0.28, 'square', 0.07);
+    if(audioCtx.state === 'suspended' && audioCtx.resume){
+      var p = audioCtx.resume();
+      if(p && p.catch) p.catch(function(){});
     }
   } catch(e){}
+}
+
+function playSound(kind){
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC){ sfxFallback(kind); return; }
+    if(!audioCtx) audioCtx = new AC();
+    var play = function(){
+      try {
+        if(!audioCtx || audioCtx.state !== 'running'){ sfxFallback(kind); return; }
+        var t0 = audioCtx.currentTime + 0.01;
+        function note(freq, start, dur, type, gain){
+          var o = audioCtx.createOscillator();
+          var g = audioCtx.createGain();
+          o.type = type || 'sine';
+          o.frequency.value = freq;
+          g.gain.setValueAtTime(0.0001, t0 + start);
+          g.gain.exponentialRampToValueAtTime(gain || 0.25, t0 + start + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + start + dur);
+          o.connect(g); g.connect(audioCtx.destination);
+          o.start(t0 + start); o.stop(t0 + start + dur + 0.05);
+        }
+        if(kind === 'correct'){          /* "ding!" naik — jawaban benar */
+          note(659.25, 0, 0.16, 'sine', 0.3);
+          note(880, 0.13, 0.26, 'sine', 0.3);
+        } else if(kind === 'almost'){    /* nada tunggal — hampir benar */
+          note(587.33, 0, 0.22, 'sine', 0.22);
+        } else if(kind === 'wrong'){     /* "buzz!" rendah — jawaban salah */
+          note(196, 0, 0.22, 'square', 0.12);
+          note(147, 0.17, 0.32, 'square', 0.12);
+        }
+      } catch(e){ sfxFallback(kind); }
+    };
+    if(audioCtx.state === 'suspended'){
+      /* tunggu resume selesai agar nada tidak terjadwal di masa lalu */
+      var pr = audioCtx.resume();
+      if(pr && pr.then) pr.then(play, play);
+      else setTimeout(play, 60);
+    } else {
+      play();
+    }
+  } catch(e){ sfxFallback(kind); }
+}
+
+/* pemanasan audio di setiap ketukan + daftarkan service worker (mode aplikasi) */
+document.addEventListener('pointerdown', audioPrewarm, { passive: true });
+if('serviceWorker' in navigator){
+  try { navigator.serviceWorker.register('sw.js').catch(function(){}); } catch(e){}
 }
 
 /* ---------- PENGENALAN SUARA (mikrofon) ---------- */
@@ -226,8 +271,8 @@ function toggleMic(){
 
 function updateMicUI(recording){
   /* tombol mic di kartu vocab dan di layar Tes Bicara */
-  [['micBtn', 'micHint', 'Tekan tombol, lalu ucapkan ungkapan di atas'],
-   ['testMic', 'testMicHint', 'Tekan tombol, lalu ucapkan kalimat di atas']].forEach(function(p){
+  [['micBtn', 'micHint', 'Tekan 🎤 lalu ucapkan'],
+   ['testMic', 'testMicHint', 'Tekan 🎤 lalu ucapkan']].forEach(function(p){
     var btn = $(p[0]);
     if(!btn) return;
     if(recording){
@@ -443,7 +488,7 @@ function initHomeApp(){
     renderCards();
     renderNotices();
     showScreen('home');
-    if(!getProfiles().length) openProfileModal(true);
+    if(!getProfiles().length && !document.getElementById('profileOverlay')) openProfileModal(true);
   }
 
   /* ---------- PROFIL NAMA ANAK ---------- */
@@ -524,7 +569,10 @@ function initHomeApp(){
     $('profileOverlay').onclick = function(e){
       if(e.target === $('profileOverlay')) root.innerHTML = '';
     };
-    if(firstRun) setTimeout(function(){ $('newNameInput').focus(); }, 100);
+    if(firstRun) setTimeout(function(){
+      var inp = $('newNameInput');
+      if(inp) inp.focus(); /* modal mungkin sudah ditutup ulang/dihancurkan */
+    }, 100);
   }
 
   function renderChips(){
@@ -882,7 +930,7 @@ function initLessonPage(data){
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-warmup">🔥 Pemanasan</div>
           <div class="question-text" id="warmupTitle">Ingat pelajaran kemarin!</div>
-          <div class="question-hint" id="warmupHint">Ulangi sapaan bersama. Tekan 🔊/🐢 untuk mendengar.</div>
+          <div class="question-hint" id="warmupHint">🔊 Dengarkan, lalu tirukan bersama</div>
           <div class="dialog" id="warmupBox"></div>
         </div>
         <div class="btn-area screen-pad" style="padding-top:0">
@@ -894,7 +942,7 @@ function initLessonPage(data){
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-vocab">📖 Bagian 1 · Kenalkan Ungkapan</div>
           <div class="question-text">Dengarkan, tirukan, lalu rekam</div>
-          <div class="question-hint">Tekan 🔊/🐢 untuk mendengar, lalu tekan 🎤 dan ucapkan.</div>
+          <div class="question-hint">🔊 Dengarkan, lalu tirukan 🎤</div>
           <div class="vocab-card" id="vocabCard">
             <div class="vocab-image" id="vocabImage">👋</div>
             <div class="word" id="vocabWord"></div>
@@ -908,7 +956,7 @@ function initLessonPage(data){
             <div class="speak-section" id="speakSection">
               <div class="speak-label">🎤 Sekarang giliranmu!</div>
               <button class="mic-btn" id="micBtn">🎤</button>
-              <div class="mic-hint" id="micHint">Tekan tombol, lalu ucapkan ungkapan di atas</div>
+              <div class="mic-hint" id="micHint">Tekan 🎤 lalu ucapkan</div>
               <div class="speech-result" id="speechResult">
                 <div class="sr-title" id="srTitle"></div>
                 <div class="sr-heard" id="srHeard"></div>
@@ -931,7 +979,7 @@ function initLessonPage(data){
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-game">🔎 Permainan</div>
           <div class="question-text" id="gameRound"></div>
-          <div class="question-hint" id="gameHint">Dengarkan perintahnya, lalu sentuh gambar benda yang benar!</div>
+          <div class="question-hint" id="gameHint">Sentuh gambar yang benar!</div>
           <div class="cmd-card">
             <div style="flex:1;min-width:0">
               <div class="cmd-en" id="cmdEn"></div>
@@ -972,7 +1020,7 @@ function initLessonPage(data){
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-dialog">💬 Latihan Dialog</div>
           <div class="question-text">Bacakan dialog dengan ceria</div>
-          <div class="question-hint">Tekan 🔊/🐢 untuk mendengar. Tekan 🎤 di bubble anak untuk merekam dan cek pengucapan.</div>
+          <div class="question-hint">🔊 Dengarkan, lalu tirukan 🎤 di bubble anak</div>
           <div class="dialog" id="dialogBox"></div>
         </div>
         <div class="btn-area screen-pad" style="padding-top:0">
@@ -984,7 +1032,7 @@ function initLessonPage(data){
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-speaktest">🎤 Tes Bicara</div>
           <div class="question-text">Ulangi kalimatnya dengan suaramu!</div>
-          <div class="question-hint">Dengarkan dulu 🔊, lalu tekan 🎤 dan ucapkan. Kalau sudah benar, lanjut ke kalimat berikutnya.</div>
+          <div class="question-hint">🔊 Dengarkan, lalu ucapkan 🎤</div>
           <div class="test-card">
             <div class="vocab-dots" id="testDots"></div>
             <div class="test-en" id="testEn"></div>
@@ -994,7 +1042,7 @@ function initLessonPage(data){
               <button class="speed-btn slow" id="testSaySlow">🐢 Lambat</button>
             </div>
             <button class="mic-btn big" id="testMic">🎤</button>
-            <div class="mic-hint" id="testMicHint">Tekan tombol, lalu ucapkan kalimat di atas</div>
+            <div class="mic-hint" id="testMicHint">Tekan 🎤 lalu ucapkan</div>
             <div class="speech-result" id="testResult">
               <div class="sr-title" id="testSrTitle"></div>
               <div class="sr-heard" id="testSrHeard"></div>
@@ -1147,7 +1195,7 @@ function initLessonPage(data){
     $('vocabWord').textContent = v.word;
     $('vocabPhonetic').textContent = 'Cara baca: ' + v.phonetic;
     $('vocabMeaning').textContent = 'Artinya: ' + v.meaning;
-    $('vocabGesture').textContent = 'Gerakan: ' + v.gesture;
+    $('vocabGesture').textContent = (v.gestureLabel || 'Gerakan') + ': ' + v.gesture;
 
     var dots = $('vocabDots');
     dots.innerHTML = '';

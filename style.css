@@ -1,5 +1,5 @@
 /* ============================================================
-   Kids English — style.css  (FILE INTI — TIDAK PERLU DIUBAH)
+   Kids English — style.css (FILE INTI / MESIN TAMPILAN)
    Dipakai bersama oleh index.html dan semua pelajaranN.html
    ============================================================ */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -22,6 +22,7 @@ body {
   font-family: 'Baloo 2', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   background: #e8e8ee; color: var(--ink);
   min-height: 100dvh;
+  overscroll-behavior: contain; /* rasa aplikasi: tanpa pull-to-refresh */
 }
 
 .app {
@@ -111,7 +112,7 @@ body {
 .btn-secondary:active { transform: translateY(4px); box-shadow: none; }
 .btn-green { background: var(--green); box-shadow: 0 5px 0 var(--green-dark); }
 .btn-green:active { transform: translateY(5px); box-shadow: 0 0 0 var(--green-dark); }
-.btn-area { margin-top: auto; padding-top: 18px; flex-shrink: 0; }
+.btn-area { margin-top: auto; padding-top: 18px; flex-shrink: 0; padding-bottom: env(safe-area-inset-bottom); }
 
 /* ===== HOME ===== */
 .home-head { padding: clamp(18px, 5vw, 26px) clamp(16px, 4.5vw, 24px) 6px; }
@@ -121,7 +122,7 @@ body {
 .search-wrap input {
   width: 100%; border: 2px solid var(--line); background: var(--bg);
   border-radius: 999px; padding: 13px 18px 13px 44px;
-  font-family: inherit; font-size: clamp(13px, 3.6vw, 14.5px); font-weight: 600; color: var(--ink);
+  font-family: inherit; font-size: 16px; font-weight: 600; color: var(--ink);
   outline: none; transition: border-color .2s;
 }
 .search-wrap input:focus { border-color: var(--purple); }
@@ -618,13 +619,16 @@ body {
 .profile-row .pr-emoji { font-size: 20px; }
 .profile-row .pr-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .profile-row .pr-del { background: none; border: none; font-size: 15px; cursor: pointer; padding: 4px 6px; opacity: .6; }
-.add-row { display: flex; gap: 8px; margin-top: 14px; }
+/* kolom tulis nama: besar & jelas (font >=16px agar iOS tidak zoom otomatis) */
+.add-row { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .add-row input {
-  flex: 1; min-width: 0; border: 2px solid var(--line); border-radius: 14px;
-  padding: 11px 12px; font-family: inherit; font-weight: 700;
-  font-size: clamp(13px, 3.8vw, 14px); background: var(--bg);
+  width: 100%; border: 2px solid var(--line); border-radius: 16px;
+  padding: 15px 16px; font-family: inherit; font-weight: 700;
+  font-size: 17px; background: var(--bg); color: var(--ink);
 }
-.add-row input:focus { outline: none; border-color: var(--blue); }
+.add-row input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 4px var(--green-soft); }
+.add-row input::placeholder { color: var(--ink-light); }
+.add-row .btn { width: 100%; }
 .skip-link {
   display: block; margin: 12px auto 0; background: none; border: none;
   font-family: inherit; font-weight: 700; color: var(--ink-light);
@@ -639,3 +643,15 @@ body {
 .test-en { font-size: clamp(20px, 6vw, 26px); font-weight: 800; margin-top: 8px; line-height: 1.25; }
 .test-id { color: var(--ink-light); font-weight: 700; font-size: clamp(12px, 3.4vw, 14px); margin-top: 2px; }
 .mic-btn.big { width: 88px; height: 88px; font-size: 34px; margin-top: 16px; }
+
+/* ===== RASA APLIKASI MOBILE ===== */
+html { -webkit-text-size-adjust: 100%; }
+button, .btn, .chip, .cat-card, .lesson-row, .game-item, .option, .profile-row,
+.icon-pill, .speed-btn, .speak-bubble, .mic-btn, .profile-chip, .skip-link {
+  touch-action: manipulation; /* tanpa zoom ketuk-ganda */
+  user-select: none; -webkit-user-select: none;
+}
+input { user-select: text; -webkit-user-select: text; }
+@supports (padding: env(safe-area-inset-bottom)) {
+  .modal-card { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+}

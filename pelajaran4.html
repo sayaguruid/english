@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#3dab6e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 4 · Animals — Mengenal Nama Hewan · Kids English</title>
+  <meta name="description" content="Pelajaran 4 Kids English: mengenal nama hewan — cat, dog, bird, fish, dengan permainan tebak hewan dan dialog.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐶</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-4 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 3) -> vocab 4 -> game "Guess
+               the Animal!" -> quiz (evaluasi) -> dialog -> Tes Bicara
+               ("I like cats / I like dogs") -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "hewan",
+      "name": "Hewan",
+      "short": "Hewan",
+      "emoji": "🐶",
+      "color": "green",
+      "desc": "Cat, dog, bird, fish"
+    },
+    "title": "Animals — Mengenal Nama Hewan",
+    "subtitle": "Cat, dog, bird, fish",
+    "icon": "🐶",
+    "desc": "Hari ini kita mengenal empat nama hewan dengan gambar, suara, dan gerakan. Target: anak mengenali empat hewan ketika namanya disebutkan dan mencoba mengucapkannya.",
+    "warmup": [
+      { "who": "parent", "en": "What color is it?", "id": "Apa warnanya?" },
+      { "who": "child", "en": "Red!", "id": "Merah!", "alt": ["red", "it is red", "its red", "it's red"] },
+      { "who": "parent", "en": "How many?", "id": "Ada berapa?" },
+      { "who": "child", "en": "Two!", "id": "Dua!", "alt": ["two", "tuu", "too"] },
+      { "who": "parent", "en": "Today we learn animals!", "id": "Hari ini kita belajar hewan!" }
+    ],
+    "vocab": [
+      { "word": "Cat", "phonetic": "ket", "meaning": "Kucing", "gesture": "🐱 Meow!", "gestureLabel": "Suara", "image": "🐱", "emojiBg": "#ffe5e5", "speak": "Cat", "alt": ["cat", "ket", "kat", "the cat"] },
+      { "word": "Dog", "phonetic": "dog", "meaning": "Anjing", "gesture": "🐶 Woof!", "gestureLabel": "Suara", "image": "🐶", "emojiBg": "#fff3e0", "speak": "Dog", "alt": ["dog", "dok", "dogg", "the dog"] },
+      { "word": "Bird", "phonetic": "berd", "meaning": "Burung", "gesture": "🐦 Tweet!", "gestureLabel": "Suara", "image": "🐦", "emojiBg": "#e3f2fd", "speak": "Bird", "alt": ["bird", "berd", "burd", "the bird"] },
+      { "word": "Fish", "phonetic": "fish", "meaning": "Ikan", "gesture": "🐟 Berenang", "image": "🐟", "emojiBg": "#e0f7fa", "speak": "Fish", "alt": ["fish", "fis", "the fish"] }
+    ],
+    "game": [
+      { "say": "Meow! Meow!", "id": "Tirukan suara kucing, lalu sentuh gambarnya!", "target": "Cat" },
+      { "say": "Woof! Woof!", "id": "Tirukan suara anjing, lalu sentuh gambarnya!", "target": "Dog" },
+      { "say": "Tweet! Tweet!", "id": "Kepakkan tangan seperti sayap, lalu sentuh gambarnya!", "target": "Bird" },
+      { "say": "Blub! Blub!", "id": "Gerakkan tangan seperti ikan berenang, lalu sentuh gambarnya!", "target": "Fish" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya kucing?", "hint": "Suaranya meow.", "options": ["Cat", "Dog", "Fish"], "answer": 0 },
+      { "q": "Apa arti Dog?", "hint": "Suaranya woof.", "options": ["Burung", "Anjing", "Ikan"], "answer": 1 },
+      { "q": "Hewan apa yang bisa berenang dan disebut Fish?", "hint": "Hidup di air.", "options": ["Kucing", "Burung", "Ikan"], "answer": 2 },
+      { "q": "Apa bahasa Inggrisnya burung?", "hint": "Suaranya tweet.", "options": ["Bird", "Cat", "Dog"], "answer": 0 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "What animal is this?", "id": "Hewan apa ini?" },
+      { "who": "child", "en": "Cat!", "id": "Kucing!", "alt": ["cat", "ket", "it is a cat", "a cat"] },
+      { "who": "parent", "en": "Very good! What sound does a cat make?", "id": "Bagus sekali! Apa suara kucing?" },
+      { "who": "child", "en": "Meow!", "id": "Meow!", "alt": ["meow", "meo", "meow meow"] }
+    ],
+    "speakingTest": [
+      { "en": "I like cats.", "id": "Saya suka kucing.", "alt": ["i like cats", "i like cat", "like cats", "i like the cats"] },
+      { "en": "I like dogs.", "id": "Saya suka anjing.", "alt": ["i like dogs", "i like dog", "like dogs", "i like the dogs"] }
+    ],
+    "homework": {
+      "text": "Sebelum tidur, ajak anak memilih hewan kesukaannya. Tanyakan <b>“Do you like cats?”</b> — Apakah kamu suka kucing? — atau <b>“Do you like dogs?”</b> — Apakah kamu suka anjing? Bantu anak menjawab <b>“Yes!”</b> atau <b>“No!”</b>.<br><br><b>Patokan keberhasilan:</b> anak mengenali gambar empat hewan, memahami nama hewan saat disebutkan, dan menirukan setidaknya satu atau dua nama hewan.",
+      "next": "➡️ Hari ke-5: My Body — Anggota Tubuh. Anak akan belajar kata head, eyes, nose, dan hands melalui permainan menyentuh anggota tubuh sambil mendengarkan instruksi bahasa Inggris."
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -97,7 +97,7 @@
       <li><b>Penomoran</b>: nomor tampil di beranda = nomor file (<code>pelajaran4.html</code> → "Pelajaran 4").</li>
       <li><b>Buka-kunci</b>: pelajaran N terbuka setelah pelajaran N−1 selesai; pelajaran 1 selalu terbuka; <code>comingSoon</code> selalu terkunci. Progres tersimpan per browser/domain — jika pelajaran terasa "terkunci padahal sudah selesai", itu karena berpindah browser, HP, atau domain. Di layar kunci ada tombol <b>🔓 Buka Tetap (Orang Tua)</b> untuk membuka pelajaran tanpa menyelesaikan sebelumnya (cukup ditekan sekali, tersimpan).</li>
       <li><b>Kategori</b>: kategori diambil dari data pelajaran; urutan kategori mengikuti pelajaran yang muncul duluan. Pelajaran dalam satu kategori harus menulis <code>category</code> yang <b>sama persis</b> (id, nama, emoji, warna).</li>
-      <li><b>Bagian opsional</b>: di dalam data boleh ditambahkan <code>"warmup"</code> (dialog pemanasan/ulang pelajaran sebelumnya), <code>"game"</code> (permainan <i>Find It!</i> — anak menyentuh gambar sesuai perintah), dan <code>"speakingTest"</code> (kalimat Tes Bicara; jika tidak ada, diambil otomatis dari baris anak pada dialog). Nomor "Bagian N" dan progres menyesuaikan otomatis; contohnya lihat <code>pelajaran2.html</code>, <code>pelajaran3.html</code> dan <code>template-pelajaran.html</code>.</li>
+      <li><b>Bagian opsional</b>: di dalam data boleh ditambahkan <code>"warmup"</code> (dialog pemanasan/ulang pelajaran sebelumnya), <code>"game"</code> (permainan <i>Find It!</i> — anak menyentuh gambar sesuai perintah), dan <code>"speakingTest"</code> (kalimat Tes Bicara; jika tidak ada, diambil otomatis dari baris anak pada dialog). Vocab juga bisa memakai <code>"gestureLabel"</code> untuk mengganti label "Gerakan" (mis. <code>"Suara"</code> untuk kosakata bunyi hewan — lihat <code>pelajaran4.html</code>). Nomor "Bagian N" dan progres menyesuaikan otomatis; contohnya lihat <code>pelajaran2.html</code>, <code>pelajaran3.html</code>, <code>pelajaran4.html</code> dan <code>template-pelajaran.html</code>.</li>
       <li><b>Profil nama anak</b>: di beranda anak/orang tua menuliskan nama (bisa beberapa nama — tinggal pilih lewat chip 🧒 di pojok kanan atas). Nama dipakai untuk sapaan “My name is ...” dan kalimat pujian; tanda “...” di kalimat pelajaran otomatis diganti nama yang dipilih. Data profil tersimpan di perangkat.</li>
       <li><b>Suara benar/salah</b>: jawaban benar di kuis/permainan/cek pengucapan berbunyi “ding ✨”, jawaban salah berbunyi “buzz” — jadi anak langsung tahu hasilnya tanpa harus membaca.</li>
       <li><b>Tes Bicara</b>: setelah dialog ada bagian 🎤 tes ucap: kalimat muncul → anak dengar 🔊 → tekan 🎤 dan ucapkan. Kalau sudah benar, tombol LANJUT menyala menuju kalimat berikutnya; kalau belum, ada “🔄 Ucap Ulang” dan “Lewati”. Bagian ini otomatis muncul di semua pelajaran (jika browser mendukung mikrofon).</li>
@@ -132,9 +132,18 @@
     </ul>
     <p>Jika tetap dibuka lewat file://, beranda menampilkan kolom <b>"Nomor pelajaran"</b> untuk membuka pelajaran langsung, dan file <code>pelajaranN.html</code> tetap bisa dibuka langsung &amp; berfungsi penuh.</p>
 
-    <h2>7. Fitur &amp; catatan</h2>
+    <h2>7. Pasang di HP seperti aplikasi</h2>
+    <p>Situs ini sudah berbentuk <b>PWA</b> (manifest, ikon, layar berdiri sendiri). Setelah diunggah (HTTPS), anak bisa memakainya seperti aplikasi:</p>
+    <ul>
+      <li><b>Android (Chrome)</b>: buka alamatnya → menu ⋮ → <b>Tambahkan ke layar utama</b> → muncul ikon 🦖 sendiri, terbuka tanpa address bar.</li>
+      <li><b>iPhone (Safari)</b>: buka alamatnya → tombol Bagikan → <b>Tambahkan ke Layar Utama</b>.</li>
+      <li>Saat online pertama kali, halaman tersimpan otomatis (service worker) sehingga <b>tetap bisa dibuka saat sinyal lemah</b>.</li>
+    </ul>
+
+    <h2>8. Fitur &amp; catatan</h2>
     <ul>
       <li><span class="pill">🔊 TTS</span> suara guru perempuan, normal &amp; lambat — pakai suara bawaan browser (butuh internet untuk font, suara tetap jalan offline).</li>
+      <li><span class="pill">🔔 Efek suara</span> benar = “ding”, salah = “buzz” — memakai Web Audio, dengan cadangan file <code>sfx/*.wav</code> jika audio diblokir browser.</li>
       <li><span class="pill">🎤 Mikrofon</span> cek pengucapan memakai Web Speech API — paling akurat di <b>Chrome/Edge</b>; saat di GitHub Pages (HTTPS) akan diminta izin mikrofon sekali.</li>
       <li><span class="pill">💾 Reset progres</span> untuk mulai ulang: buka aplikasi, tekan F12 → tab Console → ketik <code>localStorage.clear()</code> → muat ulang.</li>
       <li><span class="pill">🔓 Akses langsung</span> pelajaran berikutnya bisa diakses lewat tombol hijau di layar hasil — tetap berurutan karena dicek lewat progres.</li>
