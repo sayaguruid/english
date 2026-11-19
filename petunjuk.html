@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📖 Petunjuk — Kids English</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --ink:#232333; --light:#9a9ab0; --line:#ececf2; --bg:#f7f7fb;
+      --green:#58cc8b; --yellow:#ffc531; --orange:#ffa451; --black:#232333;
+    }
+    body { font-family:'Baloo 2','Segoe UI',sans-serif; background:#e8e8ee; color:var(--ink); line-height:1.65; }
+    .page { max-width:820px; margin:0 auto; background:#fff; min-height:100dvh; padding:clamp(20px,5vw,40px); }
+    @media (min-width:880px){ body{padding:24px 0} .page{border-radius:24px; box-shadow:0 20px 60px rgba(35,35,51,.18)} }
+    .top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:24px; }
+    .brand { font-weight:800; font-size:clamp(16px,4vw,19px); }
+    .brand .dot { color:var(--green); }
+    .btn-home {
+      background:var(--black); color:#fff; text-decoration:none; font-weight:800;
+      padding:10px 18px; border-radius:999px; font-size:clamp(12px,3.4vw,14px); box-shadow:0 3px 0 #12121c;
+    }
+    h1 { font-size:clamp(21px,5.6vw,27px); font-weight:800; margin-bottom:6px; }
+    .sub { color:var(--light); font-weight:600; font-size:clamp(13px,3.6vw,15px); margin-bottom:26px; }
+    h2 { font-size:clamp(16px,4.4vw,20px); font-weight:800; margin:28px 0 10px; padding-top:18px; border-top:2px solid var(--line); }
+    h2:first-of-type { border-top:none; padding-top:0; }
+    p { font-size:clamp(13.5px,3.7vw,15px); margin-bottom:10px; }
+    ul, ol { margin:0 0 12px 22px; font-size:clamp(13.5px,3.7vw,15px); }
+    li { margin-bottom:6px; }
+    b { font-weight:800; }
+    .pill {
+      display:inline-block; background:var(--bg); border:2px solid var(--line);
+      border-radius:999px; padding:4px 12px; font-size:clamp(11.5px,3.2vw,13px);
+      font-weight:800; margin:2px 4px 2px 0;
+    }
+    code {
+      background:var(--bg); border:1px solid var(--line); border-radius:8px;
+      padding:2px 7px; font-size:clamp(12px,3.2vw,13.5px);
+      font-family:ui-monospace,'Cascadia Mono',Consolas,monospace; word-break:break-all;
+    }
+    pre {
+      background:#1e1e2e; color:#dcdcf0; border-radius:16px; padding:16px;
+      overflow-x:auto; font-size:clamp(11.5px,3.2vw,13px); line-height:1.6;
+      font-family:ui-monospace,'Cascadia Mono',Consolas,monospace; margin:10px 0 14px;
+    }
+    pre .c { color:#7f8ca8; }
+    .card {
+      background:var(--bg); border:2px solid var(--line); border-radius:18px;
+      padding:16px 18px; margin:12px 0; font-size:clamp(13px,3.6vw,14.5px);
+    }
+    .card.yellow { background:#fff7dd; border-color:var(--yellow); }
+    .card.green { background:#e6f9ee; border-color:var(--green); }
+    table { width:100%; border-collapse:collapse; margin:10px 0 14px; font-size:clamp(12.5px,3.4vw,14px); }
+    th, td { border:2px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+    th { background:var(--bg); font-weight:800; }
+    td code { word-break:normal; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="top">
+      <div class="brand">Kids<span class="dot">•</span>English — Petunjuk</div>
+      <a class="btn-home" href="index.html">← KE APLIKASI</a>
+    </div>
+
+    <h1>📖 Petunjuk Pengelolaan &amp; Upload</h1>
+    <div class="sub">Situs statis ini bisa diunggah ke GitHub Pages atau hosting apa pun tanpa database dan tanpa build.</div>
+
+    <h2>1. File mana yang perlu disentuh?</h2>
+    <table>
+      <tr><th>File</th><th>Status</th><th>Kapan disentuh</th></tr>
+      <tr><td><code>index.html</code></td><td>🔒 INTI</td><td>Tidak perlu — beranda &amp; pencarian pelajaran otomatis</td></tr>
+      <tr><td><code>style.css</code></td><td>🔒 INTI</td><td>Tidak perlu — hanya kalau mau ganti tampilan</td></tr>
+      <tr><td><code>app.js</code></td><td>🔒 INTI</td><td>Tidak perlu — mesin aplikasi (suara, mic, kuis, progres)</td></tr>
+      <tr><td><code>pelajaran1.html</code>, <code>pelajaran2.html</code>, <code>pelajaran3.html</code> ...</td><td>✏️ DATA</td><td>Setiap menambah pelajaran baru (menyalin dari template)</td></tr>
+      <tr><td><code>template-pelajaran.html</code></td><td>📋 TEMPLATE</td><td>Sumber salinan — tidak diunggah pun tidak apa-apa</td></tr>
+      <tr><td><code>petunjuk.html</code></td><td>📖 Panduan</td><td>Tidak perlu</td></tr>
+    </table>
+    <div class="card green">✅ <b>Prinsipnya:</b> menambah pelajaran = <b>menambah 1 file baru</b> saja. File inti tidak pernah berubah, jadi tidak ada risiko merusak aplikasi.</div>
+
+    <h2>2. Menambah pelajaran baru (5 langkah)</h2>
+    <ol>
+      <li><b>Salin</b> <code>template-pelajaran.html</code> menjadi <code>pelajaran3.html</code> (lanjutkan nomor berurutan dari pelajaran terakhir yang ada).</li>
+      <li><b>Ganti judul</b> di bagian <code>&lt;title&gt;</code> atas file.</li>
+      <li><b>Edit blok JSON</b> di dalam <code>&lt;script id="lesson-data"&gt;</code>: kategori, judul, vocab, quiz, dialog, homework. Ada komentar penjelasan lengkap di dalam template.</li>
+      <li><b>Hapus baris</b> <code>"comingSoon": true</code> jika pelajaran sudah siap dimainkan (biarkan jika ingin tampil terkunci 🔒).</li>
+      <li><b>Uji</b>: buka <code>pelajaran3.html</code> di Chrome, mainkan sampai selesai. Setelah itu beranda akan menampilkannya secara otomatis (refresh dengan Ctrl/Cmd+Shift+R).</li>
+    </ol>
+    <div class="card yellow">⚠️ <b>Aturan penting:</b> nomor file harus <b>berurutan tanpa loncat</b> (1, 2, 3, ...). Beranda berhenti mencari di nomor pertama yang tidak ada. Batas pemindaian saat ini <b>60 pelajaran</b>. JSON tidak boleh ada komentar, koma ganda, atau koma di item terakhir.</div>
+
+    <h2>3. Cara kerja otomatis (tidak perlu diatur)</h2>
+    <ul>
+      <li><b>Penomoran</b>: nomor tampil di beranda = nomor file (<code>pelajaran4.html</code> → "Pelajaran 4").</li>
+      <li><b>Buka-kunci</b>: pelajaran N terbuka setelah pelajaran N−1 selesai; pelajaran 1 selalu terbuka; <code>comingSoon</code> selalu terkunci.</li>
+      <li><b>Kategori</b>: kategori diambil dari data pelajaran; urutan kategori mengikuti pelajaran yang muncul duluan. Pelajaran dalam satu kategori harus menulis <code>category</code> yang <b>sama persis</b> (id, nama, emoji, warna).</li>
+      <li><b>Progres &amp; bintang</b>: tersimpan di browser perangkat (localStorage) — aman di GitHub Pages maupun hosting (satu domain = satu progres).</li>
+      <li><b>Hadiah</b>: daftar bintang per pelajaran &amp; lencana terisi otomatis.</li>
+    </ul>
+
+    <h2>4. Upload ke GitHub Pages</h2>
+    <ol>
+      <li>Buat akun di <b>github.com</b> (gratis), lalu klik <b>New repository</b> — nama bebas, misal <code>kids-english</code>, pilih <b>Public</b>.</li>
+      <li>Di halaman repo, klik <b>uploading an existing file</b> (atau Add file → Upload files).</li>
+      <li><b>Seret semua file</b> dari folder ini: <code>index.html</code>, <code>style.css</code>, <code>app.js</code>, <code>pelajaran1.html</code>, <code>pelajaran2.html</code> (+ pelajaran lain &amp; template bila mau). Klik <b>Commit changes</b>.</li>
+      <li>Buka tab <b>Settings → Pages</b> (menu kiri). Pada <b>Build and deployment</b>, pilih Source: <b>Deploy from a branch</b>, Branch: <b>main</b> dan folder <b>/ (root)</b>, lalu Save.</li>
+      <li>Tunggu 1–2 menit, muat ulang halaman itu — akan muncul alamat seperti <code>https://username.github.io/kids-english/</code>.</li>
+      <li>Buka alamat itu di HP — beranda otomatis menemukan semua pelajaran. <b>Selesai! 🎉</b></li>
+    </ol>
+    <div class="card">💡 <b>Nanti setiap menambah pelajaran:</b> upload file <code>pelajaranN.html</code> baru ke repo yang sama (Add file → Upload files → Commit). File inti tidak perlu diunggah ulang.</div>
+
+    <h2>5. Upload ke hosting sendiri (cPanel/dll)</h2>
+    <ol>
+      <li>Masuk ke File Manager / FTP hosting Anda.</li>
+      <li>Masuk ke folder <code>public_html</code> (atau subfolder, misal <code>public_html/english</code>).</li>
+      <li>Unggah semua file di folder ini (bisa di-zip dulu lalu Extract di server).</li>
+      <li>Buka <code>https://domainanda.com/</code> (atau <code>/english/</code>) — langsung jalan, tanpa setting apa pun.</li>
+    </ol>
+
+    <h2>6. Menguji di komputer sebelum upload</h2>
+    <p>Beranda butuh <b>server web</b> agar bisa mencari file pelajaran (jika dibuka lewat klik ganda/file://, pencarian diblokir browser). Dua cara mudah:</p>
+    <ul>
+      <li><b>Via GitHub/hosting dulu</b> — cara paling praktis: upload, lalu uji langsung online.</li>
+      <li><b>Server lokal</b> (jika ada Python): di folder ini jalankan <code>python -m http.server 8000</code>, buka <code>http://localhost:8000</code>.</li>
+    </ul>
+    <p>Jika tetap dibuka lewat file://, beranda menampilkan kolom <b>"Nomor pelajaran"</b> untuk membuka pelajaran langsung, dan file <code>pelajaranN.html</code> tetap bisa dibuka langsung &amp; berfungsi penuh.</p>
+
+    <h2>7. Fitur &amp; catatan</h2>
+    <ul>
+      <li><span class="pill">🔊 TTS</span> suara guru perempuan, normal &amp; lambat — pakai suara bawaan browser (butuh internet untuk font, suara tetap jalan offline).</li>
+      <li><span class="pill">🎤 Mikrofon</span> cek pengucapan memakai Web Speech API — paling akurat di <b>Chrome/Edge</b>; saat di GitHub Pages (HTTPS) akan diminta izin mikrofon sekali.</li>
+      <li><span class="pill">💾 Reset progres</span> untuk mulai ulang: buka aplikasi, tekan F12 → tab Console → ketik <code>localStorage.clear()</code> → muat ulang.</li>
+      <li><span class="pill">🔓 Akses langsung</span> pelajaran berikutnya bisa diakses lewat tombol hijau di layar hasil — tetap berurutan karena dicek lewat progres.</li>
+    </ul>
+  </div>
+</body>
+</html>

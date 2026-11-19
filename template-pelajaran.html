@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEMPLATE Pelajaran N · Kids English</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+  CARA MEMAKAI TEMPLATE INI:
+  1. Salin file ini menjadi pelajaranN.html (N = nomor berurutan
+     berikutnya, contoh: pelajaran3.html). Jangan ada nomor yang
+     melompat (1, 2, 3, ... bukan 1, 2, 5).
+  2. Ganti <title> di atas sesuai judul pelajaran.
+  3. Edit HANYA blok JSON di bawah ini. Semua yang lain biarkan.
+  4. Semua teks pakai tanda kutip ganda "..." dan akhiri setiap
+     item dengan koma KECUALI item terakhir sebelum ] atau }.
+  5. Buka filenya di browser (Chrome) untuk menguji sampai selesai.
+
+  KETERANGAN ISI:
+  - category  : kategori/tema besar. Jika id sudah pernah dipakai
+                di pelajaran lain, SAMAKAN semua isinya dengan
+                pelajaran lain tersebut (misal sama-sama "warna").
+                Warna: purple | blue | orange | green | pink | yellow
+  - vocab     : ungkapan/kata (3-5 per pelajaran).
+                "alt" = variasi ejaan utk pengecekan mikrofon.
+  - quiz      : soal pilihan ganda. "answer" = nomor jawaban benar
+                MULAI DARI 0 (pilihan pertama = 0, kedua = 1, ...).
+  - dialog    : percakapan orang tua (parent) dan anak (child).
+                Setiap baris "child" WAJIB punya "alt".
+  - homework  : tugas kecil setelah pelajaran. <b>...</b> = tebal.
+  - comingSoon: hapus baris ini agar pelajaran langsung bisa
+                dimainkan. Biarkan true agar tampil terkunci 🔒.
+  ============================================================ -->
+
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "tema-baru",
+      "name": "Tema Baru",
+      "short": "Tema Baru",
+      "emoji": "🎨",
+      "color": "orange",
+      "desc": "Deskripsi singkat tema"
+    },
+    "title": "Judul Pelajaran — Sub Judul",
+    "subtitle": "Sub judul / fokus pelajaran",
+    "icon": "🎨",
+    "desc": "Deskripsi pelajaran untuk anak & orang tua",
+    "vocab": [
+      { "word": "Red", "phonetic": "red", "meaning": "Merah", "gesture": "🔴 Tunjuk benda merah", "image": "🔴", "emojiBg": "#ffe5e5", "speak": "Red", "alt": ["red", "rad"] },
+      { "word": "Blue", "phonetic": "blu", "meaning": "Biru", "gesture": "🔵 Tunjuk benda biru", "image": "🔵", "emojiBg": "#e3f2fd", "speak": "Blue", "alt": ["blue", "blu"] }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggris dari “merah”?", "hint": "Warna tomat.", "options": ["Red", "Blue"], "answer": 0 },
+      { "q": "Apa arti dari “Blue”?", "hint": "Warna langit.", "options": ["Merah", "Biru"], "answer": 1 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "What color is this?", "id": "Ini warna apa?" },
+      { "who": "child", "en": "It is red.", "id": "Ini merah.", "alt": ["it is red", "its red", "it's red", "red"] }
+    ],
+    "homework": {
+      "text": "Tugas kecil: tunjuk 2 benda berwarna <b>red</b> dan <b>blue</b> di rumah, lalu sebutkan warnanya dalam bahasa Inggris.",
+      "next": "➡️ Pelajaran berikutnya: ... "
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

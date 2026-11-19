@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelajaran 1 · Hello! — Berkenalan · Kids English</title>
+  <meta name="description" content="Pelajaran 1 Kids English: sapaan dan perkenalan diri — Hello, Goodbye, My name is, How are you.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👋</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "sapaan",
+      "name": "Sapaan",
+      "short": "Sapaan",
+      "emoji": "👋",
+      "color": "purple",
+      "desc": "Hello, Goodbye, My name is, How are you?"
+    },
+    "title": "Hello! — Berkenalan",
+    "subtitle": "Sapaan & perkenalan diri",
+    "icon": "👋",
+    "desc": "Hello, Goodbye, My name is, How are you?",
+    "vocab": [
+      { "word": "Hello!", "phonetic": "he-lo", "meaning": "Halo!", "gesture": "👋 Lambaikan tangan", "image": "👋", "emojiBg": "#fff3e0", "speak": "Hello", "alt": ["hello", "hallo", "helo"] },
+      { "word": "Goodbye!", "phonetic": "gud-bai", "meaning": "Sampai jumpa!", "gesture": "👋 Lambaikan tangan saat berpisah", "image": "🚪", "emojiBg": "#e3f2fd", "speak": "Goodbye", "alt": ["goodbye", "good bye", "bye", "gudbai"] },
+      { "word": "My name is ...", "phonetic": "mai neim iz", "meaning": "Nama saya ...", "gesture": "🫵 Tunjuk dada sendiri", "image": "🙋", "emojiBg": "#e8f5e9", "speak": "My name is", "alt": ["my name is", "mai neim is", "my name"] },
+      { "word": "How are you?", "phonetic": "hau ar yu", "meaning": "Apa kabar?", "gesture": "😊 Tersenyum sambil bertanya", "image": "😊", "emojiBg": "#fce4ec", "speak": "How are you", "alt": ["how are you", "how r u", "how are u"] }
+    ],
+    "quiz": [
+      { "q": "Apa yang kamu ucapkan saat bertemu seseorang?", "hint": "Pilih sapaan yang tepat.", "options": ["Hello!", "Goodbye!"], "answer": 0 },
+      { "q": "Apa arti dari “Goodbye!”?", "hint": "Ingat, ini diucapkan saat berpisah.", "options": ["Halo!", "Sampai jumpa!"], "answer": 1 },
+      { "q": "Lengkapi: “My name is ...”", "hint": "Artinya adalah nama saya.", "options": ["Nama anak sendiri", "Goodbye"], "answer": 0 },
+      { "q": "Apa arti dari “How are you?”?", "hint": "Ini pertanyaan tentang kabar.", "options": ["Siapa namamu?", "Apa kabar?"], "answer": 1 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "Hello!", "id": "Halo!" },
+      { "who": "child", "en": "Hello!", "id": "Halo!", "alt": ["hello", "hallo", "helo"] },
+      { "who": "parent", "en": "What is your name?", "id": "Siapa namamu?" },
+      { "who": "child", "en": "My name is ...", "id": "Nama saya ...", "alt": ["my name is", "mai neim is"] },
+      { "who": "parent", "en": "How are you?", "id": "Apa kabar?" },
+      { "who": "child", "en": "I'm fine!", "id": "Saya baik-baik saja.", "alt": ["i'm fine", "im fine", "i am fine", "fine"] }
+    ],
+    "homework": {
+      "text": "Sebelum tidur, luangkan 2 menit untuk menyapa anak dalam bahasa Inggris. Ucapkan <b>“Hello!”</b> ketika bertemu dan <b>“Goodbye!”</b> saat berpamitan.",
+      "next": "➡️ Pelajaran 2: benda di sekitar — book, pencil, bag, door"
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>
