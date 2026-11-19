@@ -97,6 +97,7 @@
       <li><b>Penomoran</b>: nomor tampil di beranda = nomor file (<code>pelajaran4.html</code> → "Pelajaran 4").</li>
       <li><b>Buka-kunci</b>: pelajaran N terbuka setelah pelajaran N−1 selesai; pelajaran 1 selalu terbuka; <code>comingSoon</code> selalu terkunci.</li>
       <li><b>Kategori</b>: kategori diambil dari data pelajaran; urutan kategori mengikuti pelajaran yang muncul duluan. Pelajaran dalam satu kategori harus menulis <code>category</code> yang <b>sama persis</b> (id, nama, emoji, warna).</li>
+      <li><b>Bagian opsional</b>: di dalam data boleh ditambahkan <code>"warmup"</code> (dialog pemanasan/ulang pelajaran sebelumnya) dan <code>"game"</code> (permainan <i>Find It!</i> — anak menyentuh gambar sesuai perintah). Nomor "Bagian N" dan progres menyesuaikan otomatis; contohnya lihat <code>pelajaran2.html</code> dan <code>template-pelajaran.html</code>.</li>
       <li><b>Progres &amp; bintang</b>: tersimpan di browser perangkat (localStorage) — aman di GitHub Pages maupun hosting (satu domain = satu progres).</li>
       <li><b>Hadiah</b>: daftar bintang per pelajaran &amp; lencana terisi otomatis.</li>
     </ul>

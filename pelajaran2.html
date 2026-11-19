@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pelajaran 2 · Benda di Sekitar · Kids English</title>
-  <meta name="description" content="Pelajaran 2 Kids English: benda di sekitar — book, pencil, bag, door.">
+  <title>Pelajaran 2 · Things Around Me — Benda di Sekitarku · Kids English</title>
+  <meta name="description" content="Pelajaran 2 Kids English: benda di sekitarku — book, pencil, bag, door, dengan permainan Find It dan evaluasi.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,45 +15,58 @@
   <div class="app" id="app"></div>
 
   <!-- ============================================================
-       DATA PELAJARAN — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       DATA PELAJARAN HARI KE-2 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (pemanasan/ulang pelajaran 1) -> vocab ->
+               game (Find It!) -> quiz (evaluasi) -> dialog -> hasil
        ============================================================ -->
   <script id="lesson-data" type="application/json">
   {
     "category": {
       "id": "benda",
-      "name": "Benda di Sekitar",
+      "name": "Benda di Sekitarku",
       "short": "Benda",
       "emoji": "📚",
       "color": "blue",
       "desc": "Book, pencil, bag, door"
     },
-    "title": "Benda di Sekitar",
+    "title": "Things Around Me — Benda di Sekitarku",
     "subtitle": "Book, pencil, bag, door",
     "icon": "📚",
-    "desc": "Belajar nama benda di rumah",
+    "desc": "Hari ini kita mengenali benda yang sering dipakai di rumah dan di sekolah, sambil mengulang sapaan dari pelajaran kemarin. Target: anak mengenali 4 benda dan berani menyebutkan namanya.",
+    "warmup": [
+      { "who": "parent", "en": "Hello!", "id": "Halo!" },
+      { "who": "child", "en": "Hello!", "id": "Halo!", "alt": ["hello", "hallo", "helo"] },
+      { "who": "parent", "en": "What is your name?", "id": "Siapa namamu?" },
+      { "who": "child", "en": "My name is ...", "id": "Nama saya ...", "alt": ["my name is", "mai neim is", "my name"] }
+    ],
     "vocab": [
-      { "word": "Book", "phonetic": "buk", "meaning": "Buku", "gesture": "📖 Pegang buku", "image": "📖", "emojiBg": "#e3f2fd", "speak": "Book", "alt": ["book", "buk"] },
+      { "word": "Book", "phonetic": "buk", "meaning": "Buku", "gesture": "📖 Tunjuk buku", "image": "📖", "emojiBg": "#e3f2fd", "speak": "Book", "alt": ["book", "buk", "books"] },
       { "word": "Pencil", "phonetic": "pen-sil", "meaning": "Pensil", "gesture": "✏️ Pegang pensil", "image": "✏️", "emojiBg": "#fff3e0", "speak": "Pencil", "alt": ["pencil", "pensil", "pen sil"] },
-      { "word": "Bag", "phonetic": "bag", "meaning": "Tas", "gesture": "🎒 Tunjuk tas", "image": "🎒", "emojiBg": "#e8f5e9", "speak": "Bag", "alt": ["bag", "bak", "tas"] },
-      { "word": "Door", "phonetic": "dor", "meaning": "Pintu", "gesture": "🚪 Tunjuk pintu", "image": "🚪", "emojiBg": "#fce4ec", "speak": "Door", "alt": ["door", "dor", "dorr"] }
+      { "word": "Bag", "phonetic": "beg", "meaning": "Tas", "gesture": "🎒 Tunjuk tas", "image": "🎒", "emojiBg": "#e8f5e9", "speak": "Bag", "alt": ["bag", "beg", "bags"] },
+      { "word": "Door", "phonetic": "dor", "meaning": "Pintu", "gesture": "🚪 Tunjuk pintu", "image": "🚪", "emojiBg": "#fce4ec", "speak": "Door", "alt": ["door", "dor", "doors"] }
+    ],
+    "game": [
+      { "say": "Find the book!", "id": "Cari bukunya!", "target": "Book" },
+      { "say": "Find the pencil!", "id": "Cari pensilnya!", "target": "Pencil" },
+      { "say": "Find the bag!", "id": "Cari tasnya!", "target": "Bag" },
+      { "say": "Touch the door!", "id": "Sentuh pintunya!", "target": "Door" }
     ],
     "quiz": [
-      { "q": "Apa bahasa Inggris dari “buku”?", "hint": "Benda untuk membaca.", "options": ["Book", "Door"], "answer": 0 },
-      { "q": "Apa arti dari “Pencil”?", "hint": "Benda untuk menulis.", "options": ["Pensil", "Tas"], "answer": 0 },
-      { "q": "Apa bahasa Inggris dari “tas”?", "hint": "Dipakai untuk membawa barang.", "options": ["Bag", "Book"], "answer": 0 },
-      { "q": "Apa arti dari “Door”?", "hint": "Untuk keluar masuk ruangan.", "options": ["Pintu", "Buku"], "answer": 0 }
+      { "q": "Apa bahasa Inggrisnya buku?", "hint": "Benda untuk membaca.", "options": ["Book", "Bag", "Door"], "answer": 0 },
+      { "q": "Mana yang berarti pensil?", "hint": "Benda untuk menulis.", "options": ["Door", "Pencil", "Book"], "answer": 1 },
+      { "q": "Apa arti bag?", "hint": "Dipakai untuk membawa barang.", "options": ["Pintu", "Buku", "Tas"], "answer": 2 },
+      { "q": "Orang tua berkata “Touch the door!” Apa yang harus dilakukan?", "hint": "Ingat, touch berarti sentuh.", "options": ["Menyentuh pintu", "Mengambil buku", "Duduk"], "answer": 0 }
     ],
     "dialog": [
       { "who": "parent", "en": "What is this?", "id": "Apa ini?" },
-      { "who": "child", "en": "It is a book.", "id": "Ini buku.", "alt": ["it is a book", "its a book", "it's a book"] },
-      { "who": "parent", "en": "What is that?", "id": "Apa itu?" },
-      { "who": "child", "en": "It is a door.", "id": "Itu pintu.", "alt": ["it is a door", "its a door", "it's a door"] }
+      { "who": "child", "en": "Book!", "id": "Buku!", "alt": ["book", "buk", "a book", "it is a book", "it's a book"] },
+      { "who": "parent", "en": "Yes! A book. Good job!", "id": "Ya! Sebuah buku. Bagus sekali!" }
     ],
     "homework": {
-      "text": "Ajak anak menunjuk benda di rumah dan sebutkan dalam bahasa Inggris: <b>book, pencil, bag, door</b>.",
-      "next": "➡️ Pelajaran 3: warna — red, blue, green, yellow"
-    },
-    "comingSoon": true
+      "text": "Sebelum tidur, tunjukkan <b>book</b>, <b>pencil</b>, <b>bag</b>, dan <b>door</b> kepada anak. Sebutkan nama bahasa Inggrisnya dan minta anak menunjuk benda yang sesuai.<br><br><b>Patokan keberhasilan:</b> anak mulai mengenali beberapa benda ketika disebutkan, meskipun belum mampu mengucapkannya dengan sempurna.",
+      "next": "➡️ Besok: Colors and Numbers — warna dan angka, dengan permainan mencari benda berdasarkan warna serta menghitung benda di rumah."
+    }
   }
   </script>
 

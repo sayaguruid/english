@@ -630,9 +630,31 @@ function initLessonPage(data){
   var state = {
     vocabIndex: 0, quizIndex: 0,
     correctCount: 0, quizAnswered: false,
-    speakCorrect: 0, speakTried: 0
+    speakCorrect: 0, speakTried: 0,
+    gameIndex: 0, gameDone: false
   };
   var selectedOption = null;
+
+  /* --- Urutan bagian (dinamis): warmup & game opsional --- */
+  var SEC = [];
+  if(data.warmup && data.warmup.length) SEC.push('warmup');
+  SEC.push('vocab');
+  if(data.game && data.game.length) SEC.push('game');
+  SEC.push('quiz');
+  SEC.push('dialog');
+  function secNum(key){ return SEC.indexOf(key) + 1; }
+  function secProgress(key, frac){
+    var step = 90 / SEC.length;
+    var i = SEC.indexOf(key);
+    return 5 + step * i + step * Math.min(Math.max(frac, 0), 1);
+  }
+  function shuffle(arr){
+    for(var i = arr.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr;
+  }
 
   buildLessonShell();
 
@@ -705,9 +727,21 @@ function initLessonPage(data){
         </div>
       </section>
 
+      <section class="screen" id="screen-warmup">
+        <div class="screen-pad center-content">
+          <div class="section-badge" id="badge-warmup">🔥 Pemanasan</div>
+          <div class="question-text" id="warmupTitle">Ingat pelajaran kemarin!</div>
+          <div class="question-hint" id="warmupHint">Ulangi sapaan bersama. Tekan 🔊/🐢 untuk mendengar.</div>
+          <div class="dialog" id="warmupBox"></div>
+        </div>
+        <div class="btn-area screen-pad" style="padding-top:0">
+          <button class="btn btn-black" id="warmupNextBtn">MULAI PELAJARAN →</button>
+        </div>
+      </section>
+
       <section class="screen" id="screen-vocab">
         <div class="screen-pad center-content">
-          <div class="section-badge">📖 Bagian 1 · Kenalkan Ungkapan</div>
+          <div class="section-badge" id="badge-vocab">📖 Bagian 1 · Kenalkan Ungkapan</div>
           <div class="question-text">Dengarkan, tirukan, lalu rekam</div>
           <div class="question-hint">Tekan 🔊/🐢 untuk mendengar, lalu tekan 🎤 dan ucapkan.</div>
           <div class="vocab-card" id="vocabCard">
@@ -742,9 +776,34 @@ function initLessonPage(data){
         </div>
       </section>
 
+      <section class="screen" id="screen-game">
+        <div class="screen-pad center-content">
+          <div class="section-badge" id="badge-game">🔎 Permainan</div>
+          <div class="question-text" id="gameRound"></div>
+          <div class="question-hint" id="gameHint">Dengarkan perintahnya, lalu sentuh gambar benda yang benar!</div>
+          <div class="cmd-card">
+            <div style="flex:1;min-width:0">
+              <div class="cmd-en" id="cmdEn"></div>
+              <div class="cmd-id" id="cmdId"></div>
+            </div>
+            <button class="speed-btn normal" id="cmdSay">🔊</button>
+            <button class="speed-btn slow" id="cmdSaySlow">🐢</button>
+          </div>
+          <div class="game-grid" id="gameGrid"></div>
+          <div class="feedback" id="gameFeedback">
+            <span class="fb-icon" id="gameFbIcon">✓</span>
+            <span id="gameFbText"></span>
+          </div>
+        </div>
+        <div class="btn-area screen-pad" style="padding-top:0">
+          <button class="btn btn-black" id="gameNextBtn" disabled>LANJUT</button>
+          <button class="btn btn-secondary" id="gameSkipBtn" style="margin-top:10px">LEWATI PERMAINAN →</button>
+        </div>
+      </section>
+
       <section class="screen" id="screen-quiz">
         <div class="screen-pad center-content">
-          <div class="section-badge">🎮 Bagian 2 · Permainan</div>
+          <div class="section-badge" id="badge-quiz">🎮 Evaluasi</div>
           <div class="question-text" id="quizQuestion"></div>
           <div class="question-hint" id="quizHint"></div>
           <div class="options" id="quizOptions"></div>
@@ -760,7 +819,7 @@ function initLessonPage(data){
 
       <section class="screen" id="screen-dialog">
         <div class="screen-pad center-content">
-          <div class="section-badge">💬 Bagian 3 · Latihan Dialog</div>
+          <div class="section-badge" id="badge-dialog">💬 Latihan Dialog</div>
           <div class="question-text">Bacakan dialog dengan ceria</div>
           <div class="question-hint">Tekan 🔊/🐢 untuk mendengar. Tekan 🎤 di bubble anak untuk merekam dan cek pengucapan.</div>
           <div class="dialog" id="dialogBox"></div>
@@ -808,6 +867,11 @@ function initLessonPage(data){
     $('retryBtn').onclick = retrySpeak;
     $('skipBtn').onclick = function(){ hideSpeechResult(); nextVocab(); };
     $('vocabNextBtn').onclick = nextVocab;
+    $('warmupNextBtn').onclick = function(){ goAfter('warmup'); };
+    $('cmdSay').onclick = speakGameCommand;
+    $('cmdSaySlow').onclick = function(){ speakGameCommand('slow'); };
+    $('gameNextBtn').onclick = gameNext;
+    $('gameSkipBtn').onclick = function(){ goAfter('game'); };
     $('quizBtn').onclick = submitQuiz;
     $('goResultBtn').onclick = showResult;
     $('restartBtn').onclick = restart;
@@ -844,6 +908,7 @@ function initLessonPage(data){
     $('welcomeInfo').innerHTML = `
       <div class="info-pill">⏱️ 15 menit</div>
       <div class="info-pill">🎯 ${(data.vocab || []).length} ungkapan</div>
+      ${data.game && data.game.length ? '<div class="info-pill">🔎 ' + data.game.length + ' putaran</div>' : ''}
       <div class="info-pill">🎮 ${(data.quiz || []).length} kuis</div>
       ${hasSpeechRec ? '<div class="info-pill">🎤 cek pengucapan</div>' : ''}`;
     $('welcomeDesc').textContent = data.desc || '';
@@ -853,11 +918,20 @@ function initLessonPage(data){
   function startLesson(){
     state.vocabIndex = 0;
     state.speakCorrect = 0; state.speakTried = 0;
-    setStepLabel('Bagian 1 · Kenalkan Ungkapan');
-    setProgress(10);
-    renderVocab();
-    showScreen('vocab');
-    setTimeout(function(){ speakCurrent('normal'); }, 600);
+    if(SEC[0] === 'warmup'){
+      setStepLabel('Pemanasan · Ulang pelajaran kemarin');
+      renderWarmup();
+      showScreen('warmup');
+      setTimeout(function(){
+        var first = data.warmup[0];
+        if(first && first.who === 'parent') speakText(first.en, 'en-US', 'normal');
+      }, 600);
+    } else {
+      setStepLabel('Bagian ' + secNum('vocab') + ' · Kenalkan Ungkapan');
+      renderVocab();
+      showScreen('vocab');
+      setTimeout(function(){ speakCurrent('normal'); }, 600);
+    }
   }
 
   function speakCurrent(speed){
@@ -882,8 +956,9 @@ function initLessonPage(data){
       dots.appendChild(d);
     });
 
+    $('badge-vocab').textContent = '📖 Bagian ' + secNum('vocab') + ' · Kenalkan Ungkapan';
     $('vocabNextBtn').textContent = state.vocabIndex < data.vocab.length - 1 ? 'LANJUT' : 'MULAI PERMAINAN';
-    setProgress(10 + (state.vocabIndex / data.vocab.length) * 20);
+    setProgress(secProgress('vocab', state.vocabIndex / data.vocab.length));
 
     hideSpeechResult();
     updateMicUI(false);
@@ -923,11 +998,7 @@ function initLessonPage(data){
       renderVocab();
       speakCurrent('normal');
     } else {
-      state.quizIndex = 0; state.correctCount = 0;
-      setStepLabel('Bagian 2 · Permainan');
-      setProgress(35);
-      renderQuiz();
-      showScreen('quiz');
+      goAfter('vocab');
     }
   }
 
@@ -935,6 +1006,8 @@ function initLessonPage(data){
   function renderQuiz(){
     state.quizAnswered = false;
     selectedOption = null;
+    setStepLabel('Bagian ' + secNum('quiz') + ' · Jawab Pertanyaan');
+    $('badge-quiz').textContent = '🎮 Bagian ' + secNum('quiz') + ' · Jawab Pertanyaan';
     var q = data.quiz[state.quizIndex];
     $('quizQuestion').textContent = q.q;
     $('quizHint').textContent = q.hint;
@@ -952,7 +1025,7 @@ function initLessonPage(data){
     $('quizFeedback').className = 'feedback';
     $('quizBtn').disabled = true;
     $('quizBtn').textContent = 'PERIKSA';
-    setProgress(35 + (state.quizIndex / data.quiz.length) * 40);
+    setProgress(secProgress('quiz', state.quizIndex / data.quiz.length));
   }
 
   function selectOption(i, btn){
@@ -969,10 +1042,7 @@ function initLessonPage(data){
       if(state.quizIndex < data.quiz.length){
         renderQuiz();
       } else {
-        setStepLabel('Bagian 3 · Latihan Dialog');
-        setProgress(80);
-        renderDialog();
-        showScreen('dialog');
+        goAfter('quiz');
       }
       return;
     }
@@ -993,11 +1063,10 @@ function initLessonPage(data){
     $('quizBtn').disabled = false;
   }
 
-  /* ---------- DIALOG ---------- */
-  function renderDialog(){
-    var box = $('dialogBox');
+  /* ---------- PEMANASAN & DIALOG (pembangun bubble bersama) ---------- */
+  function renderBubbleList(box, list){
     box.innerHTML = '';
-    (data.dialog || []).forEach(function(d, idx){
+    list.forEach(function(d, idx){
       var row = document.createElement('div');
       row.className = 'bubble-row' + (d.who === 'child' ? ' right' : '');
       var avatar = document.createElement('div');
@@ -1028,14 +1097,26 @@ function initLessonPage(data){
       b.onclick = function(){ speakText(b.getAttribute('data-say'), 'en-US', 'slow'); };
     });
     box.querySelectorAll('.speak-bubble[title="Rekam suaramu"]').forEach(function(b){
-      b.onclick = function(){ startDialogSpeak(parseInt(b.getAttribute('data-idx'), 10), b); };
+      b.onclick = function(){ startListSpeak(list, parseInt(b.getAttribute('data-idx'), 10), b); };
     });
   }
 
-  function startDialogSpeak(idx, btn){
+  function renderWarmup(){
+    $('badge-warmup').textContent = '🔥 Bagian ' + secNum('warmup') + ' · Pemanasan';
+    renderBubbleList($('warmupBox'), data.warmup || []);
+    setProgress(secProgress('warmup', 0.5));
+  }
+
+  function renderDialog(){
+    $('badge-dialog').textContent = '💬 Bagian ' + secNum('dialog') + ' · Latihan Dialog';
+    renderBubbleList($('dialogBox'), data.dialog || []);
+    setProgress(secProgress('dialog', 1));
+  }
+
+  function startListSpeak(list, idx, btn){
     if(!hasSpeechRec) return;
     if(isRecording){ try { recognition.stop(); } catch(e){} return; }
-    var d = data.dialog[idx];
+    var d = list[idx];
     currentSlowTarget = d.en;
     var resultEl = btn.closest('.bubble').querySelector('.dialog-speech-result');
     currentSpeakTarget = {
@@ -1057,6 +1138,95 @@ function initLessonPage(data){
       }
     };
     toggleMic();
+  }
+
+  /* ---------- PERMAINAN "FIND IT!" ---------- */
+  function speakGameCommand(speed){
+    var g = data.game[state.gameIndex];
+    speakText(g.say, 'en-US', speed || 'normal');
+  }
+
+  function renderGame(){
+    setStepLabel('Bagian ' + secNum('game') + ' · Permainan Find It!');
+    $('badge-game').textContent = '🔎 Bagian ' + secNum('game') + ' · Permainan Find It!';
+    var g = data.game[state.gameIndex];
+    $('gameRound').textContent = 'Putaran ' + (state.gameIndex + 1) + ' dari ' + data.game.length;
+    $('cmdEn').textContent = g.say;
+    $('cmdId').textContent = g.id || '';
+
+    var grid = $('gameGrid');
+    grid.innerHTML = '';
+    shuffle(data.vocab.slice()).forEach(function(v){
+      var b = document.createElement('button');
+      b.className = 'game-item';
+      b.innerHTML = '<div class="gi-emoji" style="background:' + (v.emojiBg || col.soft) + '">' + v.image + '</div>' +
+        '<div class="gi-word">' + v.word + '</div>';
+      b.onclick = function(){ pickGameItem(v, b); };
+      grid.appendChild(b);
+    });
+
+    $('gameFeedback').className = 'feedback';
+    $('gameNextBtn').disabled = true;
+    $('gameNextBtn').textContent = state.gameIndex < data.game.length - 1 ? 'LANJUT' : 'SELESAI';
+    setProgress(secProgress('game', state.gameIndex / data.game.length));
+    setTimeout(function(){ speakGameCommand('normal'); }, 600);
+  }
+
+  function pickGameItem(v, btn){
+    if(state.gameDone) return;
+    var g = data.game[state.gameIndex];
+    if(v.word === g.target){
+      state.gameDone = true;
+      btn.classList.add('correct');
+      document.querySelectorAll('#gameGrid .game-item').forEach(function(o){
+        if(o !== btn) o.classList.add('dim');
+      });
+      var fb = $('gameFeedback');
+      fb.className = 'feedback show correct';
+      $('gameFbIcon').textContent = '✓';
+      $('gameFbText').textContent = 'Benar! ' + (g.cheer || 'Sekarang tunjuk benda ASLI di rumahmu, ya!');
+      $('gameNextBtn').disabled = false;
+      speakText('Great job!', 'en-US', 'normal');
+    } else {
+      btn.classList.add('wrong');
+      setTimeout(function(){ btn.classList.remove('wrong'); }, 700);
+      var fb2 = $('gameFeedback');
+      fb2.className = 'feedback show wrong';
+      $('gameFbIcon').textContent = '✗';
+      $('gameFbText').textContent = 'Belum tepat. Dengarkan lagi: ' + g.say;
+    }
+  }
+
+  function gameNext(){
+    if(state.gameIndex < data.game.length - 1){
+      state.gameIndex++;
+      state.gameDone = false;
+      renderGame();
+    } else {
+      goAfter('game');
+    }
+  }
+
+  /* ---------- NAVIGASI ANTAR BAGIAN ---------- */
+  function goAfter(key){
+    var nextKey = SEC[SEC.indexOf(key) + 1];
+    if(nextKey === 'vocab'){
+      setStepLabel('Bagian ' + secNum('vocab') + ' · Kenalkan Ungkapan');
+      renderVocab();
+      showScreen('vocab');
+      setTimeout(function(){ speakCurrent('normal'); }, 600);
+    } else if(nextKey === 'game'){
+      renderGame();
+      showScreen('game');
+    } else if(nextKey === 'quiz'){
+      state.quizIndex = 0; state.correctCount = 0;
+      renderQuiz();
+      showScreen('quiz');
+    } else if(nextKey === 'dialog'){
+      setStepLabel('Bagian ' + secNum('dialog') + ' · Latihan Dialog');
+      renderDialog();
+      showScreen('dialog');
+    }
   }
 
   /* ---------- RESULT ---------- */
@@ -1110,6 +1280,7 @@ function initLessonPage(data){
     state.vocabIndex = 0; state.quizIndex = 0;
     state.correctCount = 0; state.quizAnswered = false;
     state.speakCorrect = 0; state.speakTried = 0;
+    state.gameIndex = 0; state.gameDone = false;
     selectedOption = null;
     setProgress(0);
     fillWelcome();
