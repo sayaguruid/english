@@ -6,7 +6,7 @@ Situs statis untuk belajar bahasa Inggris bersama anak: ungkapan sehari-hari, pe
 
 | File | Keterangan |
 |---|---|
-| `index.html`, `style.css`, `app.js` | **File inti** — tidak perlu diubah |
+| `index.html`, `style.css`, `app.js` | **File inti (mesin aplikasi)** — beranda, profil nama anak, suara benar/salah, tes bicara |
 | `pelajaran1.html`, `pelajaran2.html`, ... | Isi pelajaran — tambah pelajaran = tambah file baru |
 | `template-pelajaran.html` | Template untuk pelajaran baru |
 | `petunjuk.html` | Panduan lengkap (buka di browser) |
@@ -23,3 +23,8 @@ Detail lengkap ada di `petunjuk.html`.
 
 - **GitHub Pages**: buat repo → upload semua file → Settings → Pages → Branch `main` / root → alamat `https://username.github.io/nama-repo/`.
 - **Hosting sendiri**: unggah semua file ke `public_html`.
+
+## Catatan kunci pelajaran & progres
+
+- Pelajaran N terbuka setelah pelajaran N−1 **selesai di browser/domain yang sama** (progres disimpan di localStorage — pindah browser, HP, atau domain berarti mulai dari kosong).
+- Di layar 🔒 ada tombol **"🔓 Buka Tetap (Orang Tua)"** untuk membuka pelajaran tanpa menyelesaikan sebelumnya; pilihan tersimpan, cukup ditekan sekali per pelajaran.

@@ -1,14 +1,10 @@
 /* ============================================================
-   Kids English — app.js   (FILE INTI — TIDAK PERLU DIUBAH)
+   Kids English — app.js (FILE INTI / MESIN APLIKASI)
    ------------------------------------------------------------
-   Berfungsi otomatis dalam 2 mode:
-   1. Di index.html       -> beranda (mencari pelajaran1.html,
-      pelajaran2.html, ... otomatis lewat fetch)
-   2. Di pelajaranN.html  -> pemutar pelajaran (membaca blok
-      <script id="lesson-data" type="application/json">)
-
+   1. Di index.html       -> beranda + profil nama anak
+   2. Di pelajaranN.html  -> pemutar pelajaran: pemanasan, vocab,
+      permainan Find It, kuis, dialog, dan Tes Bicara
    Menambah pelajaran = menambah file pelajaranN.html baru.
-   File ini TIDAK PERLU disentuh.
    ============================================================ */
 (function(){
 'use strict';
@@ -30,6 +26,22 @@ function saveProgress(){
 }
 function totalStars(){
   return Object.values(lessonStars).reduce(function(a,b){ return a + b; }, 0);
+}
+
+/* ---------- PROFIL NAMA ANAK ---------- */
+function getProfiles(){ return loadJSON('profiles', []); }
+function saveProfiles(list){ localStorage.setItem('profiles', JSON.stringify(list)); }
+function getActiveProfile(){ return localStorage.getItem('activeProfile') || ''; }
+function setActiveProfile(name){
+  if(name) localStorage.setItem('activeProfile', name);
+  else localStorage.removeItem('activeProfile');
+}
+function childName(){ return getActiveProfile(); }
+/* Ganti "..." / "___" pada kalimat dengan nama anak yang dipilih */
+function withName(text){
+  var n = childName();
+  if(!n) return String(text);
+  return String(text).replace(/\.{2,}|_{2,}/g, n);
 }
 
 /* ---------- WARNA KATEGORI ---------- */
@@ -77,6 +89,38 @@ function speakText(text, lang, speed){
   window.speechSynthesis.speak(u);
 }
 
+/* ---------- EFEK SUARA BENAR/SALAH (Web Audio) ---------- */
+var audioCtx = null;
+function playSound(kind){
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    if(!audioCtx) audioCtx = new AC();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    var t = audioCtx.currentTime;
+    function note(freq, start, dur, type, gain){
+      var o = audioCtx.createOscillator();
+      var g = audioCtx.createGain();
+      o.type = type || 'sine';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t + start);
+      g.gain.exponentialRampToValueAtTime(gain || 0.16, t + start + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + start + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t + start); o.stop(t + start + dur + 0.05);
+    }
+    if(kind === 'correct'){          /* "ding!" naik — jawaban benar */
+      note(659.25, 0, 0.14, 'sine', 0.18);
+      note(880, 0.12, 0.22, 'sine', 0.18);
+    } else if(kind === 'almost'){    /* nada tunggal — hampir benar */
+      note(587.33, 0, 0.18, 'sine', 0.13);
+    } else if(kind === 'wrong'){     /* "buzz!" rendah — jawaban salah */
+      note(196, 0, 0.18, 'square', 0.07);
+      note(147, 0.16, 0.28, 'square', 0.07);
+    }
+  } catch(e){}
+}
+
 /* ---------- PENGENALAN SUARA (mikrofon) ---------- */
 var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 var hasSpeechRec = !!SpeechRecognition;
@@ -104,6 +148,7 @@ function setupRecognition(){
     if(e.error === 'not-allowed') msg = 'Izin mikrofon ditolak. Izinkan akses mikrofon di browser.';
     else if(e.error === 'no-speech') msg = 'Tidak ada suara terdeteksi. Coba lagi ya.';
     else if(e.error === 'network') msg = 'Butuh koneksi internet untuk memeriksa suara.';
+    playSound('wrong');
     showSpeechResult('bad', '⚠️ ' + msg, '', '', false);
   };
   recognition.onend = function(){
@@ -180,34 +225,41 @@ function toggleMic(){
 }
 
 function updateMicUI(recording){
-  var btn = $('micBtn');
-  var hint = $('micHint');
-  if(!btn) return;
-  if(recording){
-    btn.classList.add('listening');
-    btn.textContent = '⏹';
-    if(hint) hint.textContent = '🎙️ Mendengarkan... ucapkan sekarang!';
-  } else {
-    btn.classList.remove('listening');
-    btn.textContent = '🎤';
-    if(hint) hint.textContent = 'Tekan tombol, lalu ucapkan ungkapan di atas';
-  }
+  /* tombol mic di kartu vocab dan di layar Tes Bicara */
+  [['micBtn', 'micHint', 'Tekan tombol, lalu ucapkan ungkapan di atas'],
+   ['testMic', 'testMicHint', 'Tekan tombol, lalu ucapkan kalimat di atas']].forEach(function(p){
+    var btn = $(p[0]);
+    if(!btn) return;
+    if(recording){
+      btn.classList.add('listening');
+      btn.textContent = '⏹';
+      if($(p[1])) $(p[1]).textContent = '🎙️ Mendengarkan... ucapkan sekarang!';
+    } else {
+      btn.classList.remove('listening');
+      btn.textContent = '🎤';
+      if($(p[1])) $(p[1]).textContent = p[2];
+    }
+  });
 }
 
 function showSpeechResult(level, title, heard, msg, correct){
-  var box = $('speechResult');
+  /* hasil muncul di layar yang sedang aktif (vocab atau Tes Bicara) */
+  var testActive = $('screen-speaktest') && $('screen-speaktest').classList.contains('active');
+  var box = $(testActive ? 'testResult' : 'speechResult');
   if(!box) return;
   box.className = 'speech-result show ' + level;
-  $('srTitle').textContent = title;
-  $('srHeard').innerHTML = heard ? ('Kamu mengucapkan: <b>"' + heard + '"</b>') : '';
-  $('srMsg').textContent = msg;
+  $(testActive ? 'testSrTitle' : 'srTitle').textContent = title;
+  $(testActive ? 'testSrHeard' : 'srHeard').innerHTML = heard ? ('Kamu mengucapkan: <b>"' + heard + '"</b>') : '';
+  $(testActive ? 'testSrMsg' : 'srMsg').textContent = msg;
   if(!correct && currentSlowTarget) setTimeout(function(){ speakText(currentSlowTarget, 'en-US', 'slow'); }, 400);
 }
 var currentSlowTarget = null;
 
 function hideSpeechResult(){
-  var box = $('speechResult');
-  if(box) box.classList.remove('show');
+  ['speechResult', 'testResult'].forEach(function(id){
+    var box = $(id);
+    if(box) box.classList.remove('show');
+  });
 }
 
 /* ============================================================
@@ -254,6 +306,7 @@ function initHomeApp(){
         </div>
       </div>
       <div class="tb-right">
+        <button class="profile-chip" id="profileBtn" title="Pilih nama anak"><span id="profileChipTxt">＋ Nama Anak</span></button>
         <button class="icon-pill" id="giftBtn" title="Hadiah">🎁</button>
         <div class="tb-pill" id="topPill"></div>
       </div>
@@ -269,6 +322,7 @@ function initHomeApp(){
 
       <section class="screen" id="screen-home">
         <div class="home-head">
+          <div class="hello-line" id="helloLine"></div>
           <h1>Apa yang mau dipelajari<br>hari ini?</h1>
         </div>
         <div class="search-wrap">
@@ -284,7 +338,7 @@ function initHomeApp(){
         </div>
         <div id="micSupportNotice"></div>
         <div id="manualArea"></div>
-        <div class="footer-note">Pelajaran = file pelajaran1.html, pelajaran2.html, ...<br>Inti aplikasi (index, style.css, app.js) tidak perlu diubah.</div>
+        <div class="footer-note">Belajar santai, sedikit demi sedikit setiap hari 🌱</div>
       </section>
 
       <section class="screen" id="screen-category">
@@ -312,9 +366,12 @@ function initHomeApp(){
           <div id="rewardList"></div>
         </div>
       </section>
-    </main>`;
+    </main>
+    <div id="modalRoot"></div>`;
 
     $('giftBtn').onclick = function(){ if(window.speechSynthesis) speechSynthesis.cancel(); renderRewards(); };
+    $('profileBtn').onclick = function(){ openProfileModal(false); };
+    renderProfileChip();
     $('startBtn').onclick = function(){ renderHome(); };
     $('catBack').onclick = function(){ renderHome(); };
     $('rewardBack').onclick = function(){ renderHome(); };
@@ -380,10 +437,94 @@ function initHomeApp(){
   function renderHome(){
     setStepLabel('Pilih Kategori');
     setTopPillStars();
+    renderProfileChip();
+    renderHelloLine();
     renderChips();
     renderCards();
     renderNotices();
     showScreen('home');
+    if(!getProfiles().length) openProfileModal(true);
+  }
+
+  /* ---------- PROFIL NAMA ANAK ---------- */
+  function renderProfileChip(){
+    var nm = getActiveProfile();
+    $('profileChipTxt').textContent = nm ? ('🧒 ' + nm) : '＋ Nama Anak';
+  }
+  function renderHelloLine(){
+    var nm = getActiveProfile();
+    $('helloLine').textContent = nm ? ('Halo, ' + nm + '! 👋') : 'Selamat belajar! 👋';
+  }
+
+  function refreshProfileUI(){
+    renderProfileChip();
+    renderHelloLine();
+  }
+
+  function openProfileModal(firstRun){
+    var root = $('modalRoot');
+    var profiles = getProfiles();
+    var active = getActiveProfile();
+    var rows = profiles.map(function(p){
+      var safe = String(p).replace(/"/g, '&quot;');
+      return '<button class="profile-row' + (p === active ? ' on' : '') + '" data-name="' + safe + '">' +
+        '<span class="pr-emoji">🧒</span><span class="pr-name">' + p + '</span>' +
+        '<span class="pr-del" title="Hapus nama ini">🗑️</span></button>';
+    }).join('');
+    root.innerHTML = `
+      <div class="modal-overlay" id="profileOverlay">
+        <div class="modal-card">
+          <div class="modal-title">${firstRun ? '✏️ Tuliskan Nama Kamu' : '👦👧 Siapa yang Belajar?'}</div>
+          <div class="modal-desc">${firstRun
+            ? 'Nama dipakai untuk sapaan di pelajaran, misal “My name is ...”. Kamu bisa menambah nama anak lain nanti.'
+            : 'Ketuk nama untuk memilih, tambah nama baru, atau hapus. Progres & bintang tersimpan di perangkat ini.'}</div>
+          <div id="profileListWrap">${rows ? '<div class="profile-list">' + rows + '</div>' : ''}</div>
+          <div class="add-row">
+            <input id="newNameInput" type="text" maxlength="20" placeholder="Tulis nama di sini..." autocomplete="off">
+            <button class="btn btn-black" id="addNameBtn">＋ TAMBAH</button>
+          </div>
+          <div class="btn-area" style="margin-top:14px">
+            <button class="btn btn-black" id="profileDoneBtn">${firstRun ? 'MULAI BELAJAR 🚀' : 'SELESAI ✓'}</button>
+          </div>
+          ${firstRun ? '<button class="skip-link" id="profileLater">Nanti saja</button>' : ''}
+        </div>
+      </div>`;
+
+    function addFromInput(){
+      var v = (($('newNameInput').value || '').trim()).replace(/\s+/g, ' ');
+      if(!v){ $('newNameInput').focus(); return; }
+      var name = v.charAt(0).toUpperCase() + v.slice(1);
+      var list = getProfiles();
+      if(list.indexOf(name) < 0) list.push(name);
+      saveProfiles(list);
+      setActiveProfile(name);
+      refreshProfileUI();
+      openProfileModal(false);
+    }
+    function delName(p){
+      saveProfiles(getProfiles().filter(function(x){ return x !== p; }));
+      if(getActiveProfile() === p) setActiveProfile('');
+      refreshProfileUI();
+      openProfileModal(false);
+    }
+
+    $('addNameBtn').onclick = addFromInput;
+    $('newNameInput').addEventListener('keydown', function(e){ if(e.key === 'Enter') addFromInput(); });
+    root.querySelectorAll('.profile-row').forEach(function(row){
+      row.onclick = function(e){
+        if(e.target.classList.contains('pr-del')){ delName(row.getAttribute('data-name')); return; }
+        setActiveProfile(row.getAttribute('data-name'));
+        refreshProfileUI();
+        openProfileModal(false);
+      };
+    });
+    $('profileDoneBtn').onclick = function(){ root.innerHTML = ''; };
+    var later = $('profileLater');
+    if(later) later.onclick = function(){ root.innerHTML = ''; };
+    $('profileOverlay').onclick = function(e){
+      if(e.target === $('profileOverlay')) root.innerHTML = '';
+    };
+    if(firstRun) setTimeout(function(){ $('newNameInput').focus(); }, 100);
   }
 
   function renderChips(){
@@ -631,7 +772,8 @@ function initLessonPage(data){
     vocabIndex: 0, quizIndex: 0,
     correctCount: 0, quizAnswered: false,
     speakCorrect: 0, speakTried: 0,
-    gameIndex: 0, gameDone: false
+    gameIndex: 0, gameDone: false,
+    testIndex: 0
   };
   var selectedOption = null;
 
@@ -642,6 +784,11 @@ function initLessonPage(data){
   if(data.game && data.game.length) SEC.push('game');
   SEC.push('quiz');
   SEC.push('dialog');
+  /* Tes Bicara: kalimat khusus, atau otomatis dari baris anak di dialog */
+  var testSrc = (data.speakingTest && data.speakingTest.length)
+    ? data.speakingTest
+    : (data.dialog || []).filter(function(d){ return d.who === 'child'; });
+  if(hasSpeechRec && testSrc.length) SEC.push('speaktest');
   function secNum(key){ return SEC.indexOf(key) + 1; }
   function secProgress(key, frac){
     var step = 90 / SEC.length;
@@ -658,9 +805,11 @@ function initLessonPage(data){
 
   buildLessonShell();
 
-  /* --- Kunci: pelajaran sebelumnya harus selesai dulu --- */
+  /* --- Kunci: pelajaran sebelumnya harus selesai dulu (bisa dilewati orang tua) --- */
+  var forced = [];
+  try { forced = JSON.parse(localStorage.getItem('forcedLessons') || '[]'); } catch(e){ forced = []; }
   var locked = data.comingSoon === true;
-  if(!locked){
+  if(!locked && forced.indexOf(id) < 0){
     for(var i=1; i<id; i++){
       if(completedLessons.indexOf(i) < 0){ locked = true; break; }
     }
@@ -669,6 +818,7 @@ function initLessonPage(data){
     $('lockReason').textContent = data.comingSoon
       ? 'Pelajaran ini masih "Segera hadir". Nantikan ya!'
       : 'Selesaikan pelajaran sebelumnya dulu, ya!';
+    $('forceUnlockBtn').style.display = data.comingSoon ? 'none' : 'flex';
     showScreen('lock');
     setTopPillStars();
     return;
@@ -706,6 +856,7 @@ function initLessonPage(data){
           </div>
           <div class="btn-area">
             <a class="btn btn-black" href="index.html" style="text-decoration:none">← KE BERANDA</a>
+            <button class="btn btn-secondary" id="forceUnlockBtn" style="margin-top:10px">🔓 Buka Tetap (Orang Tua)</button>
           </div>
         </div>
       </section>
@@ -716,9 +867,9 @@ function initLessonPage(data){
             <div class="welcome-illustration" id="welcomeFlag">👋</div>
             <h1 id="welcomeTitle"></h1>
             <div class="theme-pill" id="welcomeTheme"></div>
+            <div class="hello-name" id="welcomeHello"></div>
             <div class="info" id="welcomeInfo"></div>
             <p class="welcome-desc" id="welcomeDesc"></p>
-            <div class="voice-badge">🎙️ Suara guru perempuan · ada mode lambat</div>
           </div>
           <div class="btn-area">
             <button class="btn btn-black" id="startLessonBtn">MULAI PELAJARAN →</button>
@@ -829,6 +980,38 @@ function initLessonPage(data){
         </div>
       </section>
 
+      <section class="screen" id="screen-speaktest">
+        <div class="screen-pad center-content">
+          <div class="section-badge" id="badge-speaktest">🎤 Tes Bicara</div>
+          <div class="question-text">Ulangi kalimatnya dengan suaramu!</div>
+          <div class="question-hint">Dengarkan dulu 🔊, lalu tekan 🎤 dan ucapkan. Kalau sudah benar, lanjut ke kalimat berikutnya.</div>
+          <div class="test-card">
+            <div class="vocab-dots" id="testDots"></div>
+            <div class="test-en" id="testEn"></div>
+            <div class="test-id" id="testId"></div>
+            <div class="speed-row">
+              <button class="speed-btn normal" id="testSay">🔊 Dengar</button>
+              <button class="speed-btn slow" id="testSaySlow">🐢 Lambat</button>
+            </div>
+            <button class="mic-btn big" id="testMic">🎤</button>
+            <div class="mic-hint" id="testMicHint">Tekan tombol, lalu ucapkan kalimat di atas</div>
+            <div class="speech-result" id="testResult">
+              <div class="sr-title" id="testSrTitle"></div>
+              <div class="sr-heard" id="testSrHeard"></div>
+              <div class="sr-msg" id="testSrMsg"></div>
+              <div class="sr-try">
+                <button class="retry" id="testRetryBtn">🔄 Ucap Ulang</button>
+                <button class="skip" id="testSkipBtn">Lewati →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-area screen-pad" style="padding-top:0">
+          <button class="btn btn-black" id="testNextBtn" disabled>LANJUT</button>
+          <button class="btn btn-secondary" id="testSkipAllBtn" style="margin-top:10px">SELESAI TES →</button>
+        </div>
+      </section>
+
       <section class="screen result" id="screen-result">
         <div class="screen-pad center-content">
           <div class="result-card">
@@ -872,9 +1055,25 @@ function initLessonPage(data){
     $('cmdSaySlow').onclick = function(){ speakGameCommand('slow'); };
     $('gameNextBtn').onclick = gameNext;
     $('gameSkipBtn').onclick = function(){ goAfter('game'); };
+    $('testSay').onclick = function(){ speakText(withName(testSrc[state.testIndex].en), 'en-US', 'normal'); };
+    $('testSaySlow').onclick = function(){ speakText(withName(testSrc[state.testIndex].en), 'en-US', 'slow'); };
+    $('testMic').onclick = startTestMic;
+    $('testRetryBtn').onclick = function(){ hideSpeechResult(); setTimeout(startTestMic, 250); };
+    $('testSkipBtn').onclick = function(){ hideSpeechResult(); testNext(); };
+    $('testNextBtn').onclick = testNext;
+    $('testSkipAllBtn').onclick = showResult;
     $('quizBtn').onclick = submitQuiz;
-    $('goResultBtn').onclick = showResult;
+    $('goResultBtn').onclick = function(){ goAfter('dialog'); };
     $('restartBtn').onclick = restart;
+    $('forceUnlockBtn').onclick = function(){
+      var f = [];
+      try { f = JSON.parse(localStorage.getItem('forcedLessons') || '[]'); } catch(e){ f = []; }
+      if(f.indexOf(id) < 0) f.push(id);
+      try { localStorage.setItem('forcedLessons', JSON.stringify(f)); } catch(e){}
+      fillWelcome();
+      showScreen('welcome');
+      setTopPillStars();
+    };
     $('nextLessonBtn').onclick = function(){ location.href = 'pelajaran' + (id + 1) + '.html'; };
     $('vocabCard').addEventListener('click', function(e){
       if(e.target.tagName !== 'BUTTON') speakCurrent('normal');
@@ -905,6 +1104,8 @@ function initLessonPage(data){
     $('welcomeFlag').textContent = data.icon || '📘';
     $('welcomeTitle').textContent = data.title || 'Pelajaran';
     $('welcomeTheme').textContent = 'Tema: ' + (data.subtitle || '');
+    var nm = childName();
+    $('welcomeHello').textContent = nm ? ('Halo, ' + nm + '! 👋 Ayo belajar hari ini!') : 'Halo! 👋 Ayo belajar hari ini!';
     $('welcomeInfo').innerHTML = `
       <div class="info-pill">⏱️ 15 menit</div>
       <div class="info-pill">🎯 ${(data.vocab || []).length} ungkapan</div>
@@ -924,7 +1125,7 @@ function initLessonPage(data){
       showScreen('warmup');
       setTimeout(function(){
         var first = data.warmup[0];
-        if(first && first.who === 'parent') speakText(first.en, 'en-US', 'normal');
+        if(first && first.who === 'parent') speakText(withName(first.en), 'en-US', 'normal');
       }, 600);
     } else {
       setStepLabel('Bagian ' + secNum('vocab') + ' · Kenalkan Ungkapan');
@@ -978,6 +1179,7 @@ function initLessonPage(data){
   function handleSpeakResult(correct, heard, level, expected){
     state.speakTried++;
     if(correct) state.speakCorrect++;
+    playSound(level === 'good' ? 'correct' : (level === 'almost' ? 'almost' : 'wrong'));
     if(level === 'good'){
       showSpeechResult('good', '🎉 Bagus sekali!', heard, 'Pengucapanmu sudah benar!', true);
     } else if(level === 'almost'){
@@ -1058,6 +1260,7 @@ function initLessonPage(data){
     fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
     $('quizFbIcon').textContent = isCorrect ? '✓' : '✗';
     $('quizFbText').textContent = isCorrect ? 'Benar! Hebat!' : 'Belum tepat. Jawaban: ' + q.options[q.answer];
+    playSound(isCorrect ? 'correct' : 'wrong');
     if(isCorrect) state.correctCount++;
     $('quizBtn').textContent = state.quizIndex < data.quiz.length - 1 ? 'LANJUT' : 'SELESAI';
     $('quizBtn').disabled = false;
@@ -1074,16 +1277,17 @@ function initLessonPage(data){
       avatar.textContent = d.who === 'parent' ? '👨' : '🧒';
       var bubble = document.createElement('div');
       bubble.className = 'bubble';
-      var safeEn = String(d.en).replace(/'/g, "\\'");
+      var enShown = withName(d.en);
+      var safeEn = String(enShown).replace(/'/g, "\\'");
       var micHtml = (d.who === 'child' && hasSpeechRec)
         ? '<button class="speak-bubble" title="Rekam suaramu" data-idx="' + idx + '">🎤</button>' : '';
       bubble.innerHTML = `
-        <div class="en">${d.en}
+        <div class="en">${enShown}
           <button class="speak-bubble say" data-say="${safeEn}">🔊</button>
           <button class="speak-bubble say-slow" data-say="${safeEn}">🐢</button>
           ${micHtml}
         </div>
-        <div class="id">${d.id}</div>
+        <div class="id">${withName(d.id || '')}</div>
         <div class="dialog-speech-result" style="display:none;margin-top:6px;font-size:11px;font-weight:700;padding:6px 8px;border-radius:8px"></div>`;
       row.appendChild(avatar);
       row.appendChild(bubble);
@@ -1109,6 +1313,7 @@ function initLessonPage(data){
 
   function renderDialog(){
     $('badge-dialog').textContent = '💬 Bagian ' + secNum('dialog') + ' · Latihan Dialog';
+    $('goResultBtn').textContent = SEC.indexOf('speaktest') >= 0 ? 'LANJUT KE TES BICARA →' : 'LANJUT KE EVALUASI →';
     renderBubbleList($('dialogBox'), data.dialog || []);
     setProgress(secProgress('dialog', 1));
   }
@@ -1117,11 +1322,15 @@ function initLessonPage(data){
     if(!hasSpeechRec) return;
     if(isRecording){ try { recognition.stop(); } catch(e){} return; }
     var d = list[idx];
-    currentSlowTarget = d.en;
+    var en = withName(d.en);
+    currentSlowTarget = en;
     var resultEl = btn.closest('.bubble').querySelector('.dialog-speech-result');
     currentSpeakTarget = {
-      alt: [String(d.en).replace(/[.,!?;:'"]/g, '')].concat(d.alt || []),
+      alt: [String(en).replace(/[.,!?;:'"]/g, '')].concat(d.alt || []),
       onDone: function(correct, heard, level){
+        state.speakTried++;
+        if(correct) state.speakCorrect++;
+        playSound(level === 'good' ? 'correct' : (level === 'almost' ? 'almost' : 'wrong'));
         if(!resultEl) return;
         resultEl.style.display = 'block';
         if(level === 'good'){
@@ -1129,15 +1338,70 @@ function initLessonPage(data){
           resultEl.textContent = '🎉 Bagus! Pengucapan benar.';
         } else if(level === 'almost'){
           resultEl.style.background = '#fff7dd'; resultEl.style.color = '#cc7800';
-          resultEl.textContent = '👍 Hampir! Kamu: "' + heard + '". Coba: "' + d.en + '"';
+          resultEl.textContent = '👍 Hampir! Kamu: "' + heard + '". Coba: "' + en + '"';
         } else {
           resultEl.style.background = '#ffe5e5'; resultEl.style.color = '#ff5a5a';
           resultEl.textContent = '🔄 Coba lagi. Kamu: "' + heard + '"';
-          setTimeout(function(){ speakText(d.en, 'en-US', 'slow'); }, 300);
+          setTimeout(function(){ speakText(en, 'en-US', 'slow'); }, 300);
         }
       }
     };
     toggleMic();
+  }
+
+  /* ---------- TES BICARA ---------- */
+  function renderSpeakTest(){
+    setStepLabel('Bagian ' + secNum('speaktest') + ' · Tes Bicara');
+    $('badge-speaktest').textContent = '🎤 Bagian ' + secNum('speaktest') + ' · Tes Bicara';
+    var s = testSrc[state.testIndex];
+    $('testEn').textContent = withName(s.en);
+    $('testId').textContent = withName(s.id || '');
+    var dots = $('testDots');
+    dots.innerHTML = '';
+    testSrc.forEach(function(_, i){
+      var d = document.createElement('i');
+      d.className = i === state.testIndex ? 'on' : '';
+      dots.appendChild(d);
+    });
+    hideSpeechResult();
+    $('testNextBtn').disabled = true;
+    $('testNextBtn').textContent = state.testIndex < testSrc.length - 1 ? 'LANJUT' : 'SELESAI TES →';
+    setProgress(secProgress('speaktest', state.testIndex / testSrc.length));
+    setTimeout(function(){ speakText(withName(s.en), 'en-US', 'normal'); }, 600);
+  }
+
+  function startTestMic(){
+    if(!hasSpeechRec) return;
+    if(isRecording){ try { recognition.stop(); } catch(e){} return; }
+    var s = testSrc[state.testIndex];
+    var en = withName(s.en);
+    currentSlowTarget = en;
+    currentSpeakTarget = {
+      alt: [String(en).replace(/[.,!?;:'"]/g, '')].concat(s.alt || []),
+      onDone: function(correct, heard, level){
+        state.speakTried++;
+        if(correct) state.speakCorrect++;
+        playSound(level === 'good' ? 'correct' : (level === 'almost' ? 'almost' : 'wrong'));
+        if(level === 'good'){
+          showSpeechResult('good', '🎉 Bagus sekali!', heard, 'Kamu berhasil mengulang kalimatnya!', true);
+          $('testNextBtn').disabled = false;
+        } else if(level === 'almost'){
+          showSpeechResult('almost', '👍 Hampir benar!', heard, 'Ucap ulang: "' + en + '"', false);
+        } else {
+          showSpeechResult('bad', '🔄 Belum tepat', heard, 'Dengar lagi 🔊, lalu ucap ulang: "' + en + '"', false);
+        }
+      }
+    };
+    toggleMic();
+  }
+
+  function testNext(){
+    if(state.testIndex < testSrc.length - 1){
+      state.testIndex++;
+      renderSpeakTest();
+    } else {
+      showResult();
+    }
   }
 
   /* ---------- PERMAINAN "FIND IT!" ---------- */
@@ -1178,6 +1442,7 @@ function initLessonPage(data){
     if(v.word === g.target){
       state.gameDone = true;
       btn.classList.add('correct');
+      playSound('correct');
       document.querySelectorAll('#gameGrid .game-item').forEach(function(o){
         if(o !== btn) o.classList.add('dim');
       });
@@ -1190,6 +1455,7 @@ function initLessonPage(data){
     } else {
       btn.classList.add('wrong');
       setTimeout(function(){ btn.classList.remove('wrong'); }, 700);
+      playSound('wrong');
       var fb2 = $('gameFeedback');
       fb2.className = 'feedback show wrong';
       $('gameFbIcon').textContent = '✗';
@@ -1226,6 +1492,11 @@ function initLessonPage(data){
       setStepLabel('Bagian ' + secNum('dialog') + ' · Latihan Dialog');
       renderDialog();
       showScreen('dialog');
+    } else if(nextKey === 'speaktest'){
+      renderSpeakTest();
+      showScreen('speaktest');
+    } else {
+      showResult();
     }
   }
 
@@ -1253,9 +1524,10 @@ function initLessonPage(data){
     lessonStars[id] = Math.max(lessonStars[id] || 0, stars);
     saveProgress();
 
+    var nm = childName();
     var emoji, title, msg;
-    if(ratio === 1){ emoji = '🏆'; title = 'Sempurna!'; msg = 'Luar biasa! Anak sudah menguasai semua ungkapan hari ini.'; }
-    else if(ratio >= 0.5){ emoji = '🎉'; title = 'Hebat!'; msg = 'Bagus sekali! Sedikit lagi menuju sempurna. Ulangi permainan untuk hasil lebih baik.'; }
+    if(ratio === 1){ emoji = '🏆'; title = 'Sempurna' + (nm ? ', ' + nm : '') + '!'; msg = 'Luar biasa! Anak sudah menguasai semua ungkapan hari ini.'; }
+    else if(ratio >= 0.5){ emoji = '🎉'; title = 'Hebat' + (nm ? ', ' + nm : '') + '!'; msg = 'Bagus sekali! Sedikit lagi menuju sempurna. Ulangi permainan untuk hasil lebih baik.'; }
     else { emoji = '💪'; title = 'Semangat!'; msg = 'Tidak apa-apa, ini latihan bersama orang tua. Ayo coba lagi!'; }
     $('resultEmoji').textContent = emoji;
     $('resultTitle').textContent = title;
@@ -1281,6 +1553,7 @@ function initLessonPage(data){
     state.correctCount = 0; state.quizAnswered = false;
     state.speakCorrect = 0; state.speakTried = 0;
     state.gameIndex = 0; state.gameDone = false;
+    state.testIndex = 0;
     selectedOption = null;
     setProgress(0);
     fillWelcome();

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelajaran 3 · Colors and Numbers — Warna dan Angka · Kids English</title>
+  <meta name="description" content="Pelajaran 3 Kids English: warna dan angka — red, blue, yellow, one, two, dengan permainan Find the Color dan evaluasi.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-3 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 2) -> vocab 5 -> game "Find the
+               Color!" -> quiz (evaluasi) -> dialog -> Tes Bicara -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "warna-angka",
+      "name": "Warna & Angka",
+      "short": "Warna & Angka",
+      "emoji": "🎨",
+      "color": "orange",
+      "desc": "Red, blue, yellow, one, two"
+    },
+    "title": "Colors and Numbers — Warna dan Angka",
+    "subtitle": "Red, blue, yellow, one, two",
+    "icon": "🎨",
+    "desc": "Hari ini kita menyebutkan warna dan menghitung benda sederhana, sambil mengulang sapaan dan benda dari pelajaran kemarin. Target: mengenali 3 warna dan menghitung 1–5 dengan bantuan.",
+    "warmup": [
+      { "who": "parent", "en": "Hello!", "id": "Halo!" },
+      { "who": "child", "en": "Hello!", "id": "Halo!", "alt": ["hello", "hallo", "helo"] },
+      { "who": "parent", "en": "What is this?", "id": "Apa ini?" },
+      { "who": "child", "en": "Book!", "id": "Buku!", "alt": ["book", "buk", "a book"] },
+      { "who": "parent", "en": "What is this?", "id": "Apa ini?" },
+      { "who": "child", "en": "Pencil!", "id": "Pensil!", "alt": ["pencil", "pensil", "pen sil"] }
+    ],
+    "vocab": [
+      { "word": "Red", "phonetic": "red", "meaning": "Merah", "gesture": "🔴 Tunjuk benda merah", "image": "🔴", "emojiBg": "#ffe5e5", "speak": "Red", "alt": ["red", "rad", "raid"] },
+      { "word": "Blue", "phonetic": "blu", "meaning": "Biru", "gesture": "🔵 Tunjuk benda biru", "image": "🔵", "emojiBg": "#e3f2fd", "speak": "Blue", "alt": ["blue", "blu", "blu e"] },
+      { "word": "Yellow", "phonetic": "ye-low", "meaning": "Kuning", "gesture": "🟡 Tunjuk benda kuning", "image": "🟡", "emojiBg": "#fff7c2", "speak": "Yellow", "alt": ["yellow", "yelo", "ye low"] },
+      { "word": "One", "phonetic": "wan", "meaning": "Satu", "gesture": "1️⃣ Tunjuk satu jari", "image": "1️⃣", "emojiBg": "#ede7f6", "speak": "One", "alt": ["one", "wan", "1"] },
+      { "word": "Two", "phonetic": "tuu", "meaning": "Dua", "gesture": "2️⃣ Tunjuk dua jari", "image": "2️⃣", "emojiBg": "#e0f2f1", "speak": "Two", "alt": ["two", "tuu", "too", "2"] }
+    ],
+    "game": [
+      { "say": "Find something red!", "id": "Cari benda berwarna merah!", "target": "Red" },
+      { "say": "Find something blue!", "id": "Cari benda berwarna biru!", "target": "Blue" },
+      { "say": "Find something yellow!", "id": "Cari benda berwarna kuning!", "target": "Yellow" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya merah?", "hint": "Warna tomat.", "options": ["Red", "Blue", "Yellow"], "answer": 0 },
+      { "q": "Apa arti blue?", "hint": "Warna langit.", "options": ["Kuning", "Biru", "Merah"], "answer": 1 },
+      { "q": "Ada dua pensil. Berapa jumlahnya dalam bahasa Inggris?", "hint": "Tunjuk dua jarimu.", "options": ["One", "Two"], "answer": 1 },
+      { "q": "Tunjukkan benda berwarna kuning. Apa bahasa Inggrisnya?", "hint": "Warna matahari.", "options": ["Yellow", "Red", "Blue"], "answer": 0 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "What color is it?", "id": "Apa warnanya?" },
+      { "who": "child", "en": "Red!", "id": "Merah!", "alt": ["red", "it is red", "its red", "it's red"] },
+      { "who": "parent", "en": "How many pencils?", "id": "Ada berapa pensil?" },
+      { "who": "child", "en": "Two!", "id": "Dua!", "alt": ["two", "tuu", "too", "two pencils"] }
+    ],
+    "speakingTest": [
+      { "en": "Red!", "id": "Merah!", "alt": ["red", "it is red", "its red"] },
+      { "en": "Two!", "id": "Dua!", "alt": ["two", "tuu", "too"] }
+    ],
+    "homework": {
+      "text": "Sebelum tidur, ajak anak menemukan satu benda <b>merah</b>, satu benda <b>biru</b>, dan satu benda <b>kuning</b>. Hitung bersama dari <b>one</b> sampai <b>two</b>.<br><br><b>Patokan keberhasilan:</b> anak mulai menghubungkan warna dengan kata bahasa Inggris dan memahami jumlah satu serta dua.",
+      "next": "➡️ Besok: Animals — Hewan, sambil mengulang warna dan angka melalui gambar atau mainan hewan."
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

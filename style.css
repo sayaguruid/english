@@ -573,3 +573,69 @@ body {
 .game-item.correct { border-color: var(--green); background: var(--green-soft); box-shadow: 0 3px 0 var(--green-dark); }
 .game-item.wrong { border-color: var(--red); background: #ffe5e5; box-shadow: 0 3px 0 #cc2020; opacity: .75; }
 .game-item.dim { opacity: .45; }
+
+/* ===== SAPAAN NAMA ANAK ===== */
+.hello-name {
+  display: inline-block; background: var(--green-soft); color: var(--green-dark);
+  border-radius: 999px; padding: 6px 14px; margin-top: 8px;
+  font-size: clamp(12px, 3.4vw, 14px); font-weight: 800;
+}
+.hello-line {
+  font-size: clamp(13px, 3.6vw, 15px); font-weight: 800; color: var(--ink-light);
+  margin-bottom: 2px;
+}
+
+/* ===== PROFIL ANAK ===== */
+.profile-chip {
+  display: flex; align-items: center; gap: 5px; max-width: 42vw;
+  background: var(--card); border: 2px solid var(--line); border-radius: 999px;
+  padding: 7px 11px; font-family: inherit; font-weight: 800;
+  font-size: clamp(11px, 3vw, 13px); cursor: pointer; box-shadow: 0 2px 0 var(--line);
+  white-space: nowrap;
+}
+.profile-chip span { overflow: hidden; text-overflow: ellipsis; }
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(35,35,51,.55);
+  display: flex; align-items: center; justify-content: center; z-index: 80; padding: 16px;
+}
+.modal-card {
+  background: var(--card); border-radius: 24px; padding: 20px;
+  width: 100%; max-width: 400px; max-height: 86vh; overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0,0,0,.28);
+}
+.modal-title { font-size: clamp(17px, 5vw, 20px); font-weight: 800; }
+.modal-desc {
+  font-size: clamp(12px, 3.4vw, 13.5px); color: var(--ink-light);
+  font-weight: 600; margin-top: 4px; line-height: 1.5;
+}
+.profile-row {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  border: 2px solid var(--line); border-radius: 16px; padding: 10px 12px;
+  margin-top: 10px; background: var(--bg); font-family: inherit;
+  font-weight: 800; font-size: clamp(14px, 4vw, 15px); cursor: pointer; text-align: left;
+}
+.profile-row.on { border-color: var(--green); background: var(--green-soft); }
+.profile-row .pr-emoji { font-size: 20px; }
+.profile-row .pr-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.profile-row .pr-del { background: none; border: none; font-size: 15px; cursor: pointer; padding: 4px 6px; opacity: .6; }
+.add-row { display: flex; gap: 8px; margin-top: 14px; }
+.add-row input {
+  flex: 1; min-width: 0; border: 2px solid var(--line); border-radius: 14px;
+  padding: 11px 12px; font-family: inherit; font-weight: 700;
+  font-size: clamp(13px, 3.8vw, 14px); background: var(--bg);
+}
+.add-row input:focus { outline: none; border-color: var(--blue); }
+.skip-link {
+  display: block; margin: 12px auto 0; background: none; border: none;
+  font-family: inherit; font-weight: 700; color: var(--ink-light);
+  font-size: clamp(12px, 3.4vw, 13px); cursor: pointer; text-decoration: underline;
+}
+
+/* ===== TES BICARA ===== */
+.test-card {
+  background: var(--card); border: 2px solid var(--line); border-radius: 26px;
+  padding: 18px 16px; box-shadow: 0 5px 0 var(--line); text-align: center;
+}
+.test-en { font-size: clamp(20px, 6vw, 26px); font-weight: 800; margin-top: 8px; line-height: 1.25; }
+.test-id { color: var(--ink-light); font-weight: 700; font-size: clamp(12px, 3.4vw, 14px); margin-top: 2px; }
+.mic-btn.big { width: 88px; height: 88px; font-size: 34px; margin-top: 16px; }
