@@ -359,6 +359,8 @@ function initHomeApp(){
     <main class="stage">
       <section class="screen splash" id="screen-splash">
         <div class="logo">Kids<span class="dot">•</span>English</div>
+        <!-- MASKOT: ganti 🦖 di baris di bawah ini dengan emoji lain,
+             atau pakai gambar sendiri: <img src="maskot.png" style="width:70%"> -->
         <div class="splash-illustration">🦖</div>
         <h1>Belajar bahasa Inggris<br>untuk anak</h1>
         <p>Cara mudah dan menyenangkan belajar bahasa Inggris bersama si kecil, sedikit demi sedikit setiap hari.</p>
@@ -1002,7 +1004,7 @@ function initLessonPage(data){
 
       <section class="screen" id="screen-quiz">
         <div class="screen-pad center-content">
-          <div class="section-badge" id="badge-quiz">🎮 Evaluasi</div>
+          <div class="section-badge" id="badge-quiz">📝 Evaluasi</div>
           <div class="question-text" id="quizQuestion"></div>
           <div class="question-hint" id="quizHint"></div>
           <div class="options" id="quizOptions"></div>
@@ -1257,7 +1259,7 @@ function initLessonPage(data){
     state.quizAnswered = false;
     selectedOption = null;
     setStepLabel('Bagian ' + secNum('quiz') + ' · Jawab Pertanyaan');
-    $('badge-quiz').textContent = '🎮 Bagian ' + secNum('quiz') + ' · Jawab Pertanyaan';
+    $('badge-quiz').textContent = '📝 Bagian ' + secNum('quiz') + ' · Jawab Pertanyaan';
     var q = data.quiz[state.quizIndex];
     $('quizQuestion').textContent = q.q;
     $('quizHint').textContent = q.hint;

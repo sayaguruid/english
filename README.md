@@ -16,6 +16,12 @@ Situs statis untuk belajar bahasa Inggris bersama anak: ungkapan sehari-hari, pe
 
 Setelah diunggah (HTTPS): buka alamatnya di Chrome/Safari HP → **Tambahkan ke layar utama** — muncul ikon 🦖 sendiri dan terbuka penuh layar tanpa address bar.
 
+## Ganti gambar dinosaurus (maskot)
+
+- **Ikon aplikasi & favicon semua halaman**: timpa `icons/icon-192.png` dan `icons/icon-512.png` dengan gambar baru (PNG persegi) — favicon otomatis mengikuti file itu.
+- **Layar pembuka**: buka `app.js`, cari `splash-illustration` (ada komentar "MASKOT"), ganti emoji 🦖 di sana.
+- Ikon lama bisa tersimpan di cache service worker — muat ulang halaman 2×, atau F12 → Application → Service Workers → Unregister.
+
 ## Menambah pelajaran
 
 1. Salin `template-pelajaran.html` → `pelajaran3.html` (nomor berurutan).

@@ -140,7 +140,16 @@
       <li>Saat online pertama kali, halaman tersimpan otomatis (service worker) sehingga <b>tetap bisa dibuka saat sinyal lemah</b>.</li>
     </ul>
 
-    <h2>8. Fitur &amp; catatan</h2>
+    <h2>8. Ganti gambar dinosaurus (maskot)</h2>
+    <p>Gambar dinosaurus 🦖 dipakai di beberapa tempat. Cara menggantinya:</p>
+    <ol>
+      <li><b>Ikon aplikasi &amp; favicon semua halaman</b>: timpa file <code>icons/icon-192.png</code> dan <code>icons/icon-512.png</code> dengan gambar baru (persegi, format PNG). Favicon setiap halaman mengambil dari file ini — cukup ganti 2 file itu, semua ikon ikut berubah.</li>
+      <li><b>Gambar besar di layar pembuka</b>: buka <code>app.js</code>, cari tulisan <code>splash-illustration</code> (sudah diberi komentar penunjuk "MASKOT"), lalu ganti emoji 🦖 atau pakai <code>&lt;img src="maskot.png"&gt;</code>.</li>
+      <li><b>Emoji di judul tab &amp; teks panduan</b> (🦖 di <code>&lt;title&gt;</code> index.html, README.md, petunjuk.html) — opsional, hanya teks.</li>
+    </ol>
+    <div class="card green">💡 Setelah mengganti ikon, ikon lama bisa masih muncul karena tersimpan di cache service worker. Caranya: buka aplikasi → tekan F12 → tab <b>Application → Service Workers → Unregister</b>, lalu muat ulang halaman 2×.</div>
+
+    <h2>9. Fitur &amp; catatan</h2>
     <ul>
       <li><span class="pill">🔊 TTS</span> suara guru perempuan, normal &amp; lambat — pakai suara bawaan browser (butuh internet untuk font, suara tetap jalan offline).</li>
       <li><span class="pill">🔔 Efek suara</span> benar = “ding”, salah = “buzz” — memakai Web Audio, dengan cadangan file <code>sfx/*.wav</code> jika audio diblokir browser.</li>

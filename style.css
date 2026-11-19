@@ -27,12 +27,12 @@ body {
 
 .app {
   width: 100%; max-width: 480px; margin: 0 auto;
-  background: var(--card); min-height: 100dvh;
+  background: var(--card); height: 100dvh;
   display: flex; flex-direction: column; position: relative;
 }
 @media (min-width: 520px) {
   body { padding: 24px 0; }
-  .app { border-radius: 30px; box-shadow: 0 20px 60px rgba(35,35,51,.25); min-height: calc(100dvh - 48px); overflow: hidden; }
+  .app { border-radius: 30px; box-shadow: 0 20px 60px rgba(35,35,51,.25); height: calc(100dvh - 48px); overflow: hidden; }
 }
 
 /* ===== TOP BAR ===== */
@@ -68,9 +68,14 @@ body {
 .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--green), #7ee0a5); border-radius: 10px; transition: width 0.4s ease; }
 
 /* ===== STAGE / SCREENS ===== */
-.stage { flex: 1; display: flex; flex-direction: column; }
-.screen { display: none; flex-direction: column; flex: 1; }
-.screen.active { display: flex; }
+.stage { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
+/* layar aktif menggulir di dalam bingkai aplikasi — tombol aksi selalu terlihat */
+.screen.active {
+  display: flex; overflow-y: auto; overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.screen.active::-webkit-scrollbar { display: none; }
 .fade-in { animation: fadeIn 0.35s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -112,7 +117,14 @@ body {
 .btn-secondary:active { transform: translateY(4px); box-shadow: none; }
 .btn-green { background: var(--green); box-shadow: 0 5px 0 var(--green-dark); }
 .btn-green:active { transform: translateY(5px); box-shadow: 0 0 0 var(--green-dark); }
-.btn-area { margin-top: auto; padding-top: 18px; flex-shrink: 0; padding-bottom: env(safe-area-inset-bottom); }
+.btn-area {
+  position: sticky; bottom: 0; z-index: 5;
+  margin-top: auto; flex-shrink: 0;
+  padding-top: 14px;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom));
+  background: var(--card);
+  box-shadow: 0 -12px 20px -12px rgba(35,35,51,.10);
+}
 
 /* ===== HOME ===== */
 .home-head { padding: clamp(18px, 5vw, 26px) clamp(16px, 4.5vw, 24px) 6px; }
