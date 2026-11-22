@@ -234,6 +234,14 @@ function setupRecognition(){
   recognition.onend = function(){
     isRecording = false;
     updateMicUI(false);
+    /* popup "Mendengarkan..." masih terbuka berarti rekaman berhenti tanpa hasil */
+    var lp = document.getElementById('popOverlay');
+    if(lp && lp.querySelector('.pop-card.listen') && currentSpeakTarget){
+      var t = currentSpeakTarget;
+      currentSpeakTarget = null;
+      closePop();
+      t.onDone && t.onDone(false, '', 'bad');
+    }
   };
   recognition.onresult = function(event){
     isRecording = false;
@@ -371,6 +379,35 @@ var currentSlowTarget = null;
 /* Kait QA: uji popup hasil rekaman dari konsol otomatis */
 window.__kidsQA = window.__kidsQA || {};
 window.__kidsQA.showSpeakPop = showSpeakPop;
+window.__kidsQA.showListenPop = showListenPop;
+
+/* ---------- POPUP "MENDENGARKAN..." selama mikrofon merekam ---------- */
+function showListenPop(expectedEn, expectedId){
+  closePop();
+  var en = String(expectedEn).replace(/</g, '&lt;');
+  var id = String(expectedId || '').replace(/</g, '&lt;');
+  document.body.insertAdjacentHTML('beforeend', `
+    <div class="pop-overlay" id="popOverlay">
+      <div class="pop-card listen">
+        <div class="pop-ico">${ICONS.mic}</div>
+        <div class="pop-title">Mendengarkan...</div>
+        <div class="pop-listen-say">
+          <div class="pls-en">\u201C${en}\u201D</div>
+          ${id ? '<div class="pls-id">Artinya: ' + id + '</div>' : ''}
+        </div>
+        <div class="pop-listen-hint">Ucapkan dengan jelas ya!</div>
+        <button class="btn btn-secondary" id="popCancelBtn">BATAL</button>
+      </div>
+    </div>`);
+  var c = document.getElementById('popCancelBtn');
+  c.onclick = function(){
+    if(c._fired) return;
+    c._fired = true;
+    currentSpeakTarget = null;
+    try { if(recognition && isRecording) recognition.stop(); } catch(e){}
+    closePop();
+  };
+}
 
 /* ============================================================
    MODE: HALAMAN PELAJARAN (pelajaranN.html) — ada blok lesson-data
@@ -1003,7 +1040,7 @@ function initLessonPage(data){
             <div class="vocab-image" id="vocabImage">👋</div>
             <div class="word" id="vocabWord"></div>
             <div class="phonetic" id="vocabPhonetic"></div>
-            <div class="meaning" id="vocabMeaning"></div>
+            <div class="meaning">Artinya: <span id="vocabMeaning"></span><button class="mini-say" id="meaningSay" title="Dengarkan artinya dalam bahasa Indonesia">${ICONS.speaker}</button></div>
             <div class="gesture" id="vocabGesture"></div>
             <div class="speed-row">
               <button class="speed-btn normal" id="speedNormal">${ICONS.speaker} Normal</button>
@@ -1119,6 +1156,7 @@ function initLessonPage(data){
     $('startLessonBtn').onclick = startLesson;
     $('speedNormal').onclick = function(){ speakCurrent('normal'); };
     $('speedSlow').onclick = function(){ speakCurrent('slow'); };
+    $('meaningSay').onclick = function(){ speakText(data.vocab[state.vocabIndex].meaning, 'id-ID', 'normal'); };
     $('quizSay').onclick = function(){ speakText(withName(data.quiz[state.quizIndex].q), 'id-ID', 'normal'); };
     $('micBtn').onclick = startVocabMic;
     $('vocabNextBtn').onclick = nextVocab;
@@ -1209,7 +1247,7 @@ function initLessonPage(data){
     $('vocabImage').style.background = v.emojiBg || col.soft;
     $('vocabWord').textContent = v.word;
     $('vocabPhonetic').textContent = 'Cara baca: ' + v.phonetic;
-    $('vocabMeaning').textContent = 'Artinya: ' + v.meaning;
+    $('vocabMeaning').textContent = v.meaning;
     $('vocabGesture').textContent = (v.gestureLabel || 'Gerakan') + ': ' + v.gesture;
 
     var dots = $('vocabDots');
@@ -1417,6 +1455,7 @@ function initLessonPage(data){
         }
       }
     };
+    showListenPop(en, d.id);
     toggleMic();
   }
 
