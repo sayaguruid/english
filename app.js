@@ -54,8 +54,27 @@ var COLORS = {
   yellow: { main:'#ffc531', dark:'#dfa600', soft:'#fff7dd' }
 };
 
+/* ---------- IKON SVG (gaya rata & membulat, seragam dengan UI) ---------- */
+var ICONS = {
+  speaker: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.2v5.6h3.6l4.9 3.9V5.3L7.6 9.2H4z" fill="currentColor"/><path d="M16 8.6a4.8 4.8 0 0 1 0 6.8M18.6 6.2a8.2 8.2 0 0 1 0 11.6" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linecap="round"/></svg>',
+  turtle: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 14.3a5.7 5.7 0 0 1 11.4 0" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linecap="round"/><path d="M2 14.3h17.9" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linecap="round"/><circle cx="19.9" cy="12.4" r="2" stroke="currentColor" stroke-width="2.1" fill="none"/><path d="M5.3 14.3v2.4M12.4 14.3v2.4" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linecap="round"/></svg>',
+  mic: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linecap="round"/></svg>',
+  stop: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="2.5" fill="currentColor"/></svg>',
+  star: '<svg class="ico star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.65 5.4 5.95.85-4.3 4.2 1.02 5.9L12 16.75l-5.32 2.8 1.02-5.9-4.3-4.2 5.95-.85z" fill="currentColor"/></svg>',
+  home: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.3l8 6.9" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.2 10.2V19.2h11.6v-9" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  flag: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5v15.5" stroke="currentColor" stroke-width="2.1" fill="none" stroke-linecap="round"/><path d="M6 5.2h11.4l-2.8 3.6 2.8 3.6H6z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+  back: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  gift: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="9" width="16" height="4" rx="1.2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M6 13v6.5h12V13M12 9v10.5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M12 9c-3.4 0-5-1.2-5-2.7C7 5 8 4.2 9.2 4.2c1.6 0 2.8 2.2 2.8 4.8 0-2.6 1.2-4.8 2.8-4.8C16 4.2 17 5 17 6.3c0 1.5-1.6 2.7-5 2.7z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>',
+  search: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M15 15l4.5 4.5" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>',
+  check: '<svg class="ico pop-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.6l4.4 4.4L19 7.4" stroke="currentColor" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  x: '<svg class="ico pop-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="3.2" fill="none" stroke-linecap="round"/></svg>',
+  alert: '<svg class="ico pop-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5 21 19.5H3z" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linejoin="round"/><path d="M12 10v4.2" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="17" r="1.3" fill="currentColor"/></svg>'
+};
+
 /* ---------- SUARA GURU (Text-to-Speech) ---------- */
-var femaleVoice = null;
+var RATE_NORMAL = 0.72;  /* "Normal" dibuat lebih lambat agar mudah ditiru */
+var RATE_SLOW   = 0.42;  /* "Lambat" dibuat lebih lambat lagi */
+var enVoice = null, idVoice = null;
 function pickFemaleVoice(){
   if(!('speechSynthesis' in window)) return null;
   var voices = speechSynthesis.getVoices();
@@ -71,22 +90,38 @@ function pickFemaleVoice(){
   }
   return voices.find(function(v){ return v.lang.indexOf('en') === 0; }) || voices[0];
 }
+function pickIdVoice(){
+  if(!('speechSynthesis' in window)) return null;
+  var voices = speechSynthesis.getVoices();
+  return voices.find(function(v){ return (v.lang || '').toLowerCase().indexOf('id') === 0; }) || null;
+}
 function initVoices(){
   if(!('speechSynthesis' in window)) return;
-  femaleVoice = pickFemaleVoice();
-  speechSynthesis.onvoiceschanged = function(){ femaleVoice = pickFemaleVoice(); };
+  enVoice = pickFemaleVoice();
+  idVoice = pickIdVoice();
+  speechSynthesis.onvoiceschanged = function(){ enVoice = pickFemaleVoice(); idVoice = pickIdVoice(); };
 }
 initVoices();
 
-function speakText(text, lang, speed){
-  if(!('speechSynthesis' in window)){ alert('Browser tidak mendukung suara.'); return; }
-  window.speechSynthesis.cancel();
+function speakText(text, lang, speed, opts){
+  if(!('speechSynthesis' in window)) return;
+  if(!(opts && opts.queue)) window.speechSynthesis.cancel();
+  var isId = lang && lang.indexOf('id') === 0;
   var u = new SpeechSynthesisUtterance(text);
   u.lang = lang || 'en-US';
-  u.rate = speed === 'slow' ? 0.55 : 0.85;
-  u.pitch = 1.15;
-  if(femaleVoice) u.voice = femaleVoice;
+  u.rate = speed === 'slow' ? RATE_SLOW : RATE_NORMAL;
+  u.pitch = isId ? 1.0 : 1.15;
+  if(isId){ if(idVoice) u.voice = idVoice; }
+  else if(enVoice) u.voice = enVoice;
   window.speechSynthesis.speak(u);
+}
+
+/* Ucapkan bahasa Inggris, lalu artinya dalam bahasa Indonesia (berurutan) */
+function speakEnId(en, id, speed){
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  speakText(withName(en), 'en-US', speed, { queue: true });
+  if(id) speakText(withName(String(id)), 'id-ID', speed, { queue: true });
 }
 
 /* ---------- EFEK SUARA BENAR/SALAH (Web Audio + fallback file WAV) ---------- */
@@ -194,7 +229,7 @@ function setupRecognition(){
     else if(e.error === 'no-speech') msg = 'Tidak ada suara terdeteksi. Coba lagi ya.';
     else if(e.error === 'network') msg = 'Butuh koneksi internet untuk memeriksa suara.';
     playSound('wrong');
-    showSpeechResult('bad', '⚠️ ' + msg, '', '', false);
+    showSpeakPop('bad', '', '', { note: msg, retry: { label: 'COBA LAGI', fn: function(){ toggleMic(); } } });
   };
   recognition.onend = function(){
     isRecording = false;
@@ -270,42 +305,72 @@ function toggleMic(){
 }
 
 function updateMicUI(recording){
-  /* tombol mic di kartu vocab dan di layar Tes Bicara */
-  [['micBtn', 'micHint', 'Tekan 🎤 lalu ucapkan'],
-   ['testMic', 'testMicHint', 'Tekan 🎤 lalu ucapkan']].forEach(function(p){
-    var btn = $(p[0]);
+  /* tombol mic di kartu vocab dan di layar Tes Bicara — ikon SVG berganti */
+  ['micBtn', 'testMic'].forEach(function(id){
+    var btn = $(id);
     if(!btn) return;
-    if(recording){
-      btn.classList.add('listening');
-      btn.textContent = '⏹';
-      if($(p[1])) $(p[1]).textContent = '🎙️ Mendengarkan... ucapkan sekarang!';
-    } else {
-      btn.classList.remove('listening');
-      btn.textContent = '🎤';
-      if($(p[1])) $(p[1]).textContent = p[2];
-    }
+    btn.classList.toggle('listening', !!recording);
+    btn.innerHTML = recording ? ICONS.stop : ICONS.mic;
   });
 }
 
-function showSpeechResult(level, title, heard, msg, correct){
-  /* hasil muncul di layar yang sedang aktif (vocab atau Tes Bicara) */
-  var testActive = $('screen-speaktest') && $('screen-speaktest').classList.contains('active');
-  var box = $(testActive ? 'testResult' : 'speechResult');
-  if(!box) return;
-  box.className = 'speech-result show ' + level;
-  $(testActive ? 'testSrTitle' : 'srTitle').textContent = title;
-  $(testActive ? 'testSrHeard' : 'srHeard').innerHTML = heard ? ('Kamu mengucapkan: <b>"' + heard + '"</b>') : '';
-  $(testActive ? 'testSrMsg' : 'srMsg').textContent = msg;
-  if(!correct && currentSlowTarget) setTimeout(function(){ speakText(currentSlowTarget, 'en-US', 'slow'); }, 400);
+/* ---------- POPUP HASIL REKAMAN (benar / hampir / salah + yang terucap) ---------- */
+function showSpeakPop(level, heard, expected, opts){
+  opts = opts || {};
+  closePop();
+  var good = level === 'good';
+  var cls = good ? 'ok' : (level === 'almost' ? 'mid' : 'no');
+  var title = good ? 'Bagus sekali!' : (level === 'almost' ? 'Hampir benar!' : 'Belum tepat');
+  var ico = good ? ICONS.check : (level === 'almost' ? ICONS.alert : ICONS.x);
+
+  var text = heard
+    ? ('Kamu mengucapkan: <b>\u201C' + heard + '\u201D</b>')
+    : (opts.note || 'Suara tidak terdeteksi. Coba lebih dekat ke mikrofon, ya.');
+  if(opts.note && heard) text += '<br>' + opts.note;
+  if(!good && expected) text += '<div class="pop-expected">Ucap ulang: <b>\u201C' + expected + '\u201D</b></div>';
+
+  var mainLabel = good ? (opts.next ? opts.next.label : 'SELESAI') : (opts.retry ? (opts.retry.label || 'COBA LAGI') : 'SELESAI');
+  var mainFn = good ? (opts.next ? opts.next.fn : null) : (opts.retry ? opts.retry.fn : null);
+  var skip = (!good && opts.skip) ? '<button class="pop-skip" id="popSkipBtn">' + (opts.skip.label || 'Lewati \u2192') + '</button>' : '';
+
+  document.body.insertAdjacentHTML('beforeend', `
+    <div class="pop-overlay" id="popOverlay">
+      <div class="pop-card ${cls}">
+        <div class="pop-ico">${ico}</div>
+        <div class="pop-title">${title}</div>
+        <div class="pop-text">${text}</div>
+        <button class="btn ${good ? 'btn-green' : 'btn-black'}" id="popGoBtn">${mainLabel}</button>
+        ${skip}
+      </div>
+    </div>`);
+
+  var goBtn = document.getElementById('popGoBtn');
+  goBtn.onclick = function(){
+    if(goBtn._fired) return;   /* pengaman klik ganda */
+    goBtn._fired = true;
+    closePop();
+    if(mainFn) mainFn();
+  };
+  var skipBtn = document.getElementById('popSkipBtn');
+  if(skipBtn) skipBtn.onclick = function(){
+    if(skipBtn._fired) return;
+    skipBtn._fired = true;
+    closePop();
+    if(opts.skip && opts.skip.fn) opts.skip.fn();
+  };
+  /* dengarkan contoh pelan setelah hasil kurang tepat */
+  if(!good && currentSlowTarget) setTimeout(function(){ speakText(currentSlowTarget, 'en-US', 'slow'); }, 350);
 }
+
+function closePop(){
+  var ov = document.getElementById('popOverlay');
+  if(ov) ov.remove();
+}
+function hideSpeechResult(){ closePop(); }
 var currentSlowTarget = null;
-
-function hideSpeechResult(){
-  ['speechResult', 'testResult'].forEach(function(id){
-    var box = $(id);
-    if(box) box.classList.remove('show');
-  });
-}
+/* Kait QA: uji popup hasil rekaman dari konsol otomatis */
+window.__kidsQA = window.__kidsQA || {};
+window.__kidsQA.showSpeakPop = showSpeakPop;
 
 /* ============================================================
    MODE: HALAMAN PELAJARAN (pelajaranN.html) — ada blok lesson-data
@@ -352,7 +417,7 @@ function initHomeApp(){
       </div>
       <div class="tb-right">
         <button class="profile-chip" id="profileBtn" title="Pilih nama anak"><span id="profileChipTxt">＋ Nama Anak</span></button>
-        <button class="icon-pill" id="giftBtn" title="Hadiah">🎁</button>
+        <button class="icon-pill" id="giftBtn" title="Hadiah">${ICONS.gift}</button>
         <div class="tb-pill" id="topPill"></div>
       </div>
     </header>
@@ -373,7 +438,7 @@ function initHomeApp(){
           <h1>Apa yang mau dipelajari<br>hari ini?</h1>
         </div>
         <div class="search-wrap">
-          <span class="s-ico">🔍</span>
+          <span class="s-ico">${ICONS.search}</span>
           <input type="text" id="searchInput" placeholder="Cari kategori atau pelajaran...">
         </div>
         <div class="chips" id="chipRow"></div>
@@ -389,7 +454,7 @@ function initHomeApp(){
 
       <section class="screen" id="screen-category">
         <div class="cat-head-wrap">
-          <button class="back-btn" id="catBack">←</button>
+          <button class="back-btn" id="catBack">${ICONS.back}</button>
           <h1>Pilih Pelajaran</h1>
         </div>
         <div class="cat-hero" id="catHero"></div>
@@ -399,7 +464,7 @@ function initHomeApp(){
       <section class="screen" id="screen-rewards">
         <div class="rewards-wrap">
           <div class="cat-head-wrap" style="padding-left:0;padding-right:0">
-            <button class="back-btn" id="rewardBack">←</button>
+            <button class="back-btn" id="rewardBack">${ICONS.back}</button>
             <h1>Hadiah</h1>
           </div>
           <div class="rewards-hero" style="margin-top:14px">
@@ -476,7 +541,7 @@ function initHomeApp(){
     window.scrollTo(0, 0);
   }
   function setTopPillStars(){
-    $('topPill').innerHTML = '⭐ <span id="topPillVal">' + totalStars() + '</span>';
+    $('topPill').innerHTML = ICONS.star + ' <span id="topPillVal">' + totalStars() + '</span>';
   }
   function setStepLabel(t){ $('stepLabel').textContent = t; }
 
@@ -883,7 +948,7 @@ function initLessonPage(data){
         </a>
       </div>
       <div class="tb-right">
-        <a class="icon-pill" href="index.html" title="Beranda">🏠</a>
+        <a class="icon-pill" href="index.html" title="Beranda">${ICONS.home}</a>
         <div class="tb-pill" id="topPill"></div>
       </div>
     </header>
@@ -941,22 +1006,12 @@ function initLessonPage(data){
             <div class="meaning" id="vocabMeaning"></div>
             <div class="gesture" id="vocabGesture"></div>
             <div class="speed-row">
-              <button class="speed-btn normal" id="speedNormal">🔊 Normal</button>
-              <button class="speed-btn slow" id="speedSlow">🐢 Lambat</button>
+              <button class="speed-btn normal" id="speedNormal">${ICONS.speaker} Normal</button>
+              <button class="speed-btn slow" id="speedSlow">${ICONS.turtle} Lambat</button>
             </div>
             <div class="speak-section" id="speakSection">
-              <div class="speak-label">🎤 Sekarang giliranmu!</div>
-              <button class="mic-btn" id="micBtn">🎤</button>
-              <div class="mic-hint" id="micHint">Tekan 🎤 lalu ucapkan</div>
-              <div class="speech-result" id="speechResult">
-                <div class="sr-title" id="srTitle"></div>
-                <div class="sr-heard" id="srHeard"></div>
-                <div class="sr-msg" id="srMsg"></div>
-                <div class="sr-try">
-                  <button class="retry" id="retryBtn">🔄 Coba Lagi</button>
-                  <button class="skip" id="skipBtn">Lewati →</button>
-                </div>
-              </div>
+              <div class="speak-label">${ICONS.mic} Sekarang giliranmu!</div>
+              <button class="mic-btn" id="micBtn">${ICONS.mic}</button>
             </div>
           </div>
           <div class="vocab-dots" id="vocabDots"></div>
@@ -975,8 +1030,8 @@ function initLessonPage(data){
               <div class="cmd-en" id="cmdEn"></div>
               <div class="cmd-id" id="cmdId"></div>
             </div>
-            <button class="speed-btn normal" id="cmdSay">🔊</button>
-            <button class="speed-btn slow" id="cmdSaySlow">🐢</button>
+            <button class="speed-btn normal" id="cmdSay" title="Dengarkan normal">${ICONS.speaker}</button>
+            <button class="speed-btn slow" id="cmdSaySlow" title="Dengarkan lambat">${ICONS.turtle}</button>
           </div>
           <div class="game-grid" id="gameGrid"></div>
         </div>
@@ -989,7 +1044,10 @@ function initLessonPage(data){
       <section class="screen" id="screen-quiz">
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-quiz">📝 Evaluasi</div>
-          <div class="question-text" id="quizQuestion"></div>
+          <div class="quiz-head">
+            <div class="question-text" id="quizQuestion"></div>
+            <button class="speed-btn normal" id="quizSay" title="Dengarkan soal">${ICONS.speaker}</button>
+          </div>
           <div class="options" id="quizOptions"></div>
         </div>
         <div class="btn-area screen-pad" style="padding-top:0">
@@ -1015,20 +1073,10 @@ function initLessonPage(data){
             <div class="test-en" id="testEn"></div>
             <div class="test-id" id="testId"></div>
             <div class="speed-row">
-              <button class="speed-btn normal" id="testSay">🔊 Dengar</button>
-              <button class="speed-btn slow" id="testSaySlow">🐢 Lambat</button>
+              <button class="speed-btn normal" id="testSay">${ICONS.speaker} Dengar</button>
+              <button class="speed-btn slow" id="testSaySlow">${ICONS.turtle} Lambat</button>
             </div>
-            <button class="mic-btn big" id="testMic">🎤</button>
-            <div class="mic-hint" id="testMicHint">Tekan 🎤 lalu ucapkan</div>
-            <div class="speech-result" id="testResult">
-              <div class="sr-title" id="testSrTitle"></div>
-              <div class="sr-heard" id="testSrHeard"></div>
-              <div class="sr-msg" id="testSrMsg"></div>
-              <div class="sr-try">
-                <button class="retry" id="testRetryBtn">🔄 Ucap Ulang</button>
-                <button class="skip" id="testSkipBtn">Lewati →</button>
-              </div>
-            </div>
+            <button class="mic-btn big" id="testMic">${ICONS.mic}</button>
           </div>
         </div>
         <div class="btn-area screen-pad" style="padding-top:0">
@@ -1071,20 +1119,17 @@ function initLessonPage(data){
     $('startLessonBtn').onclick = startLesson;
     $('speedNormal').onclick = function(){ speakCurrent('normal'); };
     $('speedSlow').onclick = function(){ speakCurrent('slow'); };
+    $('quizSay').onclick = function(){ speakText(withName(data.quiz[state.quizIndex].q), 'id-ID', 'normal'); };
     $('micBtn').onclick = startVocabMic;
-    $('retryBtn').onclick = retrySpeak;
-    $('skipBtn').onclick = function(){ hideSpeechResult(); nextVocab(); };
     $('vocabNextBtn').onclick = nextVocab;
     $('warmupNextBtn').onclick = function(){ goAfter('warmup'); };
     $('cmdSay').onclick = speakGameCommand;
     $('cmdSaySlow').onclick = function(){ speakGameCommand('slow'); };
     $('gameNextBtn').onclick = gameNext;
     $('gameSkipBtn').onclick = function(){ goAfter('game'); };
-    $('testSay').onclick = function(){ speakText(withName(testSrc[state.testIndex].en), 'en-US', 'normal'); };
-    $('testSaySlow').onclick = function(){ speakText(withName(testSrc[state.testIndex].en), 'en-US', 'slow'); };
+    $('testSay').onclick = function(){ speakEnId(withName(testSrc[state.testIndex].en), testSrc[state.testIndex].id, 'normal'); };
+    $('testSaySlow').onclick = function(){ speakEnId(withName(testSrc[state.testIndex].en), testSrc[state.testIndex].id, 'slow'); };
     $('testMic').onclick = startTestMic;
-    $('testRetryBtn').onclick = function(){ hideSpeechResult(); setTimeout(startTestMic, 250); };
-    $('testSkipBtn').onclick = function(){ hideSpeechResult(); testNext(); };
     $('testNextBtn').onclick = testNext;
     $('testSkipAllBtn').onclick = showResult;
     $('quizBtn').onclick = submitQuiz;
@@ -1114,13 +1159,13 @@ function initLessonPage(data){
     window.scrollTo(0, 0);
   }
   function setTopPillStars(){
-    $('topPill').innerHTML = '⭐ <span id="topPillVal">' + totalStars() + '</span>';
+    $('topPill').innerHTML = ICONS.star + ' <span id="topPillVal">' + totalStars() + '</span>';
   }
   function setStepLabel(t){ $('stepLabel').textContent = t; }
   function setProgress(pct){
     $('progressBarWrap').classList.add('show');
     $('progressFill').style.width = pct + '%';
-    $('topPill').innerHTML = '🚩 <span id="topPillVal">' + Math.round(pct) + '%</span>';
+    $('topPill').innerHTML = ICONS.flag + ' <span id="topPillVal">' + Math.round(pct) + '%</span>';
   }
 
   /* ---------- WELCOME ---------- */
@@ -1143,7 +1188,7 @@ function initLessonPage(data){
       showScreen('warmup');
       setTimeout(function(){
         var first = data.warmup[0];
-        if(first && first.who === 'parent') speakText(withName(first.en), 'en-US', 'normal');
+        if(first && first.who === 'parent') speakEnId(withName(first.en), first.id, 'normal');
       }, 600);
     } else {
       setStepLabel('Bagian ' + secNum('vocab') + ' · Kenalkan Ungkapan');
@@ -1155,7 +1200,7 @@ function initLessonPage(data){
 
   function speakCurrent(speed){
     var v = data.vocab[state.vocabIndex];
-    speakText(v.speak, 'en-US', speed);
+    speakEnId(v.speak, v.meaning, speed);
   }
 
   function renderVocab(){
@@ -1199,11 +1244,9 @@ function initLessonPage(data){
     if(correct) state.speakCorrect++;
     playSound(level === 'good' ? 'correct' : (level === 'almost' ? 'almost' : 'wrong'));
     if(level === 'good'){
-      showSpeechResult('good', '🎉 Bagus sekali!', heard, 'Pengucapanmu sudah benar!', true);
-    } else if(level === 'almost'){
-      showSpeechResult('almost', '👍 Hampir benar!', heard, 'Coba ucapkan lebih jelas: "' + expected + '"', false);
+      showSpeakPop('good', heard, null, { next: { label: 'LANJUT', fn: nextVocab } });
     } else {
-      showSpeechResult('bad', '🔄 Belum tepat', heard, 'Dengar lagi suaranya, lalu coba ucapkan: "' + expected + '"', false);
+      showSpeakPop(level, heard, expected, { retry: retrySpeak, skip: { label: 'LEWATI \u2192', fn: nextVocab } });
     }
   }
 
@@ -1222,13 +1265,17 @@ function initLessonPage(data){
     }
   }
 
+  /* Kait QA (tidak dipakai alur normal): menguji popup dari konsol otomatis */
+  window.__kidsQA = window.__kidsQA || {};
+  window.__kidsQA.showAnswerPop = showAnswerPop;
+
   /* ---------- POPUP BENAR / SALAH (ala Duolingo) ---------- */
   function showAnswerPop(ok, text, btnLabel, onGo){
     var host = document.getElementById('modalRoot') || document.body;
     host.insertAdjacentHTML('beforeend', `
       <div class="pop-overlay" id="popOverlay">
         <div class="pop-card ${ok ? 'ok' : 'no'}">
-          <div class="pop-ico">${ok ? '✓' : '✗'}</div>
+          <div class="pop-ico">${ok ? ICONS.check : ICONS.x}</div>
           <div class="pop-title">${ok ? 'Benar!' : 'Belum tepat'}</div>
           <div class="pop-text">${text}</div>
           <button class="btn ${ok ? 'btn-green' : 'btn-black'}" id="popGoBtn">${btnLabel}</button>
@@ -1308,27 +1355,27 @@ function initLessonPage(data){
       var bubble = document.createElement('div');
       bubble.className = 'bubble';
       var enShown = withName(d.en);
-      var safeEn = String(enShown).replace(/'/g, "\\'");
+      var safeEn = String(enShown).replace(/"/g, '&quot;').replace(/'/g, "\\'");
+      var safeId = String(d.id || '').replace(/"/g, '&quot;').replace(/'/g, "\\'");
       var micHtml = (d.who === 'child' && hasSpeechRec)
-        ? '<button class="speak-bubble" title="Rekam suaramu" data-idx="' + idx + '">🎤</button>' : '';
+        ? '<button class="speak-bubble" title="Rekam suaramu" data-idx="' + idx + '">' + ICONS.mic + '</button>' : '';
       bubble.innerHTML = `
         <div class="en">${enShown}
-          <button class="speak-bubble say" data-say="${safeEn}">🔊</button>
-          <button class="speak-bubble say-slow" data-say="${safeEn}">🐢</button>
+          <button class="speak-bubble say" data-say="${safeEn}" data-sayid="${safeId}" title="Dengarkan">${ICONS.speaker}</button>
+          <button class="speak-bubble say-slow" data-say="${safeEn}" data-sayid="${safeId}" title="Dengarkan lambat">${ICONS.turtle}</button>
           ${micHtml}
         </div>
-        <div class="id">${withName(d.id || '')}</div>
-        <div class="dialog-speech-result" style="display:none;margin-top:6px;font-size:11px;font-weight:700;padding:6px 8px;border-radius:8px"></div>`;
+        <div class="id">${withName(d.id || '')}</div>`;
       row.appendChild(avatar);
       row.appendChild(bubble);
       box.appendChild(row);
     });
 
     box.querySelectorAll('.say').forEach(function(b){
-      b.onclick = function(){ speakText(b.getAttribute('data-say'), 'en-US', 'normal'); };
+      b.onclick = function(){ speakEnId(b.getAttribute('data-say'), b.getAttribute('data-sayid'), 'normal'); };
     });
     box.querySelectorAll('.say-slow').forEach(function(b){
-      b.onclick = function(){ speakText(b.getAttribute('data-say'), 'en-US', 'slow'); };
+      b.onclick = function(){ speakEnId(b.getAttribute('data-say'), b.getAttribute('data-sayid'), 'slow'); };
     });
     box.querySelectorAll('.speak-bubble[title="Rekam suaramu"]').forEach(function(b){
       b.onclick = function(){ startListSpeak(list, parseInt(b.getAttribute('data-idx'), 10), b); };
@@ -1354,25 +1401,19 @@ function initLessonPage(data){
     var d = list[idx];
     var en = withName(d.en);
     currentSlowTarget = en;
-    var resultEl = btn.closest('.bubble').querySelector('.dialog-speech-result');
     currentSpeakTarget = {
       alt: [String(en).replace(/[.,!?;:'"]/g, '')].concat(d.alt || []),
       onDone: function(correct, heard, level){
         state.speakTried++;
         if(correct) state.speakCorrect++;
         playSound(level === 'good' ? 'correct' : (level === 'almost' ? 'almost' : 'wrong'));
-        if(!resultEl) return;
-        resultEl.style.display = 'block';
         if(level === 'good'){
-          resultEl.style.background = '#e6f9ee'; resultEl.style.color = '#3dab6e';
-          resultEl.textContent = '🎉 Bagus! Pengucapan benar.';
-        } else if(level === 'almost'){
-          resultEl.style.background = '#fff7dd'; resultEl.style.color = '#cc7800';
-          resultEl.textContent = '👍 Hampir! Kamu: "' + heard + '". Coba: "' + en + '"';
+          showSpeakPop('good', heard, null, { next: { label: 'SELESAI', fn: null } });
         } else {
-          resultEl.style.background = '#ffe5e5'; resultEl.style.color = '#ff5a5a';
-          resultEl.textContent = '🔄 Coba lagi. Kamu: "' + heard + '"';
-          setTimeout(function(){ speakText(en, 'en-US', 'slow'); }, 300);
+          showSpeakPop(level, heard, en, {
+            retry: { label: 'COBA LAGI', fn: function(){ startListSpeak(list, idx, btn); } },
+            skip: { label: 'SELESAI', fn: null }
+          });
         }
       }
     };
@@ -1397,7 +1438,7 @@ function initLessonPage(data){
     $('testNextBtn').disabled = true;
     $('testNextBtn').textContent = state.testIndex < testSrc.length - 1 ? 'LANJUT' : 'SELESAI TES →';
     setProgress(secProgress('speaktest', state.testIndex / testSrc.length));
-    setTimeout(function(){ speakText(withName(s.en), 'en-US', 'normal'); }, 600);
+    setTimeout(function(){ speakEnId(withName(s.en), s.id, 'normal'); }, 600);
   }
 
   function startTestMic(){
@@ -1413,12 +1454,12 @@ function initLessonPage(data){
         if(correct) state.speakCorrect++;
         playSound(level === 'good' ? 'correct' : (level === 'almost' ? 'almost' : 'wrong'));
         if(level === 'good'){
-          showSpeechResult('good', '🎉 Bagus sekali!', heard, 'Kamu berhasil mengulang kalimatnya!', true);
+          showSpeakPop('good', heard, null, {
+            next: { label: state.testIndex < testSrc.length - 1 ? 'LANJUT' : 'SELESAI', fn: function(){ testNext(); } }
+          });
           $('testNextBtn').disabled = false;
-        } else if(level === 'almost'){
-          showSpeechResult('almost', '👍 Hampir benar!', heard, 'Ucap ulang: "' + en + '"', false);
         } else {
-          showSpeechResult('bad', '🔄 Belum tepat', heard, 'Dengar lagi 🔊, lalu ucap ulang: "' + en + '"', false);
+          showSpeakPop(level, heard, en, { retry: startTestMic, skip: { label: 'LEWATI \u2192', fn: testNext } });
         }
       }
     };
@@ -1438,7 +1479,7 @@ function initLessonPage(data){
   function speakGameCommand(speed){
     var g = data.game[state.gameIndex];
     if(!g) return; /* permainan sudah selesai (timer tertunda) */
-    speakText(g.say, 'en-US', speed || 'normal');
+    speakEnId(g.say, g.id, speed || 'normal');
   }
 
   function renderGame(){
