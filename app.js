@@ -385,7 +385,6 @@ function initHomeApp(){
         </div>
         <div id="micSupportNotice"></div>
         <div id="manualArea"></div>
-        <div class="footer-note">Belajar santai, sedikit demi sedikit setiap hari 🌱</div>
       </section>
 
       <section class="screen" id="screen-category">
@@ -523,8 +522,8 @@ function initHomeApp(){
         <div class="modal-card">
           <div class="modal-title">${firstRun ? '✏️ Tuliskan Nama Kamu' : '👦👧 Siapa yang Belajar?'}</div>
           <div class="modal-desc">${firstRun
-            ? 'Nama dipakai untuk sapaan di pelajaran, misal “My name is ...”. Kamu bisa menambah nama anak lain nanti.'
-            : 'Ketuk nama untuk memilih, tambah nama baru, atau hapus. Progres & bintang tersimpan di perangkat ini.'}</div>
+            ? 'Nama dipakai untuk sapaan di pelajaran, misal “My name is ...”.'
+            : 'Pilih nama, tambah baru, atau hapus. Progres tersimpan di perangkat ini.'}</div>
           <div id="profileListWrap">${rows ? '<div class="profile-list">' + rows + '</div>' : ''}</div>
           <div class="add-row">
             <input id="newNameInput" type="text" maxlength="20" placeholder="Tulis nama di sini..." autocomplete="off">
@@ -594,9 +593,7 @@ function initHomeApp(){
   function renderNotices(){
     var html = '';
     if(!hasSpeechRec){
-      html += `<div class="unsupported-notice">⚠️ <b>Pengecekan suara tidak tersedia.</b> Browser ini belum mendukung Web Speech API.
-        Gunakan <b>Google Chrome</b> atau <b>Microsoft Edge</b> untuk fitur rekam &amp; cek pengucapan.
-        Kamu tetap bisa belajar dengan tombol 🔊/🐢.</div>`;
+      html += '<div class="unsupported-notice">⚠️ Cek suara 🎤 butuh <b>Chrome</b>/<b>Edge</b>. Belajar tetap jalan dengan tombol 🔊/🐢.</div>';
     }
     $('micSupportNotice').innerHTML = html;
   }
@@ -604,10 +601,7 @@ function initHomeApp(){
   function renderManualOpen(){
     if($('manualArea').innerHTML) return;
     $('manualArea').innerHTML = `
-      <div class="unsupported-notice">📂 <b>Beranda otomatis butuh server web.</b>
-        Saat file dibuka langsung dari komputer (file://), browser memblokir pencarian pelajaran.
-        Unggah ke GitHub Pages/hosting, jalankan server lokal, atau buka langsung:
-        <b>pelajaran1.html</b>, <b>pelajaran2.html</b>, dst.</div>
+      <div class="unsupported-notice">📂 Beranda butuh hosting. Atau buka langsung:</div>
       <div class="manual-open">
         <input id="manualNum" type="number" min="1" placeholder="Nomor pelajaran, mis. 1">
         <button class="btn btn-black" id="manualGo">BUKA →</button>
@@ -735,7 +729,7 @@ function initHomeApp(){
         <div class="lr-info">
           <div class="lr-num">Pelajaran ${n}${d.comingSoon ? ' · Segera hadir' : ''}</div>
           <div class="lr-name">${d.title || 'Tanpa judul'}</div>
-          <div class="lr-desc">${d.desc || ''}</div>
+          <div class="lr-desc">${d.subtitle || d.desc || ''}</div>
         </div>
         ${isDone ? '<div class="lr-stars">⭐ ' + (lessonStars[n] || 1) + '</div>' : '<div class="lr-status">' + (unlocked ? '▶️' : '🔒') + '</div>'}`;
       if(unlocked) row.onclick = function(){ location.href = 'pelajaran' + n + '.html'; };
@@ -918,8 +912,6 @@ function initLessonPage(data){
             <h1 id="welcomeTitle"></h1>
             <div class="theme-pill" id="welcomeTheme"></div>
             <div class="hello-name" id="welcomeHello"></div>
-            <div class="info" id="welcomeInfo"></div>
-            <p class="welcome-desc" id="welcomeDesc"></p>
           </div>
           <div class="btn-area">
             <button class="btn btn-black" id="startLessonBtn">MULAI PELAJARAN →</button>
@@ -932,7 +924,6 @@ function initLessonPage(data){
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-warmup">🔥 Pemanasan</div>
           <div class="question-text" id="warmupTitle">Ingat pelajaran kemarin!</div>
-          <div class="question-hint" id="warmupHint">🔊 Dengarkan, lalu tirukan bersama</div>
           <div class="dialog" id="warmupBox"></div>
         </div>
         <div class="btn-area screen-pad" style="padding-top:0">
@@ -943,8 +934,6 @@ function initLessonPage(data){
       <section class="screen" id="screen-vocab">
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-vocab">📖 Bagian 1 · Kenalkan Ungkapan</div>
-          <div class="question-text">Dengarkan, tirukan, lalu rekam</div>
-          <div class="question-hint">🔊 Dengarkan, lalu tirukan 🎤</div>
           <div class="vocab-card" id="vocabCard">
             <div class="vocab-image" id="vocabImage">👋</div>
             <div class="word" id="vocabWord"></div>
@@ -981,7 +970,6 @@ function initLessonPage(data){
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-game">🔎 Permainan</div>
           <div class="question-text" id="gameRound"></div>
-          <div class="question-hint" id="gameHint">Sentuh gambar yang benar!</div>
           <div class="cmd-card">
             <div style="flex:1;min-width:0">
               <div class="cmd-en" id="cmdEn"></div>
@@ -991,10 +979,6 @@ function initLessonPage(data){
             <button class="speed-btn slow" id="cmdSaySlow">🐢</button>
           </div>
           <div class="game-grid" id="gameGrid"></div>
-          <div class="feedback" id="gameFeedback">
-            <span class="fb-icon" id="gameFbIcon">✓</span>
-            <span id="gameFbText"></span>
-          </div>
         </div>
         <div class="btn-area screen-pad" style="padding-top:0">
           <button class="btn btn-black" id="gameNextBtn" disabled>LANJUT</button>
@@ -1006,12 +990,7 @@ function initLessonPage(data){
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-quiz">📝 Evaluasi</div>
           <div class="question-text" id="quizQuestion"></div>
-          <div class="question-hint" id="quizHint"></div>
           <div class="options" id="quizOptions"></div>
-          <div class="feedback" id="quizFeedback">
-            <span class="fb-icon" id="quizFbIcon">✓</span>
-            <span id="quizFbText"></span>
-          </div>
         </div>
         <div class="btn-area screen-pad" style="padding-top:0">
           <button class="btn btn-black" id="quizBtn" disabled>PERIKSA</button>
@@ -1021,8 +1000,6 @@ function initLessonPage(data){
       <section class="screen" id="screen-dialog">
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-dialog">💬 Latihan Dialog</div>
-          <div class="question-text">Bacakan dialog dengan ceria</div>
-          <div class="question-hint">🔊 Dengarkan, lalu tirukan 🎤 di bubble anak</div>
           <div class="dialog" id="dialogBox"></div>
         </div>
         <div class="btn-area screen-pad" style="padding-top:0">
@@ -1033,8 +1010,6 @@ function initLessonPage(data){
       <section class="screen" id="screen-speaktest">
         <div class="screen-pad center-content">
           <div class="section-badge" id="badge-speaktest">🎤 Tes Bicara</div>
-          <div class="question-text">Ulangi kalimatnya dengan suaramu!</div>
-          <div class="question-hint">🔊 Dengarkan, lalu ucapkan 🎤</div>
           <div class="test-card">
             <div class="vocab-dots" id="testDots"></div>
             <div class="test-en" id="testEn"></div>
@@ -1156,13 +1131,6 @@ function initLessonPage(data){
     $('welcomeTheme').textContent = 'Tema: ' + (data.subtitle || '');
     var nm = childName();
     $('welcomeHello').textContent = nm ? ('Halo, ' + nm + '! 👋 Ayo belajar hari ini!') : 'Halo! 👋 Ayo belajar hari ini!';
-    $('welcomeInfo').innerHTML = `
-      <div class="info-pill">⏱️ 15 menit</div>
-      <div class="info-pill">🎯 ${(data.vocab || []).length} ungkapan</div>
-      ${data.game && data.game.length ? '<div class="info-pill">🔎 ' + data.game.length + ' putaran</div>' : ''}
-      <div class="info-pill">🎮 ${(data.quiz || []).length} kuis</div>
-      ${hasSpeechRec ? '<div class="info-pill">🎤 cek pengucapan</div>' : ''}`;
-    $('welcomeDesc').textContent = data.desc || '';
   }
 
   /* ---------- VOCAB ---------- */
@@ -1254,6 +1222,28 @@ function initLessonPage(data){
     }
   }
 
+  /* ---------- POPUP BENAR / SALAH (ala Duolingo) ---------- */
+  function showAnswerPop(ok, text, btnLabel, onGo){
+    var host = document.getElementById('modalRoot') || document.body;
+    host.insertAdjacentHTML('beforeend', `
+      <div class="pop-overlay" id="popOverlay">
+        <div class="pop-card ${ok ? 'ok' : 'no'}">
+          <div class="pop-ico">${ok ? '✓' : '✗'}</div>
+          <div class="pop-title">${ok ? 'Benar!' : 'Belum tepat'}</div>
+          <div class="pop-text">${text}</div>
+          <button class="btn ${ok ? 'btn-green' : 'btn-black'}" id="popGoBtn">${btnLabel}</button>
+        </div>
+      </div>`);
+    var goBtn = document.getElementById('popGoBtn');
+    goBtn.onclick = function(){
+      if(goBtn._fired) return;   /* pengaman klik ganda */
+      goBtn._fired = true;
+      var ov = document.getElementById('popOverlay');
+      if(ov) ov.remove();
+      if(onGo) onGo();
+    };
+  }
+
   /* ---------- QUIZ ---------- */
   function renderQuiz(){
     state.quizAnswered = false;
@@ -1262,7 +1252,6 @@ function initLessonPage(data){
     $('badge-quiz').textContent = '📝 Bagian ' + secNum('quiz') + ' · Jawab Pertanyaan';
     var q = data.quiz[state.quizIndex];
     $('quizQuestion').textContent = q.q;
-    $('quizHint').textContent = q.hint;
 
     var opts = $('quizOptions');
     opts.innerHTML = '';
@@ -1274,7 +1263,6 @@ function initLessonPage(data){
       opts.appendChild(b);
     });
 
-    $('quizFeedback').className = 'feedback';
     $('quizBtn').disabled = true;
     $('quizBtn').textContent = 'PERIKSA';
     setProgress(secProgress('quiz', state.quizIndex / data.quiz.length));
@@ -1289,31 +1277,23 @@ function initLessonPage(data){
   }
 
   function submitQuiz(){
-    if(state.quizAnswered){
-      state.quizIndex++;
-      if(state.quizIndex < data.quiz.length){
-        renderQuiz();
-      } else {
-        goAfter('quiz');
-      }
-      return;
-    }
-    if(selectedOption === null) return;
+    if(state.quizAnswered || selectedOption === null) return;
     state.quizAnswered = true;
     var q = data.quiz[state.quizIndex];
     var allOpts = document.querySelectorAll('#quizOptions .option');
     var isCorrect = selectedOption === q.answer;
     allOpts[q.answer].classList.add('correct');
     if(!isCorrect) allOpts[selectedOption].classList.add('wrong');
-
-    var fb = $('quizFeedback');
-    fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
-    $('quizFbIcon').textContent = isCorrect ? '✓' : '✗';
-    $('quizFbText').textContent = isCorrect ? 'Benar! Hebat!' : 'Belum tepat. Jawaban: ' + q.options[q.answer];
     playSound(isCorrect ? 'correct' : 'wrong');
     if(isCorrect) state.correctCount++;
-    $('quizBtn').textContent = state.quizIndex < data.quiz.length - 1 ? 'LANJUT' : 'SELESAI';
-    $('quizBtn').disabled = false;
+    $('quizBtn').disabled = true;
+    showAnswerPop(isCorrect,
+      isCorrect ? 'Hebat, jawabanmu benar!' : 'Jawaban benarnya: <b>' + q.options[q.answer] + '</b>',
+      state.quizIndex < data.quiz.length - 1 ? 'LANJUT' : 'SELESAI',
+      function(){
+        state.quizIndex++;
+        if(state.quizIndex < data.quiz.length){ renderQuiz(); } else { goAfter('quiz'); }
+      });
   }
 
   /* ---------- PEMANASAN & DIALOG (pembangun bubble bersama) ---------- */
@@ -1457,12 +1437,16 @@ function initLessonPage(data){
   /* ---------- PERMAINAN "FIND IT!" ---------- */
   function speakGameCommand(speed){
     var g = data.game[state.gameIndex];
+    if(!g) return; /* permainan sudah selesai (timer tertunda) */
     speakText(g.say, 'en-US', speed || 'normal');
   }
 
   function renderGame(){
-    setStepLabel('Bagian ' + secNum('game') + ' · Permainan Find It!');
-    $('badge-game').textContent = '🔎 Bagian ' + secNum('game') + ' · Permainan Find It!';
+    var g = data.game[state.gameIndex];
+    if(!g){ goAfter('game'); return; } /* pengaman indeks di luar jangkauan */
+    var gname = data.gameName || 'Find It!';
+    setStepLabel('Bagian ' + secNum('game') + ' · ' + gname);
+    $('badge-game').textContent = '🔎 Bagian ' + secNum('game') + ' · ' + gname;
     var g = data.game[state.gameIndex];
     $('gameRound').textContent = 'Putaran ' + (state.gameIndex + 1) + ' dari ' + data.game.length;
     $('cmdEn').textContent = g.say;
@@ -1479,7 +1463,6 @@ function initLessonPage(data){
       grid.appendChild(b);
     });
 
-    $('gameFeedback').className = 'feedback';
     $('gameNextBtn').disabled = true;
     $('gameNextBtn').textContent = state.gameIndex < data.game.length - 1 ? 'LANJUT' : 'SELESAI';
     setProgress(secProgress('game', state.gameIndex / data.game.length));
@@ -1496,20 +1479,20 @@ function initLessonPage(data){
       document.querySelectorAll('#gameGrid .game-item').forEach(function(o){
         if(o !== btn) o.classList.add('dim');
       });
-      var fb = $('gameFeedback');
-      fb.className = 'feedback show correct';
-      $('gameFbIcon').textContent = '✓';
-      $('gameFbText').textContent = 'Benar! ' + (g.cheer || 'Sekarang tunjuk benda ASLI di rumahmu, ya!');
-      $('gameNextBtn').disabled = false;
       speakText('Great job!', 'en-US', 'normal');
+      showAnswerPop(true,
+        (g.cheer || 'Kamu berhasil!') + '<br><b>' + g.say + '</b>',
+        state.gameIndex < data.game.length - 1 ? 'LANJUT' : 'SELESAI',
+        function(){
+          state.gameIndex++;
+          state.gameDone = false;
+          if(state.gameIndex < data.game.length){ renderGame(); } else { goAfter('game'); }
+        });
     } else {
       btn.classList.add('wrong');
       setTimeout(function(){ btn.classList.remove('wrong'); }, 700);
       playSound('wrong');
-      var fb2 = $('gameFeedback');
-      fb2.className = 'feedback show wrong';
-      $('gameFbIcon').textContent = '✗';
-      $('gameFbText').textContent = 'Belum tepat. Dengarkan lagi: ' + g.say;
+      showAnswerPop(false, 'Dengarkan lagi: <b>' + g.say + '</b>', 'COBA LAGI', null);
     }
   }
 

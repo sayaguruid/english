@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#3dab6e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 5 · My Body — Mengenal Anggota Tubuh · Kids English</title>
+  <meta name="description" content="Pelajaran 5 Kids English: mengenal anggota tubuh — head, eyes, nose, hands, dengan permainan Touch Your Body dan dialog.">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-5 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 4) -> vocab 4 (Head, Eyes,
+               Nose, Hands) -> game "Touch Your Body!" -> quiz ->
+               dialog -> Tes Bicara ("This is my head / These are
+               my hands") -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "tubuh",
+      "name": "Anggota Tubuh",
+      "short": "Tubuh",
+      "emoji": "🧍",
+      "color": "pink",
+      "desc": "Head, eyes, nose, hands"
+    },
+    "gameName": "Touch Your Body!",
+    "title": "My Body — Mengenal Anggota Tubuh",
+    "subtitle": "Head, eyes, nose, hands",
+    "icon": "🧍",
+    "desc": "Hari ini anak mengenal anggota tubuh melalui gerakan, bernyanyi, dan permainan di depan cermin. Target: anak memahami empat nama anggota tubuh ketika disebutkan dan mulai bisa mengucapkannya.",
+    "warmup": [
+      { "who": "parent", "en": "What animal is this?", "id": "Hewan apa ini?" },
+      { "who": "child", "en": "Cat!", "id": "Kucing!", "alt": ["cat", "ket", "a cat", "it is a cat"] },
+      { "who": "parent", "en": "What is this?", "id": "Ini apa?" },
+      { "who": "child", "en": "Dog!", "id": "Anjing!", "alt": ["dog", "dok", "a dog", "it is a dog"] },
+      { "who": "parent", "en": "Very good! Today we learn about our body!", "id": "Pintar! Hari ini kita belajar tentang tubuh!" }
+    ],
+    "vocab": [
+      { "word": "Head", "phonetic": "hed", "meaning": "Kepala", "gesture": "Sentuh kepala", "image": "😊", "emojiBg": "#fff3e0", "speak": "Head", "alt": ["head", "hed", "my head", "the head"] },
+      { "word": "Eyes", "phonetic": "aiz", "meaning": "Mata", "gesture": "Tunjuk kedua mata", "image": "👀", "emojiBg": "#e3f2fd", "speak": "Eyes", "alt": ["eyes", "aiz", "eye", "my eyes", "the eyes"] },
+      { "word": "Nose", "phonetic": "nouz", "meaning": "Hidung", "gesture": "Sentuh hidung", "image": "👃", "emojiBg": "#ffe5e5", "speak": "Nose", "alt": ["nose", "nouz", "my nose", "the nose"] },
+      { "word": "Hands", "phonetic": "hendz", "meaning": "Tangan", "gesture": "Angkat kedua tangan", "image": "🙌", "emojiBg": "#e6f9ee", "speak": "Hands", "alt": ["hands", "hendz", "hand", "my hands", "the hands"] }
+    ],
+    "game": [
+      { "say": "Touch your head!", "id": "Sentuh kepalamu, lalu sentuh gambar HEAD!", "target": "Head" },
+      { "say": "Touch your eyes!", "id": "Sentuh matamu, lalu sentuh gambar EYES!", "target": "Eyes" },
+      { "say": "Touch your nose!", "id": "Sentuh hidungmu, lalu sentuh gambar NOSE!", "target": "Nose" },
+      { "say": "Show your hands!", "id": "Tunjukkan tanganmu, lalu sentuh gambar HANDS!", "target": "Hands" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya kepala?", "options": ["Head", "Nose", "Eyes"], "answer": 0 },
+      { "q": "Apa arti Eyes?", "options": ["Hidung", "Mata", "Tangan"], "answer": 1 },
+      { "q": "Bagian tubuh mana yang disebut Nose?", "options": ["Hidung", "Kepala", "Tangan"], "answer": 0 },
+      { "q": "Apa bahasa Inggrisnya tangan?", "options": ["Eyes", "Hands", "Head"], "answer": 1 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "What is this?", "id": "Apa ini?" },
+      { "who": "child", "en": "Nose!", "id": "Hidung!", "alt": ["nose", "nouz", "my nose", "it is my nose"] },
+      { "who": "parent", "en": "Yes! Very good!", "id": "Ya! Bagus sekali!" }
+    ],
+    "speakingTest": [
+      { "en": "This is my head.", "id": "Ini kepala saya.", "alt": ["this is my head", "this is head", "it is my head", "this is my head"] },
+      { "en": "These are my hands.", "id": "Ini tangan saya.", "alt": ["these are my hands", "this is my hands", "these are hands", "these are my hand"] }
+    ],
+    "homework": {
+      "text": "Sebelum tidur, bermainlah bersama anak selama 2 menit. Berikan instruksi secara acak: <b>“Touch your head!”</b>, <b>“Touch your nose!”</b>, <b>“Show your hands!”</b>, <b>“Touch your eyes!”</b>.<br><br><b>Patokan keberhasilan:</b> anak mampu menunjukkan setidaknya dua anggota tubuh ketika disebutkan dalam bahasa Inggris dan mencoba menirukan namanya.",
+      "next": "➡️ Hari ke-6: My Family — Keluargaku, dengan kosakata mother, father, sister, dan brother. Materi hewan, benda, warna, serta anggota tubuh akan diselingi pengulangan agar tidak mudah lupa."
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>
