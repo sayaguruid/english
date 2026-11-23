@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#e88a33">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 7 · Food I Like — Makanan yang Saya Suka · Kids English</title>
+  <meta name="description" content="Pelajaran 7 Kids English: mengenal makanan — apple, banana, bread, milk — dengan permainan Find the Food! dan ungkapan I like ....">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-7 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 5-6) -> vocab 4 (Apple, Banana,
+               Bread, Milk) -> game "Find the Food!" -> quiz ->
+               dialog ("Do you like...? / I like ...") ->
+               Tes Bicara ("I like ...") -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "makanan",
+      "name": "Food I Like",
+      "short": "Makanan",
+      "emoji": "🍎",
+      "color": "orange",
+      "desc": "Apple, banana, bread, milk"
+    },
+    "gameName": "Find the Food!",
+    "title": "Food I Like — Makanan yang Saya Suka",
+    "subtitle": "Apple, banana, bread, milk",
+    "icon": "🍎",
+    "desc": "Hari ini anak mengenali empat nama makanan dan minuman serta mulai mengungkapkan makanan yang disukainya dengan kalimat sederhana \u201cI like ...\u201d. Target: anak bisa menyebut apple, banana, bread, dan milk serta menjawab pertanyaan \u201cDo you like ...?\u201d.",
+    "warmup": [
+      { "who": "parent", "en": "Touch your head!", "id": "Sentuh kepala!" },
+      { "who": "child", "en": "Head!", "id": "Kepala!", "alt": ["head", "hed", "my head", "the head"] },
+      { "who": "parent", "en": "Touch your nose!", "id": "Sentuh hidung!" },
+      { "who": "child", "en": "Nose!", "id": "Hidung!", "alt": ["nose", "nouz", "my nose", "the nose"] },
+      { "who": "parent", "en": "Show me your hands!", "id": "Tunjukkan tangan!" },
+      { "who": "child", "en": "Hands!", "id": "Tangan!", "alt": ["hands", "hendz", "my hands", "the hands"] },
+      { "who": "parent", "en": "Who is this?", "id": "Siapa ini?" },
+      { "who": "child", "en": "Mother!", "id": "Ibu!", "alt": ["mother", "madher", "my mother", "muther"] },
+      { "who": "parent", "en": "Very good! Today we learn about food!", "id": "Pintar! Hari ini kita belajar tentang makanan!" }
+    ],
+    "vocab": [
+      { "word": "Apple", "phonetic": "ep-el", "meaning": "Apel", "gesture": "Gerakkan tangan seperti memegang apel", "image": "🍎", "emojiBg": "#ffe5e5", "speak": "Apple", "alt": ["apple", "epel", "an apple", "the apple"] },
+      { "word": "Banana", "phonetic": "be-na-na", "meaning": "Pisang", "gesture": "Bentuk lengkung seperti pisang dengan tangan", "image": "🍌", "emojiBg": "#fff7dd", "speak": "Banana", "alt": ["banana", "benana", "a banana", "the banana"] },
+      { "word": "Bread", "phonetic": "bred", "meaning": "Roti", "gesture": "Tepuk telapak tangan seperti memotong roti", "image": "🍞", "emojiBg": "#fff3e0", "speak": "Bread", "alt": ["bread", "bred", "the bread", "some bread"] },
+      { "word": "Milk", "phonetic": "milk", "meaning": "Susu", "gesture": "Tirukan menuang susu ke gelas", "image": "🥛", "emojiBg": "#e3f2fd", "speak": "Milk", "alt": ["milk", "the milk", "some milk", "a glass of milk"] }
+    ],
+    "game": [
+      { "say": "Show me apple!", "id": "Tunjukkan gambar APEL!", "target": "Apple" },
+      { "say": "Touch banana!", "id": "Sentuh gambar PISANG!", "target": "Banana" },
+      { "say": "Where is milk?", "id": "Di mana gambar SUSU?", "target": "Milk" },
+      { "say": "Find bread!", "id": "Cari gambar ROTI!", "target": "Bread" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya apel?", "options": ["Apple", "Banana", "Bread"], "answer": 0 },
+      { "q": "Apa bahasa Inggrisnya susu?", "options": ["Bread", "Milk", "Apple"], "answer": 1 },
+      { "q": "Apa arti Banana?", "options": ["Roti", "Susu", "Pisang"], "answer": 2 },
+      { "q": "Bagaimana mengatakan \u201csaya suka roti\u201d?", "options": ["I like bread.", "I like milk.", "I like apple."], "answer": 0 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "Do you like banana?", "id": "Apakah kamu suka pisang?" },
+      { "who": "child", "en": "Yes!", "id": "Ya!", "alt": ["yes", "yes i do", "i do", "yes!"] },
+      { "who": "parent", "en": "What do you like?", "id": "Kamu suka apa?" },
+      { "who": "child", "en": "I like banana!", "id": "Saya suka pisang!", "alt": ["i like banana", "like banana", "banana", "i like banana"] },
+      { "who": "parent", "en": "What do you like?", "id": "Kamu suka apa?" },
+      { "who": "child", "en": "I like apple!", "id": "Saya suka apel!", "alt": ["i like apple", "like apple", "apple", "i like apple"] },
+      { "who": "parent", "en": "What do you like?", "id": "Kamu suka apa?" },
+      { "who": "child", "en": "I like milk!", "id": "Saya suka susu!", "alt": ["i like milk", "like milk", "milk", "i like milk"] },
+      { "who": "parent", "en": "Excellent! Good job! You are learning English!", "id": "Hebat! Kerja bagus! Kamu sedang belajar bahasa Inggris!" }
+    ],
+    "speakingTest": [
+      { "en": "I like apple.", "id": "Saya suka apel.", "alt": ["i like apple", "like apple", "apple", "i like apples"] },
+      { "en": "I like banana.", "id": "Saya suka pisang.", "alt": ["i like banana", "like banana", "banana", "i like bananas"] },
+      { "en": "I like bread.", "id": "Saya suka roti.", "alt": ["i like bread", "like bread", "bread", "i like the bread"] },
+      { "en": "I like milk.", "id": "Saya suka susu.", "alt": ["i like milk", "like milk", "milk", "i like the milk"] }
+    ],
+    "homework": {
+      "text": "Misi kecil di rumah: saat makan, tunjuk satu makanan dan tanyakan, <b>\u201cWhat is this?\u201d</b> Biarkan anak mencoba menjawab dalam bahasa Inggris. Beri kesempatan anak memilih makanan yang benar-benar disukainya agar ungkapan <b>\u201cI like ...\u201d</b> terasa alami.<br><br>Jangan menambah kosakata lain hari ini, dan tidak perlu mengoreksi tata bahasa secara berlebihan — utamakan keberanian berbicara. Jika anak belum menguasai materi keluarga atau anggota tubuh, ulangi sebentar pada kesempatan berikutnya.<br><br><b>Patokan keberhasilan:</b> anak mengenali apple, banana, bread, dan milk, serta mencoba mengucapkan <b>\u201cI like ...\u201d</b> dengan makanan yang benar.<br><br><b>Pujian untuk anak:</b> <b>\u201cExcellent! Good job! You are learning English!\u201d</b>",
+      "next": "➡️ Hari ke-8: pengulangan seru seluruh materi Hari 1–7 (sapaan, benda, warna & angka, hewan, anggota tubuh, keluarga, dan makanan) dengan permainan baru, lalu kosakata tambahan. Ditunggu ya!"
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>
