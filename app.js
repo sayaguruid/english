@@ -96,7 +96,12 @@ function pickFemaleVoice(){
 function pickIdVoice(){
   if(!('speechSynthesis' in window)) return null;
   var voices = speechSynthesis.getVoices();
-  return voices.find(function(v){ return (v.lang || '').toLowerCase().indexOf('id') === 0; }) || null;
+  if(!voices.length) return null;
+  /* utamakan suara berbahasa Indonesia, lalu nama "Indonesia" (beberapa mesin TTS
+     melaporkan lang tidak konsisten di browser tertentu, mis. Samsung Internet) */
+  var v = voices.find(function(v){ return (v.lang || '').toLowerCase().indexOf('id') === 0; });
+  if(!v) v = voices.find(function(v){ return (v.name || '').toLowerCase().indexOf('indonesia') >= 0; });
+  return v || null;
 }
 function initVoices(){
   if(!('speechSynthesis' in window)) return;
@@ -110,6 +115,9 @@ function speakText(text, lang, speed, opts){
   if(!('speechSynthesis' in window)) return;
   if(!(opts && opts.queue)) window.speechSynthesis.cancel();
   var isId = lang && lang.indexOf('id') === 0;
+  /* pilih ulang jika daftar suara baru saja termuat (Android/iOS memuatnya async) */
+  if(isId && !idVoice) idVoice = pickIdVoice();
+  if(!isId && !enVoice) enVoice = pickFemaleVoice();
   var u = new SpeechSynthesisUtterance(text);
   u.lang = lang || 'en-US';
   u.rate = speed === 'slow' ? RATE_SLOW : (speed === 'id' ? ID_RATE : RATE_NORMAL);
@@ -226,11 +234,15 @@ function setupRecognition(){
     isRecording = false;
     updateMicUI(false);
     var msg = 'Gagal mendengar suara. ';
-    if(e.error === 'not-allowed') msg = 'Izin mikrofon ditolak. Izinkan akses mikrofon di browser.';
+    if(e.error === 'not-allowed' || e.error === 'service-not-allowed') msg = 'Izin mikrofon ditolak. Izinkan akses mikrofon di browser, lalu coba lagi.';
     else if(e.error === 'no-speech') msg = 'Tidak ada suara terdeteksi. Coba lagi ya.';
     else if(e.error === 'network') msg = 'Butuh koneksi internet untuk memeriksa suara.';
     playSound('wrong');
-    showSpeakPop('bad', '', '', { note: msg, retry: { label: 'COBA LAGI', fn: function(){ toggleMic(); } } });
+    showSpeakPop('bad', '', '', { note: msg, retry: { label: 'COBA LAGI', fn: function(){
+      /* ulangi lewat fungsi asalnya agar popup "Mendengarkan..." muncul lagi */
+      if(currentSpeakTarget && currentSpeakTarget.retryFn) currentSpeakTarget.retryFn();
+      else toggleMic();
+    } } });
   };
   recognition.onend = function(){
     isRecording = false;
@@ -1253,12 +1265,16 @@ function initLessonPage(data){
   }
 
   function startVocabMic(){
+    if(!hasSpeechRec) return;
+    if(isRecording){ try { recognition.stop(); } catch(e){} return; }
     var v = data.vocab[state.vocabIndex];
     currentSlowTarget = v.speak;
     currentSpeakTarget = {
       alt: [v.speak].concat(v.alt || []),
+      retryFn: function(){ startVocabMic(); },
       onDone: function(correct, heard, level){ handleSpeakResult(correct, heard, level, v.speak); }
     };
+    showListenPop(v.speak, v.meaning);
     toggleMic();
   }
 
@@ -1426,6 +1442,7 @@ function initLessonPage(data){
     currentSlowTarget = en;
     currentSpeakTarget = {
       alt: [String(en).replace(/[.,!?;:'"]/g, '')].concat(d.alt || []),
+      retryFn: function(){ startListSpeak(list, idx, btn); },
       onDone: function(correct, heard, level){
         state.speakTried++;
         if(correct) state.speakCorrect++;
@@ -1473,6 +1490,7 @@ function initLessonPage(data){
     currentSlowTarget = en;
     currentSpeakTarget = {
       alt: [String(en).replace(/[.,!?;:'"]/g, '')].concat(s.alt || []),
+      retryFn: function(){ startTestMic(); },
       onDone: function(correct, heard, level){
         state.speakTried++;
         if(correct) state.speakCorrect++;
@@ -1487,6 +1505,7 @@ function initLessonPage(data){
         }
       }
     };
+    showListenPop(en, s.id);
     toggleMic();
   }
 
