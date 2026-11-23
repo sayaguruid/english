@@ -132,7 +132,12 @@ body {
   position: sticky; bottom: 0; z-index: 5;
   margin-top: auto; flex-shrink: 0;
   padding-top: 14px;
-  padding-bottom: calc(14px + env(safe-area-inset-bottom));
+  /* PWA terinstal: Android menggambar layar edge-to-edge dan Chrome Android
+     melaporkan env(safe-area-inset-bottom)=0 pada navigasi gestur, sehingga
+     tombol paling bawah bisa tertutup bilah gestur. Fallback + max() menjaga
+     tombol tetap terlihat penuh. */
+  padding-bottom: 36px; /* fallback jika env() tidak didukung */
+  padding-bottom: calc(14px + max(env(safe-area-inset-bottom, 0px), 22px));
   background: var(--card);
   box-shadow: 0 -12px 20px -12px rgba(35,35,51,.10);
 }
