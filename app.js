@@ -68,12 +68,15 @@ var ICONS = {
   search: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M15 15l4.5 4.5" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>',
   check: '<svg class="ico pop-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.6l4.4 4.4L19 7.4" stroke="currentColor" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   x: '<svg class="ico pop-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="3.2" fill="none" stroke-linecap="round"/></svg>',
-  alert: '<svg class="ico pop-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5 21 19.5H3z" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linejoin="round"/><path d="M12 10v4.2" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="17" r="1.3" fill="currentColor"/></svg>'
+  alert: '<svg class="ico pop-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5 21 19.5H3z" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linejoin="round"/><path d="M12 10v4.2" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="17" r="1.3" fill="currentColor"/></svg>',
+  chat: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.2c-4.6 0-8.3 2.9-8.3 6.6 0 2.1 1.2 3.9 3.1 5.1l-.7 3.6c-.1.5.4.9.9.7l3.6-1.7c.5.1.9.1 1.4.1 4.6 0 8.3-2.9 8.3-6.6s-3.7-7.8-8.3-7.8z" fill="currentColor"/></svg>',
+  chart: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 19.5V12M12 19.5v-14M18.5 19.5v-8" stroke="currentColor" stroke-width="2.8" fill="none" stroke-linecap="round"/></svg>'
 };
 
 /* ---------- SUARA GURU (Text-to-Speech) ---------- */
-var RATE_NORMAL = 0.72;  /* "Normal" dibuat lebih lambat agar mudah ditiru */
+var RATE_NORMAL = 0.6;   /* "Normal" Inggris dibuat lambat agar mudah ditiru anak */
 var RATE_SLOW   = 0.42;  /* "Lambat" dibuat lebih lambat lagi */
+var ID_RATE     = 0.8;   /* kecepatan natural untuk bahasa Indonesia */
 var enVoice = null, idVoice = null;
 function pickFemaleVoice(){
   if(!('speechSynthesis' in window)) return null;
@@ -109,19 +112,17 @@ function speakText(text, lang, speed, opts){
   var isId = lang && lang.indexOf('id') === 0;
   var u = new SpeechSynthesisUtterance(text);
   u.lang = lang || 'en-US';
-  u.rate = speed === 'slow' ? RATE_SLOW : RATE_NORMAL;
+  u.rate = speed === 'slow' ? RATE_SLOW : (speed === 'id' ? ID_RATE : RATE_NORMAL);
   u.pitch = isId ? 1.0 : 1.15;
   if(isId){ if(idVoice) u.voice = idVoice; }
   else if(enVoice) u.voice = enVoice;
   window.speechSynthesis.speak(u);
 }
 
-/* Ucapkan bahasa Inggris, lalu artinya dalam bahasa Indonesia (berurutan) */
+/* Ucapkan bahasa Inggris SAJA. Bahasa Indonesia hanya berbunyi bila
+   tombol artinya ditekan (lihat tombol hijau di kartu kosakata). */
 function speakEnId(en, id, speed){
-  if(!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-  speakText(withName(en), 'en-US', speed, { queue: true });
-  if(id) speakText(withName(String(id)), 'id-ID', speed, { queue: true });
+  speakText(withName(en), 'en-US', speed);
 }
 
 /* ---------- EFEK SUARA BENAR/SALAH (Web Audio + fallback file WAV) ---------- */
@@ -478,11 +479,10 @@ function initHomeApp(){
           <span class="s-ico">${ICONS.search}</span>
           <input type="text" id="searchInput" placeholder="Cari kategori atau pelajaran...">
         </div>
-        <div class="chips" id="chipRow"></div>
         <div class="section-title">Pilih Kategori</div>
         <div class="cat-grid" id="catGrid"></div>
         <div class="stats-card">
-          <div class="st-title">📊 Ringkasan Belajar</div>
+          <div class="st-title">${ICONS.chart} Ringkasan Belajar</div>
           <div class="stats-row" id="statsRow"></div>
         </div>
         <div id="micSupportNotice"></div>
@@ -587,7 +587,6 @@ function initHomeApp(){
     setTopPillStars();
     renderProfileChip();
     renderHelloLine();
-    renderChips();
     renderCards();
     renderNotices();
     showScreen('home');
@@ -676,20 +675,6 @@ function initHomeApp(){
       var inp = $('newNameInput');
       if(inp) inp.focus(); /* modal mungkin sudah ditutup ulang/dihancurkan */
     }, 100);
-  }
-
-  function renderChips(){
-    var chips = $('chipRow');
-    chips.innerHTML = '';
-    var mkChip = function(label, emoji, val){
-      var b = document.createElement('button');
-      b.className = 'chip' + (activeCat === val ? ' active' : '');
-      b.textContent = (emoji ? emoji + ' ' : '') + label;
-      b.onclick = function(){ activeCat = val; renderCards(); };
-      chips.appendChild(b);
-    };
-    mkChip('Semua', '', 'all');
-    CATS.forEach(function(c){ mkChip(c.short || c.name, c.emoji, c.id); });
   }
 
   function renderNotices(){
@@ -781,9 +766,9 @@ function initHomeApp(){
       .filter(function(L){ return completedLessons.indexOf(L.n) >= 0; })
       .reduce(function(a,L){ return a + ((L.data.vocab || []).length); }, 0);
     [
-      { e:'⭐', bg:'#f7b731', v: totalStars(), l:'Bintang' },
-      { e:'✅', bg:'#58cc8b', v: doneCount + '/' + LESSONS.length, l:'Selesai' },
-      { e:'💬', bg:'#a48be8', v: words, l:'Ungkapan' }
+      { e: ICONS.star, bg:'#f7b731', v: totalStars(), l:'Bintang' },
+      { e: ICONS.check, bg:'#58cc8b', v: doneCount + '/' + LESSONS.length, l:'Selesai' },
+      { e: ICONS.chat, bg:'#a48be8', v: words, l:'Ungkapan' }
     ].forEach(function(s){
       var d = document.createElement('div');
       d.className = 'stat';
@@ -1156,7 +1141,7 @@ function initLessonPage(data){
     $('startLessonBtn').onclick = startLesson;
     $('speedNormal').onclick = function(){ speakCurrent('normal'); };
     $('speedSlow').onclick = function(){ speakCurrent('slow'); };
-    $('meaningSay').onclick = function(){ speakText(data.vocab[state.vocabIndex].meaning, 'id-ID', 'normal'); };
+    $('meaningSay').onclick = function(){ speakText(data.vocab[state.vocabIndex].meaning, 'id-ID', 'id'); };
     $('quizSay').onclick = function(){ speakText(withName(data.quiz[state.quizIndex].q), 'id-ID', 'normal'); };
     $('micBtn').onclick = startVocabMic;
     $('vocabNextBtn').onclick = nextVocab;

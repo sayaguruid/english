@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#dfa600">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 6 · My Family — Keluargaku · Kids English</title>
+  <meta name="description" content="Pelajaran 6 Kids English: mengenal anggota keluarga — mother, father, sister, brother — dengan permainan Point to the Family dan dialog Who is this?.">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-6 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 5) -> vocab 4 (Mother, Father,
+               Sister, Brother) -> game "Point to the Family!" -> quiz ->
+               dialog ("Who is this?") -> Tes Bicara (kata keluarga) -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "keluarga",
+      "name": "Keluargaku",
+      "short": "Keluarga",
+      "emoji": "👨‍👩‍👧‍👦",
+      "color": "yellow",
+      "desc": "Mother, father, sister, brother"
+    },
+    "gameName": "Point to the Family!",
+    "title": "My Family — Keluargaku",
+    "subtitle": "Mother, father, sister, brother",
+    "icon": "👨‍👩‍👧‍👦",
+    "desc": "Hari ini anak mengenal empat anggota keluarga melalui permainan Point to the Family dan dialog sederhana. Target: anak dapat menyebutkan mother, father, sister, dan brother serta memahami pertanyaan \u201cWho is this?\u201d.",
+    "warmup": [
+      { "who": "parent", "en": "Touch your head!", "id": "Sentuh kepalamu!" },
+      { "who": "child", "en": "Head!", "id": "Kepala!", "alt": ["head", "hed", "my head", "the head"] },
+      { "who": "parent", "en": "Touch your nose!", "id": "Sentuh hidungmu!" },
+      { "who": "child", "en": "Nose!", "id": "Hidung!", "alt": ["nose", "nouz", "my nose", "the nose"] },
+      { "who": "parent", "en": "Show me your hands!", "id": "Tunjukkan tanganmu!" },
+      { "who": "child", "en": "Hands!", "id": "Tangan!", "alt": ["hands", "hendz", "my hands", "the hands"] },
+      { "who": "parent", "en": "Very good! Today we learn about our family!", "id": "Pintar! Hari ini kita belajar tentang keluarga!" }
+    ],
+    "vocab": [
+      { "word": "Mother", "phonetic": "ma-dher", "meaning": "Ibu", "gesture": "Peluk pelan seperti ibu", "image": "👩", "emojiBg": "#ffeaf1", "speak": "Mother", "alt": ["mother", "madher", "mader", "my mother", "the mother"] },
+      { "word": "Father", "phonetic": "fa-dher", "meaning": "Ayah", "gesture": "Berdiri tegak seperti ayah", "image": "👨", "emojiBg": "#e3f2fd", "speak": "Father", "alt": ["father", "fadher", "fader", "my father", "the father"] },
+      { "word": "Sister", "phonetic": "sis-ter", "meaning": "Saudara perempuan", "gesture": "Angkat tangan kecil ke atas", "image": "👧", "emojiBg": "#fff7dd", "speak": "Sister", "alt": ["sister", "my sister", "the sister", "sis-ter"] },
+      { "word": "Brother", "phonetic": "bra-dher", "meaning": "Saudara laki-laki", "gesture": "Berdiri gagah, tangan di pinggang", "image": "👦", "emojiBg": "#e6f9ee", "speak": "Brother", "alt": ["brother", "my brother", "the brother", "bra-dher"] }
+    ],
+    "game": [
+      { "say": "Mother!", "id": "Dengarkan, lalu tunjukkan gambar IBU!", "target": "Mother" },
+      { "say": "Father!", "id": "Dengarkan, lalu tunjukkan gambar AYAH!", "target": "Father" },
+      { "say": "Sister!", "id": "Dengarkan, lalu tunjukkan gambar SISTER!", "target": "Sister" },
+      { "say": "Brother!", "id": "Dengarkan, lalu tunjukkan gambar BROTHER!", "target": "Brother" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya ibu?", "options": ["Mother", "Father", "Sister"], "answer": 0 },
+      { "q": "Apa bahasa Inggrisnya ayah?", "options": ["Sister", "Father", "Mother"], "answer": 1 },
+      { "q": "Apa arti Sister?", "options": ["Saudara perempuan", "Saudara laki-laki", "Ibu"], "answer": 0 },
+      { "q": "Apa arti Brother?", "options": ["Ayah", "Ibu", "Saudara laki-laki"], "answer": 2 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "Who is this?", "id": "Siapa ini?" },
+      { "who": "child", "en": "This is my mother.", "id": "Ini ibu saya.", "alt": ["this is my mother", "this is mother", "mother", "my mother", "this is my mom"] },
+      { "who": "parent", "en": "Who is this?", "id": "Siapa ini?" },
+      { "who": "child", "en": "This is my father.", "id": "Ini ayah saya.", "alt": ["this is my father", "this is father", "father", "my father", "this is my dad"] },
+      { "who": "parent", "en": "Who is this?", "id": "Siapa ini?" },
+      { "who": "child", "en": "This is my sister.", "id": "Ini saudara perempuan saya.", "alt": ["this is my sister", "this is sister", "sister", "my sister"] },
+      { "who": "parent", "en": "Who is this?", "id": "Siapa ini?" },
+      { "who": "child", "en": "This is my brother.", "id": "Ini saudara laki-laki saya.", "alt": ["this is my brother", "this is brother", "brother", "my brother"] },
+      { "who": "parent", "en": "Great job! You are amazing!", "id": "Kerja bagus! Kamu hebat!" }
+    ],
+    "speakingTest": [
+      { "en": "Mother.", "id": "Ibu.", "alt": ["mother", "madher", "mader", "my mother"] },
+      { "en": "Father.", "id": "Ayah.", "alt": ["father", "fadher", "fader", "my father"] },
+      { "en": "Sister.", "id": "Saudara perempuan.", "alt": ["sister", "my sister"] },
+      { "en": "Brother.", "id": "Saudara laki-laki.", "alt": ["brother", "my brother"] }
+    ],
+    "homework": {
+      "text": "Bermainlah <b>Point to the Family!</b> bersama anak: orang tua menyebut kata secara acak — <b>Mother, Father, Sister, Brother</b> — dan anak menunjuk gambar atau tokoh yang benar. Jika anak tidak memiliki kakak atau adik, gunakan gambar tokoh atau boneka sebagai contoh.<br><br>Kemudian ajak anak membaca empat kata (<b>MOTHER, FATHER, SISTER, BROTHER</b>) dan menyalin satu atau dua kata yang paling mudah. Boleh juga menebalkan tulisan yang dibuat orang tua.<br><br><b>Patokan keberhasilan:</b> anak mampu menyebutkan setidaknya dua anggota keluarga dalam bahasa Inggris dan memahami pertanyaan <b>\u201cWho is this?\u201d</b>.<br><br><b>Pesan untuk anak:</b> <b>\u201cGreat job! You are amazing!\u201d</b> (Kerja bagus! Kamu hebat!)",
+      "next": "➡️ Hari ke-7: pengulangan seru seluruh materi Hari 1–6 (sapaan, benda, warna & angka, hewan, anggota tubuh, dan keluarga) dengan permainan baru. Ditunggu ya!"
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

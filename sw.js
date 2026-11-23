@@ -3,7 +3,7 @@
    Mode aplikasi: halaman tetap terbuka saat koneksi lemah/offline.
    Strategi: network-first (selalu data terbaru), fallback ke cache.
    ============================================================ */
-var CACHE = 'kids-english-v1';
+var CACHE = 'kids-english-v2';
 var CORE = [
   'index.html', 'style.css', 'app.js', 'manifest.json',
   'icons/icon-192.png', 'icons/icon-512.png',
