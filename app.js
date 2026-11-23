@@ -113,6 +113,9 @@ initVoices();
 
 function speakText(text, lang, speed, opts){
   if(!('speechSynthesis' in window)) return;
+  /* jangan bunyikan apa pun saat mikrofon merekam: suara TTS ikut tertangkap
+     mic dan menutupi suara asli anak */
+  if(isRecording) return;
   if(!(opts && opts.queue)) window.speechSynthesis.cancel();
   var isId = lang && lang.indexOf('id') === 0;
   /* pilih ulang jika daftar suara baru saja termuat (Android/iOS memuatnya async) */
@@ -322,6 +325,8 @@ function toggleMic(){
   if(isRecording){ try { recognition.stop(); } catch(e){} return; }
   if(!currentSpeakTarget) return;
   hideSpeechResult();
+  /* matikan TTS yang masih berbunyi agar tidak tertangkap mikrofon */
+  try { window.speechSynthesis.cancel(); } catch(e){}
   try { recognition.start(); } catch(e){}
 }
 
@@ -1037,7 +1042,7 @@ function initLessonPage(data){
             <div class="vocab-image" id="vocabImage">👋</div>
             <div class="word" id="vocabWord"></div>
             <div class="phonetic" id="vocabPhonetic"></div>
-            <div class="meaning">Artinya: <span id="vocabMeaning"></span><button class="mini-say" id="meaningSay" title="Dengarkan artinya dalam bahasa Indonesia">${ICONS.speaker}</button></div>
+            <div class="meaning" id="meaningRow" title="Ketuk untuk dengarkan artinya dalam bahasa Indonesia">Artinya: <span id="vocabMeaning"></span><button class="mini-say" id="meaningSay" aria-label="Dengarkan artinya dalam bahasa Indonesia">${ICONS.speaker}</button></div>
             <div class="gesture" id="vocabGesture"></div>
             <div class="speed-row">
               <button class="speed-btn normal" id="speedNormal">${ICONS.speaker} Normal</button>
@@ -1153,7 +1158,7 @@ function initLessonPage(data){
     $('startLessonBtn').onclick = startLesson;
     $('speedNormal').onclick = function(){ speakCurrent('normal'); };
     $('speedSlow').onclick = function(){ speakCurrent('slow'); };
-    $('meaningSay').onclick = function(){ speakText(data.vocab[state.vocabIndex].meaning, 'id-ID', 'id'); };
+    /* bunyi artinya ditangani handler meaningRow di atas (area ketuk penuh) */
     $('quizSay').onclick = function(){ speakText(withName(data.quiz[state.quizIndex].q), 'id-ID', 'normal'); };
     $('micBtn').onclick = startVocabMic;
     $('vocabNextBtn').onclick = nextVocab;
@@ -1180,9 +1185,13 @@ function initLessonPage(data){
       setTopPillStars();
     };
     $('nextLessonBtn').onclick = function(){ location.href = 'pelajaran' + (id + 1) + '.html'; };
-    $('vocabCard').addEventListener('click', function(e){
-      if(e.target.tagName !== 'BUTTON') speakCurrent('normal');
-    });
+    /* kartu TIDAK membunyikan bahasa Inggris saat disentuh sembarangan —
+       bahasa Inggris hanya lewat tombol Normal/Lambat. Seluruh baris
+       "Artinya" berbunyi bahasa Indonesia (area ketuk besar). */
+    $('meaningRow').onclick = function(){
+      if(isRecording) return;
+      speakText(data.vocab[state.vocabIndex].meaning, 'id-ID', 'id');
+    };
   }
 
   function showScreen(name){
