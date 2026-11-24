@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#3da8dc">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 14 · Let's Count! — Ayo Berhitung! · Kids English</title>
+  <meta name="description" content="Pelajaran 14 Kids English: mengenal angka 1–4 — one, two, three, four — dengan permainan Count and Touch! dan pertanyaan How many?.">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-14 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 12 & 13) -> vocab 4 angka (One,
+               Two, Three, Four) -> game "Count and Touch!" -> quiz ->
+               dialog ("How many apples? / Three!") ->
+               Tes Bicara (angka 1-4) -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "angka",
+      "name": "Let's Count!",
+      "short": "Berhitung",
+      "emoji": "🔢",
+      "color": "blue",
+      "desc": "One, two, three, four"
+    },
+    "gameName": "Count and Touch!",
+    "title": "Let's Count! — Ayo Berhitung!",
+    "subtitle": "One, two, three, four",
+    "icon": "🔢",
+    "desc": "Hari ini anak mengenali angka 1–4 dalam bahasa Inggris, menghitung benda sederhana, dan mulai memahami pertanyaan \u201cHow many?\u201d (Ada berapa?). Hari ini kita belajar berhitung menggunakan jari dan benda nyata — tidak perlu langsung menghafal semuanya.",
+    "warmup": [
+      { "who": "parent", "en": "Show me something red!", "id": "Tunjukkan benda berwarna merah!" },
+      { "who": "child", "en": "Red!", "id": "Merah!", "alt": ["red", "it is red", "its red"] },
+      { "who": "parent", "en": "Find something blue!", "id": "Cari benda berwarna biru!" },
+      { "who": "child", "en": "Blue!", "id": "Biru!", "alt": ["blue", "it is blue", "its blue"] },
+      { "who": "parent", "en": "Stand up!", "id": "Berdiri!" },
+      { "who": "child", "en": "Stand up!", "id": "Berdiri!", "alt": ["stand up", "sten ap", "stand"] },
+      { "who": "parent", "en": "Clap your hands!", "id": "Tepuk tangan!" },
+      { "who": "child", "en": "Clap your hands!", "id": "Tepuk tangan!", "alt": ["clap your hands", "clap", "klep yor hens"] },
+      { "who": "parent", "en": "Wonderful! Today we learn numbers!", "id": "Luar biasa! Hari ini kita belajar angka!" }
+    ],
+    "vocab": [
+      { "word": "One", "phonetic": "wan", "meaning": "Satu", "gesture": "Tunjukkan satu jari", "image": "☝️", "emojiBg": "#fff7dd", "speak": "One", "alt": ["one", "wan", "number one"] },
+      { "word": "Two", "phonetic": "tuu", "meaning": "Dua", "gesture": "Tunjukkan dua jari", "image": "✌️", "emojiBg": "#e3f2fd", "speak": "Two", "alt": ["two", "tuu", "too", "number two"] },
+      { "word": "Three", "phonetic": "thrii", "meaning": "Tiga", "gesture": "Tunjukkan tiga jari", "image": "🤟", "emojiBg": "#ffe5e5", "speak": "Three", "alt": ["three", "thrii", "number three"] },
+      { "word": "Four", "phonetic": "for", "meaning": "Empat", "gesture": "Tunjukkan empat jari", "image": "🖖", "emojiBg": "#eef2f6", "speak": "Four", "alt": ["four", "for", "number four"] }
+    ],
+    "game": [
+      { "say": "One!", "id": "Letakkan SATU benda — hitung bersama: satu! Tunjuk gambar SATU!", "target": "One" },
+      { "say": "Show me two!", "id": "Tunjukkan DUA jari! Tunjuk gambar DUA!", "target": "Two" },
+      { "say": "Show me three!", "id": "Tunjukkan TIGA jari! Tunjuk gambar TIGA!", "target": "Three" },
+      { "say": "Touch four!", "id": "Sentuh EMPAT benda! Tunjuk gambar EMPAT!", "target": "Four" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya satu?", "options": ["One", "Two", "Three"], "answer": 0 },
+      { "q": "Apa bahasa Inggrisnya tiga?", "options": ["Four", "Three", "Two"], "answer": 1 },
+      { "q": "Jika ada empat pensil, berapa jumlahnya dalam bahasa Inggris?", "options": ["One", "Four", "Two"], "answer": 1 },
+      { "q": "Apa arti pertanyaan \u201cHow many?\u201d?", "options": ["Ada berapa?", "Ini apa?", "Siapa ini?"], "answer": 0 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "How many apples?", "id": "Ada berapa apel?" },
+      { "who": "child", "en": "Three!", "id": "Tiga!", "alt": ["three", "thrii", "three apples"] },
+      { "who": "parent", "en": "Yes! Three apples!", "id": "Ya! Tiga apel!" },
+      { "who": "child", "en": "Three apples!", "id": "Tiga apel!", "alt": ["three apples", "three", "apples"] },
+      { "who": "parent", "en": "How many balls?", "id": "Ada berapa bola?" },
+      { "who": "child", "en": "Two!", "id": "Dua!", "alt": ["two", "tuu", "two balls"] },
+      { "who": "parent", "en": "How many pencils?", "id": "Ada berapa pensil?" },
+      { "who": "child", "en": "Four!", "id": "Empat!", "alt": ["four", "for", "four pencils"] },
+      { "who": "parent", "en": "Wonderful! You can count!", "id": "Luar biasa! Kamu bisa berhitung!" }
+    ],
+    "speakingTest": [
+      { "en": "One.", "id": "Satu.", "alt": ["one", "wan", "number one"] },
+      { "en": "Two.", "id": "Dua.", "alt": ["two", "tuu", "too", "number two"] },
+      { "en": "Three.", "id": "Tiga.", "alt": ["three", "thrii", "number three"] },
+      { "en": "Four.", "id": "Empat.", "alt": ["four", "for", "number four"] }
+    ],
+    "homework": {
+      "text": "Misi kecil di rumah: saat bermain, minta anak mengambil benda sesuai jumlah yang disebutkan. Orang tua: <b>\u201cGive me two pencils!\u201d</b> — anak memberikan dua pensil. Orang tua: <b>\u201cHow many pencils?\u201d</b> — anak menjawab <b>\u201cTwo!\u201d</b> Lakukan dengan jumlah satu sampai empat.<br><br>Gunakan jari dan benda nyata saat berhitung — pensil, balok, kancing besar, atau mainan. Catatan: pada kata THREE, bunyi awalnya menggunakan ujung lidah sedikit di antara gigi — tidak perlu sempurna pada latihan pertama.<br><br><b>Patokan keberhasilan:</b> anak mengenali angka 1–4 dalam bahasa Inggris, menghitung benda dengan benar, serta memahami pertanyaan <b>\u201cHow many?\u201d</b><br><br><b>Pujian untuk anak:</b> <b>\u201cWonderful! You can count!\u201d</b> (Luar biasa! Kamu bisa berhitung!)<br><br><b>Target berikutnya:</b> menggabungkan angka, warna, dan benda dalam satu permainan sederhana agar anak mulai menggunakan beberapa kosakata yang sudah dipelajari dalam percakapan sehari-hari. Utamakan kemampuan mendengar, memahami, dan mengucapkan angka sebelum meminta anak menulisnya.",
+      "next": "➡️ Hari ke-15: materi baru menyusul — gabungan angka, warna, dan benda dalam satu permainan sederhana. Sampai jumpa!"
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

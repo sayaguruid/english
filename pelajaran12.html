@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#3dab6e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 12 · Let's Move! — Ayo Bergerak! · Kids English</title>
+  <meta name="description" content="Pelajaran 12 Kids English: memahami instruksi gerakan — stand up, sit down, clap your hands, jump — dengan permainan Simon Says! dan ungkapan I can ....">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-12 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 11) -> vocab 4 instruksi gerakan
+               (Stand Up, Sit Down, Clap Your Hands, Jump) ->
+               game "Simon Says!" -> quiz ->
+               dialog ("Can you jump? / I can ...") ->
+               Tes Bicara ("I can ...") -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "gerak",
+      "name": "Let's Move!",
+      "short": "Bergerak",
+      "emoji": "🏃",
+      "color": "green",
+      "desc": "Stand up, sit down, clap, jump"
+    },
+    "gameName": "Simon Says!",
+    "title": "Let's Move! — Ayo Bergerak!",
+    "subtitle": "Stand up, sit down, clap, jump",
+    "icon": "🏃",
+    "desc": "Hari ini anak memahami empat instruksi gerakan dalam bahasa Inggris, melakukan gerakan sesuai perintah, dan mulai mengatakan kemampuan dirinya dengan kalimat \u201cI can ...\u201d (Saya bisa ...). Hari ini kita lebih banyak belajar melalui gerakan — anak tidak harus langsung menghafal semua kata.",
+    "warmup": [
+      { "who": "parent", "en": "How do you feel?", "id": "Bagaimana perasaanmu?" },
+      { "who": "child", "en": "I am happy!", "id": "Saya senang!", "alt": ["i am happy", "im happy", "happy", "i am hepi"] },
+      { "who": "parent", "en": "Happy or sad?", "id": "Senang atau sedih?" },
+      { "who": "child", "en": "Happy!", "id": "Senang!", "alt": ["happy", "hepi", "i am happy"] },
+      { "who": "parent", "en": "How do you feel?", "id": "Bagaimana perasaanmu?" },
+      { "who": "child", "en": "I am sleepy!", "id": "Saya mengantuk!", "alt": ["i am sleepy", "im sleepy", "sleepy"] },
+      { "who": "parent", "en": "Excellent! Today we learn action words!", "id": "Luar biasa! Hari ini kita belajar kata-kata gerakan!" }
+    ],
+    "vocab": [
+      { "word": "Stand Up", "phonetic": "sten ap", "meaning": "Berdiri", "gesture": "Berdiri tegak", "image": "🧍", "emojiBg": "#e8f5e9", "speak": "Stand up", "alt": ["stand up", "sten ap", "stand", "i can stand up"] },
+      { "word": "Sit Down", "phonetic": "sit daun", "meaning": "Duduk", "gesture": "Duduk di kursi atau lantai", "image": "🪑", "emojiBg": "#fff3e0", "speak": "Sit down", "alt": ["sit down", "sit daun", "sit", "i can sit down"] },
+      { "word": "Clap Your Hands", "phonetic": "klep yor hens", "meaning": "Tepuk tangan", "gesture": "Tepukkan kedua tangan", "image": "👏", "emojiBg": "#fff7dd", "speak": "Clap your hands", "alt": ["clap your hands", "clap", "klep yor hens", "i can clap"] },
+      { "word": "Jump", "phonetic": "jamp", "meaning": "Melompat", "gesture": "Melompat kecil di tempat", "image": "🐸", "emojiBg": "#e3f2fd", "speak": "Jump", "alt": ["jump", "jamp", "i can jump"] }
+    ],
+    "game": [
+      { "say": "Simon says, stand up!", "id": "SIMON SAYS — berdiri! Tunjuk gambar BERDIRI!", "target": "Stand Up" },
+      { "say": "Simon says, clap your hands!", "id": "SIMON SAYS — tepuk tangan! Tunjuk gambar TEPUK TANGAN!", "target": "Clap Your Hands" },
+      { "say": "Simon says, jump!", "id": "SIMON SAYS — lompat! Tunjuk gambar MELOMPAT!", "target": "Jump" },
+      { "say": "Sit down!", "id": "Tanpa \u201cSimon says\u201d — anak tidak perlu bergerak! Untuk jawabannya, tunjuk gambar DUDUK!", "target": "Sit Down" }
+    ],
+    "quiz": [
+      { "q": "Apa arti \u201cStand up!\u201d?", "options": ["Berdiri", "Duduk", "Melompat"], "answer": 0 },
+      { "q": "Apa arti \u201cJump!\u201d?", "options": ["Duduk", "Tepuk tangan", "Melompat"], "answer": 2 },
+      { "q": "Apa bahasa Inggrisnya tepuk tangan?", "options": ["Sit down", "Clap your hands", "Stand up"], "answer": 1 },
+      { "q": "Bagaimana mengatakan \u201csaya bisa melompat\u201d?", "options": ["I can jump.", "I can clap.", "I can sit."], "answer": 0 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "Can you jump?", "id": "Kamu bisa lompat?" },
+      { "who": "child", "en": "Yes!", "id": "Ya!", "alt": ["yes", "yes i can", "i can", "ye"] },
+      { "who": "parent", "en": "What can you do?", "id": "Kamu bisa apa?" },
+      { "who": "child", "en": "I can jump!", "id": "Saya bisa melompat!", "alt": ["i can jump", "can jump", "jump"] },
+      { "who": "parent", "en": "Great! Can you clap?", "id": "Hebat! Kamu bisa tepuk tangan?" },
+      { "who": "child", "en": "Yes! I can clap!", "id": "Ya! Saya bisa tepuk tangan!", "alt": ["i can clap", "can clap", "clap", "yes i can clap"] },
+      { "who": "parent", "en": "Excellent! You can do it!", "id": "Luar biasa! Kamu pasti bisa!" }
+    ],
+    "speakingTest": [
+      { "en": "I can jump.", "id": "Saya bisa melompat.", "alt": ["i can jump", "can jump", "jump", "i can jamp"] },
+      { "en": "I can clap.", "id": "Saya bisa tepuk tangan.", "alt": ["i can clap", "can clap", "clap"] },
+      { "en": "I can stand up.", "id": "Saya bisa berdiri.", "alt": ["i can stand up", "can stand up", "stand up"] },
+      { "en": "I can sit down.", "id": "Saya bisa duduk.", "alt": ["i can sit down", "can sit down", "sit down"] }
+    ],
+    "homework": {
+      "text": "Misi kecil di rumah: sebelum tidur atau saat bermain, lakukan permainan singkat. Orang tua mengatakan <b>\u201cStand up!\u201d</b>, <b>\u201cClap your hands!\u201d</b>, <b>\u201cJump!\u201d</b> — anak melakukan gerakannya. Kemudian minta anak mengatakan <b>\u201cI can jump!\u201d</b> Cukup 2–3 menit dan lakukan dengan suasana menyenangkan.<br><br>Ingat aturan Simon Says: anak hanya bergerak jika ada kata <b>\u201cSimon says\u201d</b> terlebih dahulu. Jika anak salah, jangan langsung menyalahkan — berikan kesempatan mencoba lagi. Jika anak belum bisa mengucapkan kalimat lengkap, cukup menjawab <b>\u201cJump!\u201d</b> atau <b>\u201cYes!\u201d</b> terlebih dahulu.<br><br><b>Patokan keberhasilan:</b> anak memahami instruksi stand up, sit down, clap, dan jump, mengikuti permainan Simon Says, serta mencoba mengucapkan <b>\u201cI can jump\u201d</b><br><br><b>Pujian untuk anak:</b> <b>\u201cExcellent! You can do it!\u201d</b> (Luar biasa! Kamu pasti bisa!)<br><br><b>Catatan perkembangan:</b> hari ini adalah latihan mendengar dan memahami instruksi melalui gerakan — penting sebelum anak diminta berbicara lebih banyak. Jika masih kesulitan, ulangi materi gerakan besok; jangan memaksakan membaca dan menulis sebelum anak nyaman mendengar dan berbicara.",
+      "next": "➡️ Hari ke-13: My Favorite Colors — warna kesukaanku (red, blue, yellow, green) dengan permainan Find Something! dan ungkapan baru \u201cWhat color is it? / It is red.\u201d Ditunggu ya!"
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

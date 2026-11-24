@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#e35b8c">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 11 · How Do You Feel? — Bagaimana Perasaanmu? · Kids English</title>
+  <meta name="description" content="Pelajaran 11 Kids English: mengenal perasaan — happy, sad, angry, sleepy — dengan permainan Guess My Feeling! dan ungkapan I am ....">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-11 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 1 & 10) -> vocab 4 (Happy, Sad,
+               Angry, Sleepy) -> game "Guess My Feeling!" -> quiz ->
+               dialog ("How do you feel? / I am ...") ->
+               Tes Bicara ("I am ...") -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "perasaan",
+      "name": "How Do You Feel?",
+      "short": "Perasaan",
+      "emoji": "😊",
+      "color": "pink",
+      "desc": "Happy, sad, angry, sleepy"
+    },
+    "gameName": "Guess My Feeling!",
+    "title": "How Do You Feel? — Bagaimana Perasaanmu?",
+    "subtitle": "Happy, sad, angry, sleepy",
+    "icon": "😊",
+    "desc": "Hari ini anak mengenali empat ungkapan perasaan dalam bahasa Inggris dan mencoba menjawab pertanyaan \u201cHow do you feel?\u201d dengan kalimat sederhana. Peragakan ekspresi wajah saat mengucapkan kata agar anak mudah menirukan.",
+    "warmup": [
+      { "who": "parent", "en": "Hello!", "id": "Halo!" },
+      { "who": "child", "en": "Hello!", "id": "Halo!", "alt": ["hello", "halo", "hi", "hello!"] },
+      { "who": "parent", "en": "How's the weather?", "id": "Bagaimana cuacanya?" },
+      { "who": "child", "en": "It's sunny!", "id": "Cuacanya cerah!", "alt": ["its sunny", "it is sunny", "sunny"] },
+      { "who": "parent", "en": "Sunny or rainy?", "id": "Cerah atau hujan?" },
+      { "who": "child", "en": "Sunny!", "id": "Cerah!", "alt": ["sunny", "soni", "it is sunny", "sunny day"] },
+      { "who": "parent", "en": "Wonderful! Today we learn about feelings!", "id": "Keren! Hari ini kita belajar tentang perasaan!" }
+    ],
+    "vocab": [
+      { "word": "Happy", "phonetic": "he-pi", "meaning": "Senang", "gesture": "Buat wajah tersenyum lebar", "image": "😊", "emojiBg": "#fff7dd", "speak": "Happy", "alt": ["happy", "hepi", "i am happy", "im happy"] },
+      { "word": "Sad", "phonetic": "sed", "meaning": "Sedih", "gesture": "Buat wajah sedih, mulut turun", "image": "😢", "emojiBg": "#e3f2fd", "speak": "Sad", "alt": ["sad", "sed", "i am sad", "im sad"] },
+      { "word": "Angry", "phonetic": "eng-gri", "meaning": "Marah", "gesture": "Buat wajah marah, alis turun", "image": "😠", "emojiBg": "#ffe5e5", "speak": "Angry", "alt": ["angry", "enggri", "i am angry", "im angry"] },
+      { "word": "Sleepy", "phonetic": "sli-pi", "meaning": "Mengantuk", "gesture": "Kepalkan mata dan buat mulut menguap", "image": "😴", "emojiBg": "#eef2f6", "speak": "Sleepy", "alt": ["sleepy", "slipi", "i am sleepy", "im sleepy"] }
+    ],
+    "game": [
+      { "say": "Happy!", "id": "Ekspresi SENANG — senyum lebar! Tunjuk gambar SENANG!", "target": "Happy" },
+      { "say": "Sad!", "id": "Ekspresi SEDIH — mulut turun! Tunjuk gambar SEDIH!", "target": "Sad" },
+      { "say": "Angry!", "id": "Ekspresi MARAH — alis turun! Tunjuk gambar MARAH!", "target": "Angry" },
+      { "say": "Sleepy!", "id": "Ekspresi MENGANTUK — menguap! Tunjuk gambar MENGANTUK!", "target": "Sleepy" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya senang?", "options": ["Happy", "Sad", "Angry"], "answer": 0 },
+      { "q": "Apa bahasa Inggrisnya sedih?", "options": ["Sleepy", "Happy", "Sad"], "answer": 2 },
+      { "q": "Apa arti Sleepy?", "options": ["Marah", "Mengantuk", "Senang"], "answer": 1 },
+      { "q": "Bagaimana mengatakan \u201csaya senang\u201d?", "options": ["I am happy.", "I am sad.", "I am angry."], "answer": 0 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "How do you feel?", "id": "Bagaimana perasaanmu?" },
+      { "who": "child", "en": "I am happy!", "id": "Saya senang!", "alt": ["i am happy", "im happy", "happy", "i am hepi"] },
+      { "who": "parent", "en": "Why are you happy?", "id": "Kenapa kamu senang?" },
+      { "who": "child", "en": "I am happy!", "id": "Saya senang!", "alt": ["i am happy", "im happy", "happy"] },
+      { "who": "parent", "en": "How do you feel?", "id": "Bagaimana perasaanmu?" },
+      { "who": "child", "en": "I am sad.", "id": "Saya sedih.", "alt": ["i am sad", "im sad", "sad"] },
+      { "who": "parent", "en": "How do you feel?", "id": "Bagaimana perasaanmu?" },
+      { "who": "child", "en": "I am sleepy!", "id": "Saya mengantuk!", "alt": ["i am sleepy", "im sleepy", "sleepy"] },
+      { "who": "parent", "en": "Wonderful! You are doing great!", "id": "Keren! Kamu hebat!" }
+    ],
+    "speakingTest": [
+      { "en": "I am happy.", "id": "Saya senang.", "alt": ["i am happy", "im happy", "happy", "i am hepi"] },
+      { "en": "I am sad.", "id": "Saya sedih.", "alt": ["i am sad", "im sad", "sad"] },
+      { "en": "I am angry.", "id": "Saya marah.", "alt": ["i am angry", "im angry", "angry", "i am enggri"] },
+      { "en": "I am sleepy.", "id": "Saya mengantuk.", "alt": ["i am sleepy", "im sleepy", "sleepy"] }
+    ],
+    "homework": {
+      "text": "Misi kecil di rumah: saat anak bermain atau beraktivitas, tanyakan <b>\u201cHow do you feel?\u201d</b> Biarkan anak menjawab sesuai perasaannya saat itu, misalnya <b>\u201cI am happy!\u201d</b> Ingatkan anak bahwa semua perasaan boleh dirasakan — tidak perlu berpura-pura selalu senang.<br><br>Jika anak belum mampu membuat kalimat, menjawab <b>\u201cHappy!\u201d</b> saja sudah bagus. Peragakan wajah saat mengucapkan kata agar anak mudah menirukan.<br><br><b>Patokan keberhasilan:</b> anak mengenali happy, sad, angry, dan sleepy, bisa menebak ekspresi perasaan, serta mencoba mengucapkan <b>\u201cI am ...\u201d</b><br><br><b>Pujian untuk anak:</b> <b>\u201cWonderful! You are doing great!\u201d</b> (Keren! Kamu hebat!)<br><br><b>Catatan pendamping:</b> jika masih kesulitan, ulangi permainan ekspresi pada pertemuan berikutnya sebelum menambah materi baru.",
+      "next": "➡️ Hari ke-12: Let's Move! — ayo bergerak (stand up, sit down, clap your hands, jump) dengan permainan Simon Says! dan ungkapan baru \u201cI can ...\u201d. Ditunggu ya!"
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>
