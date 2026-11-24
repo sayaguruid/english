@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#e35b8c">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 9 · My Clothes — Pakaianku · Kids English</title>
+  <meta name="description" content="Pelajaran 9 Kids English: mengenal pakaian — shirt, pants, shoes, hat — dengan permainan Touch Your Clothes! dan ungkapan This is my ....">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-9 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 8) -> vocab 4 (Shirt, Pants,
+               Shoes, Hat) -> game "Touch Your Clothes!" -> quiz ->
+               dialog ("What is this? / This is my ...") ->
+               Tes Bicara ("This is my ...") -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "pakaian",
+      "name": "My Clothes",
+      "short": "Pakaian",
+      "emoji": "👕",
+      "color": "pink",
+      "desc": "Shirt, pants, shoes, hat"
+    },
+    "gameName": "Touch Your Clothes!",
+    "title": "My Clothes — Pakaianku",
+    "subtitle": "Shirt, pants, shoes, hat",
+    "icon": "👕",
+    "desc": "Hari ini anak mengenali empat nama pakaian dalam bahasa Inggris, memahami instruksi sederhana, dan mencoba menyebutkan nama pakaian dengan kalimat \u201cThis is my ...\u201d (Ini ... milik saya). Gunakan pakaian yang benar-benar ada di rumah agar mudah dipahami.",
+    "warmup": [
+      { "who": "parent", "en": "What do you have?", "id": "Kamu punya apa?" },
+      { "who": "child", "en": "I have a ball!", "id": "Saya punya bola!", "alt": ["i have a ball", "i have ball", "have a ball", "ball"] },
+      { "who": "parent", "en": "What do you have?", "id": "Kamu punya apa?" },
+      { "who": "child", "en": "I have a doll!", "id": "Saya punya boneka!", "alt": ["i have a doll", "i have doll", "have a doll", "doll"] },
+      { "who": "parent", "en": "Show me a car!", "id": "Tunjukkan mobil!" },
+      { "who": "child", "en": "Car!", "id": "Mobil!", "alt": ["car", "kar", "a car", "i have a car"] },
+      { "who": "parent", "en": "Show me a kite!", "id": "Tunjukkan layang-layang!" },
+      { "who": "child", "en": "Kite!", "id": "Layang-layang!", "alt": ["kite", "kait", "a kite", "i have a kite"] },
+      { "who": "parent", "en": "Excellent! Today we learn about clothes!", "id": "Hebat! Hari ini kita belajar tentang pakaian!" }
+    ],
+    "vocab": [
+      { "word": "Shirt", "phonetic": "syert", "meaning": "Baju / kemeja", "gesture": "Tunjuk bajumu sendiri", "image": "👕", "emojiBg": "#e3f2fd", "speak": "Shirt", "alt": ["shirt", "syert", "a shirt", "my shirt", "the shirt"] },
+      { "word": "Pants", "phonetic": "pants", "meaning": "Celana panjang", "gesture": "Tunjuk celanamu", "image": "👖", "emojiBg": "#fff3e0", "speak": "Pants", "alt": ["pants", "the pants", "my pants", "a pair of pants"] },
+      { "word": "Shoes", "phonetic": "syuz", "meaning": "Sepatu", "gesture": "Tunjuk sepatumu", "image": "👟", "emojiBg": "#ffe5e5", "speak": "Shoes", "alt": ["shoes", "syuz", "my shoes", "shoe", "a shoe", "the shoes"] },
+      { "word": "Hat", "phonetic": "het", "meaning": "Topi", "gesture": "Pegang topimu atau topi yang ada di rumah", "image": "👒", "emojiBg": "#fff7dd", "speak": "Hat", "alt": ["hat", "het", "a hat", "my hat", "the hat"] }
+    ],
+    "game": [
+      { "say": "Touch your shirt!", "id": "Sentuh gambar BAJU!", "target": "Shirt" },
+      { "say": "Touch your pants!", "id": "Sentuh gambar CELANA PANJANG!", "target": "Pants" },
+      { "say": "Show me your shoes!", "id": "Tunjukkan gambar SEPATU!", "target": "Shoes" },
+      { "say": "Show me your hat!", "id": "Tunjukkan gambar TOPI!", "target": "Hat" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya topi?", "options": ["Hat", "Shirt", "Shoes"], "answer": 0 },
+      { "q": "Apa bahasa Inggrisnya sepatu?", "options": ["Pants", "Shoes", "Hat"], "answer": 1 },
+      { "q": "Apa arti Shirt?", "options": ["Topi", "Celana panjang", "Baju"], "answer": 2 },
+      { "q": "Bagaimana mengatakan \u201cini baju saya\u201d?", "options": ["This is my shirt.", "This is my hat.", "This is my shoes."], "answer": 0 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "What is this?", "id": "Ini apa?" },
+      { "who": "child", "en": "Shirt!", "id": "Baju!", "alt": ["shirt", "syert", "a shirt", "my shirt"] },
+      { "who": "parent", "en": "Can you say, 'This is my shirt'?", "id": "Bisa ucapkan, 'Ini baju saya'?" },
+      { "who": "child", "en": "This is my shirt.", "id": "Ini baju saya.", "alt": ["this is my shirt", "this is shirt", "my shirt", "this is my syert"] },
+      { "who": "parent", "en": "What is this?", "id": "Ini apa?" },
+      { "who": "child", "en": "Hat!", "id": "Topi!", "alt": ["hat", "het", "a hat", "my hat"] },
+      { "who": "parent", "en": "Can you say, 'This is my hat'?", "id": "Bisa ucapkan, 'Ini topi saya'?" },
+      { "who": "child", "en": "This is my hat.", "id": "Ini topi saya.", "alt": ["this is my hat", "this is hat", "my hat", "this hat"] },
+      { "who": "parent", "en": "Very good! You are doing great!", "id": "Pintar! Kerja bagus!" }
+    ],
+    "speakingTest": [
+      { "en": "This is my shirt.", "id": "Ini baju saya.", "alt": ["this is my shirt", "this is shirt", "my shirt", "shirt"] },
+      { "en": "These are my pants.", "id": "Ini celana panjang saya.", "alt": ["these are my pants", "this is my pants", "my pants", "pants"] },
+      { "en": "These are my shoes.", "id": "Ini sepatu saya.", "alt": ["these are my shoes", "this is my shoes", "my shoes", "shoes"] },
+      { "en": "This is my hat.", "id": "Ini topi saya.", "alt": ["this is my hat", "this is hat", "my hat", "hat"] }
+    ],
+    "homework": {
+      "text": "Misi kecil di rumah: saat anak akan berganti pakaian, ajak ia menunjuk bajunya dan mengucapkan <b>\u201cMy shirt!\u201d</b> kemudian tunjuk sepatu dan katakan <b>\u201cMy shoes!\u201d</b> Cukup dilakukan sambil bermain atau bersiap-siap — bukan ujian.<br><br>Jika anak belum mampu mengucapkan kalimat lengkap, jawaban satu kata seperti <b>\u201cShirt!\u201d</b> sudah cukup untuk tahap ini. Gunakan pakaian yang benar-benar ada di rumah agar anak mudah memahaminya.<br><br><b>Patokan keberhasilan:</b> anak mengenali shirt, pants, shoes, dan hat, memahami instruksi permainan, serta mencoba mengucapkan <b>\u201cThis is my ...\u201d</b><br><br><b>Pujian untuk anak:</b> <b>\u201cExcellent! You are doing great!\u201d</b> (Kerja bagus! Kamu hebat!)<br><br><b>Catatan pendamping:</b> pada pertemuan berikutnya, ulangi beberapa kosakata lama sebelum memperkenalkan materi baru. Jika anak belum lancar, kurangi jumlah kata yang diulang.",
+      "next": "➡️ Hari ke-10: What's the Weather Like? — bagaimana cuacanya (sunny, rainy, cloudy, windy) dengan permainan Weather Actions! dan ungkapan baru \u201cHow's the weather?\u201d. Ditunggu ya!"
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

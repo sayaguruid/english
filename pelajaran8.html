@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#3da8dc">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 8 · My Toys — Mainanku · Kids English</title>
+  <meta name="description" content="Pelajaran 8 Kids English: mengenal mainan — ball, doll, car, kite — dengan permainan Show Me Your Toy! dan ungkapan I have a ....">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-8 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 6-7) -> vocab 4 (Ball, Doll,
+               Car, Kite) -> game "Show Me Your Toy!" -> quiz ->
+               dialog ("What do you have? / I have a ...") ->
+               Tes Bicara ("I have a ...") -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "mainan",
+      "name": "My Toys",
+      "short": "Mainan",
+      "emoji": "🧸",
+      "color": "blue",
+      "desc": "Ball, doll, car, kite"
+    },
+    "gameName": "Show Me Your Toy!",
+    "title": "My Toys — Mainanku",
+    "subtitle": "Ball, doll, car, kite",
+    "icon": "🧸",
+    "desc": "Hari ini anak mengenali empat nama mainan dalam bahasa Inggris dan mencoba mengatakan \u201cI have a ...\u201d (Saya punya ...). Target: anak bisa menyebut ball, doll, car, dan kite serta menjawab pertanyaan \u201cWhat do you have?\u201d.",
+    "warmup": [
+      { "who": "parent", "en": "Who is this?", "id": "Siapa ini?" },
+      { "who": "child", "en": "Mother!", "id": "Ibu!", "alt": ["mother", "madher", "my mother", "mader"] },
+      { "who": "parent", "en": "Who is this?", "id": "Siapa ini?" },
+      { "who": "child", "en": "Father!", "id": "Ayah!", "alt": ["father", "fadher", "my father", "fader"] },
+      { "who": "parent", "en": "What is this?", "id": "Ini apa?" },
+      { "who": "child", "en": "Apple!", "id": "Apel!", "alt": ["apple", "epel", "an apple", "the apple"] },
+      { "who": "parent", "en": "What is this?", "id": "Ini apa?" },
+      { "who": "child", "en": "Banana!", "id": "Pisang!", "alt": ["banana", "benana", "a banana", "the banana"] },
+      { "who": "parent", "en": "Very good! Today we learn about toys!", "id": "Pintar! Hari ini kita belajar tentang mainan!" }
+    ],
+    "vocab": [
+      { "word": "Ball", "phonetic": "bol", "meaning": "Bola", "gesture": "Lempar dan tangkap bola kecil", "image": "⚽", "emojiBg": "#ffe5e5", "speak": "Ball", "alt": ["ball", "bol", "a ball", "the ball"] },
+      { "word": "Doll", "phonetic": "dol", "meaning": "Boneka", "gesture": "Peluk boneka pelan seperti ibu memeluk bayi", "image": "🎎", "emojiBg": "#fff3e0", "speak": "Doll", "alt": ["doll", "dol", "a doll", "the doll"] },
+      { "word": "Car", "phonetic": "kar", "meaning": "Mobil", "gesture": "Dorong mobil mainan maju-mundur sambil bilang vroom", "image": "🚗", "emojiBg": "#e3f2fd", "speak": "Car", "alt": ["car", "kar", "a car", "the car"] },
+      { "word": "Kite", "phonetic": "kait", "meaning": "Layang-layang", "gesture": "Angkat tangan seperti menarik tali layang-layang", "image": "🪁", "emojiBg": "#e8f5e9", "speak": "Kite", "alt": ["kite", "kait", "a kite", "the kite"] }
+    ],
+    "game": [
+      { "say": "Show me a ball!", "id": "Tunjukkan gambar BOLA!", "target": "Ball" },
+      { "say": "Where is the car?", "id": "Di mana gambar MOBIL?", "target": "Car" },
+      { "say": "Touch the doll!", "id": "Sentuh gambar BONEKA!", "target": "Doll" },
+      { "say": "Find the kite!", "id": "Cari gambar LAYANG-LAYANG!", "target": "Kite" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya bola?", "options": ["Ball", "Doll", "Car"], "answer": 0 },
+      { "q": "Apa bahasa Inggrisnya mobil?", "options": ["Kite", "Car", "Ball"], "answer": 1 },
+      { "q": "Apa arti Doll?", "options": ["Bola", "Layang-layang", "Boneka"], "answer": 2 },
+      { "q": "Bagaimana mengatakan \u201csaya punya bola\u201d?", "options": ["I have a ball.", "I have a doll.", "I have a car."], "answer": 0 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "What do you have?", "id": "Kamu punya apa?" },
+      { "who": "child", "en": "I have a ball!", "id": "Saya punya bola!", "alt": ["i have a ball", "i have ball", "have a ball", "ball"] },
+      { "who": "parent", "en": "What do you have?", "id": "Kamu punya apa?" },
+      { "who": "child", "en": "I have a doll!", "id": "Saya punya boneka!", "alt": ["i have a doll", "i have doll", "have a doll", "doll"] },
+      { "who": "parent", "en": "What do you have?", "id": "Kamu punya apa?" },
+      { "who": "child", "en": "I have a car!", "id": "Saya punya mobil!", "alt": ["i have a car", "i have car", "have a car", "car"] },
+      { "who": "parent", "en": "Wow! Good job!", "id": "Wow! Kerja bagus!" }
+    ],
+    "speakingTest": [
+      { "en": "I have a ball.", "id": "Saya punya bola.", "alt": ["i have a ball", "i have ball", "have a ball", "ball"] },
+      { "en": "I have a doll.", "id": "Saya punya boneka.", "alt": ["i have a doll", "i have doll", "have a doll", "doll"] },
+      { "en": "I have a car.", "id": "Saya punya mobil.", "alt": ["i have a car", "i have car", "have a car", "car"] },
+      { "en": "I have a kite.", "id": "Saya punya layang-layang.", "alt": ["i have a kite", "i have kite", "have a kite", "kite"] }
+    ],
+    "homework": {
+      "text": "Misi kecil di rumah: saat anak bermain, ajak ia mengambil satu mainan dan mengatakan <b>\u201cI have a ...\u201d</b> Cukup satu atau dua kali. Jadikan kegiatan bermain, bukan ujian.<br><br>Jika anak belum bisa mengucapkan kalimat lengkap, cukup minta ia menjawab satu kata seperti <b>\u201cBall!\u201d</b> terlebih dahulu — kata <b>a</b> dipakai sebelum nama satu benda. Gunakan mainan yang tersedia di rumah; jika tidak ada, gunakan gambar.<br><br><b>Patokan keberhasilan:</b> anak mengenali ball, doll, car, dan kite, memahami instruksi permainan, serta mencoba mengucapkan <b>\u201cI have a ...\u201d</b><br><br><b>Pujian untuk anak:</b> <b>\u201cVery good! You are smart!\u201d</b> (Kamu hebat! Kamu pintar!)",
+      "next": "➡️ Hari ke-9: My Clothes — pakaianku (shirt, pants, shoes, hat) dengan permainan Touch Your Clothes! dan ungkapan baru \u201cThis is my ...\u201d. Ditunggu ya!"
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

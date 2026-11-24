@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#dfa600">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kids English">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Pelajaran 10 · What's the Weather Like? — Bagaimana Cuacanya? · Kids English</title>
+  <meta name="description" content="Pelajaran 10 Kids English: mengenal cuaca — sunny, rainy, cloudy, windy — dengan permainan Weather Actions! dan ungkapan How's the weather? / It's ....">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app"></div>
+
+  <!-- ============================================================
+       DATA PELAJARAN HARI KE-10 — INI SATU-SATUNYA BAGIAN YANG DIUBAH
+       (format JSON: tanpa komentar, tanpa koma berlebih)
+       Bagian: warmup (ulang pelajaran 5-9) -> vocab 4 (Sunny, Rainy,
+               Cloudy, Windy) -> game "Weather Actions!" -> quiz ->
+               dialog ("How's the weather? / It's ...") ->
+               Tes Bicara ("It's ...") -> hasil
+       ============================================================ -->
+  <script id="lesson-data" type="application/json">
+  {
+    "category": {
+      "id": "cuaca",
+      "name": "Weather",
+      "short": "Cuaca",
+      "emoji": "⛅",
+      "color": "yellow",
+      "desc": "Sunny, rainy, cloudy, windy"
+    },
+    "gameName": "Weather Actions!",
+    "title": "What's the Weather Like? — Bagaimana Cuacanya?",
+    "subtitle": "Sunny, rainy, cloudy, windy",
+    "icon": "⛅",
+    "desc": "Hari ini anak mengenali empat kondisi cuaca dalam bahasa Inggris, memahami pertanyaan sederhana tentang cuaca, dan mencoba menjawab dengan kalimat pendek \u201cIt's sunny.\u201d. Panduan dibaca di bawah tiap kata adalah pendekatan sederhana, bukan ejaan bunyi yang persis.",
+    "warmup": [
+      { "who": "parent", "en": "Touch your head!", "id": "Sentuh kepalamu!" },
+      { "who": "child", "en": "Head!", "id": "Kepala!", "alt": ["head", "hed", "my head", "the head"] },
+      { "who": "parent", "en": "Show me your shoes!", "id": "Tunjukkan sepatumu!" },
+      { "who": "child", "en": "Shoes!", "id": "Sepatu!", "alt": ["shoes", "syuz", "my shoes", "the shoes"] },
+      { "who": "parent", "en": "Find a ball!", "id": "Cari bola!" },
+      { "who": "child", "en": "Ball!", "id": "Bola!", "alt": ["ball", "bol", "a ball", "the ball"] },
+      { "who": "parent", "en": "What is this?", "id": "Ini apa?" },
+      { "who": "child", "en": "Shirt!", "id": "Baju!", "alt": ["shirt", "syert", "a shirt", "my shirt"] },
+      { "who": "parent", "en": "Wonderful! Today we learn about the weather!", "id": "Keren! Hari ini kita belajar tentang cuaca!" }
+    ],
+    "vocab": [
+      { "word": "Sunny", "phonetic": "sa-ni", "meaning": "Cerah", "gesture": "Buat lingkaran besar dengan kedua tangan seperti matahari", "image": "☀️", "emojiBg": "#fff7dd", "speak": "Sunny", "alt": ["sunny", "soni", "it is sunny", "its sunny", "the sunny"] },
+      { "word": "Rainy", "phonetic": "rei-ni", "meaning": "Hujan", "gesture": "Gerakkan jari-jari ke bawah seperti air hujan", "image": "☔", "emojiBg": "#e3f2fd", "speak": "Rainy", "alt": ["rainy", "reini", "it is rainy", "its rainy", "the rainy"] },
+      { "word": "Cloudy", "phonetic": "klau-di", "meaning": "Berawan", "gesture": "Bentuk awan dengan kedua tangan", "image": "☁️", "emojiBg": "#eef2f6", "speak": "Cloudy", "alt": ["cloudy", "klaudi", "it is cloudy", "its cloudy", "the cloudy"] },
+      { "word": "Windy", "phonetic": "win-di", "meaning": "Berangin", "gesture": "Goyangkan tubuh perlahan seperti tertiup angin", "image": "🍃", "emojiBg": "#e8f5e9", "speak": "Windy", "alt": ["windy", "windi", "it is windy", "its windy", "the windy"] }
+    ],
+    "game": [
+      { "say": "Sunny!", "id": "CUACA CERAH — buat lingkaran besar dengan kedua tangan, lalu tunjuk gambar MATAHARI!", "target": "Sunny" },
+      { "say": "Rainy!", "id": "CUACA HUJAN — gerakkan jari-jari ke bawah, lalu tunjuk gambar HUJAN!", "target": "Rainy" },
+      { "say": "Cloudy!", "id": "CUACA BERAWAN — bentuk awan dengan kedua tangan, lalu tunjuk gambar AWAN!", "target": "Cloudy" },
+      { "say": "Windy!", "id": "CUACA BERANGIN — goyangkan tubuh perlahan, lalu tunjuk gambar ANGIN!", "target": "Windy" }
+    ],
+    "quiz": [
+      { "q": "Apa bahasa Inggrisnya cerah?", "options": ["Sunny", "Rainy", "Windy"], "answer": 0 },
+      { "q": "Apa bahasa Inggrisnya hujan?", "options": ["Cloudy", "Sunny", "Rainy"], "answer": 2 },
+      { "q": "Apa arti Windy?", "options": ["Berawan", "Berangin", "Hujan"], "answer": 1 },
+      { "q": "Bagaimana menjawab \u201cHow's the weather?\u201d jika berangin?", "options": ["It's windy.", "It's rainy.", "It's sunny."], "answer": 0 }
+    ],
+    "dialog": [
+      { "who": "parent", "en": "How's the weather?", "id": "Bagaimana cuacanya?" },
+      { "who": "child", "en": "It's sunny!", "id": "Cuacanya cerah!", "alt": ["its sunny", "it is sunny", "sunny", "its sunny"] },
+      { "who": "parent", "en": "How's the weather?", "id": "Bagaimana cuacanya?" },
+      { "who": "child", "en": "It's rainy!", "id": "Cuacanya hujan!", "alt": ["its rainy", "it is rainy", "rainy", "its rainy"] },
+      { "who": "parent", "en": "How's the weather?", "id": "Bagaimana cuacanya?" },
+      { "who": "child", "en": "It's cloudy!", "id": "Cuacanya berawan!", "alt": ["its cloudy", "it is cloudy", "cloudy", "its cloudy"] },
+      { "who": "parent", "en": "How's the weather?", "id": "Bagaimana cuacanya?" },
+      { "who": "child", "en": "It's windy!", "id": "Cuacanya berangin!", "alt": ["its windy", "it is windy", "windy", "its windy"] },
+      { "who": "parent", "en": "Wonderful! You are learning English!", "id": "Keren! Kamu sedang belajar bahasa Inggris!" }
+    ],
+    "speakingTest": [
+      { "en": "It's sunny.", "id": "Cuacanya cerah.", "alt": ["its sunny", "it is sunny", "sunny", "sunny day"] },
+      { "en": "It's rainy.", "id": "Cuacanya hujan.", "alt": ["its rainy", "it is rainy", "rainy", "rainy day"] },
+      { "en": "It's cloudy.", "id": "Cuacanya berawan.", "alt": ["its cloudy", "it is cloudy", "cloudy", "cloudy day"] },
+      { "en": "It's windy.", "id": "Cuacanya berangin.", "alt": ["its windy", "it is windy", "windy", "windy day"] }
+    ],
+    "homework": {
+      "text": "Misi kecil di rumah: ajak anak melihat cuaca dari jendela rumah bersama orang tua. Tanyakan <b>\u201cHow's the weather?\u201d</b> lalu bantu anak menjawab sesuai kondisi cuaca yang terlihat, misalnya <b>\u201cIt's sunny!\u201d</b> Lakukan sambil mengamati langit, bukan sebagai ujian.<br><br>Jika anak belum mampu mengucapkan kalimat lengkap, jawaban satu kata seperti <b>\u201cSunny!\u201d</b> sudah cukup. Pada pertemuan berikutnya, ulangi materi cuaca sebentar sebelum masuk ke topik baru; jika anak masih kesulitan, kurangi jumlah kata yang perlu diingat.<br><br><b>Patokan keberhasilan:</b> anak mengenali sunny, rainy, cloudy, dan windy, mengikuti gerakan permainan, serta mencoba menjawab <b>\u201cHow's the weather?\u201d</b><br><br><b>Pujian untuk anak:</b> <b>\u201cWonderful! You are learning English!\u201d</b> (Keren! Kamu sedang belajar bahasa Inggris!)",
+      "next": "➡️ Hari ke-11: materi baru menyusul. Sementara itu, ulangi dulu kosakata lama (sapaan, benda, warna & angka, hewan, anggota tubuh, keluarga, makanan, mainan, pakaian, dan cuaca) dengan cara bermain. Sampai jumpa!"
+    }
+  }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>
